@@ -29,7 +29,7 @@ export class Client {
         .send({ text })
         .end((err, res) => {
           if (err) {
-            throw err
+            throw new RecastError(res.message)
           } else {
             return callback(new Response(res.body))
           }
@@ -59,7 +59,7 @@ export class Client {
         .set('Content-Type', '')
         .end((err, res) => {
           if (err) {
-            throw err
+            throw new RecastError(res.message)
           } else {
             return callback(new Response(res.body))
           }

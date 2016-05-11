@@ -31,14 +31,15 @@ npm install 'https://github.com/RecastAI/SDK-NodeJs.git'
 ### Module
 
 ```javascript
-const RECAST = require('recastai')
+import * as recast from 'recastai'
 
-var client = new RECAST.Client(YOUR_TOKEN)
-let response = client.textRequest(YOUR_TEXT)
+const CLIENT = new recast.Client(YOUR_TOKEN)
 
-if (response.intent === YOUR_EXPECTED_INTENT) {
-  // Do your code...
-}
+CLIENT.textRequest(YOUR_TEXT, (response) => {
+  if (response.intent() === YOUR_INTENT) {
+    // Do your code...
+  }
+})
 ```
 
 You can find more examples in the `example/` folder.
@@ -69,10 +70,10 @@ The Recast.AI Client can be instanciated with a token and provides the two follo
 ### class Response
 
 The Recast.AI Response is generated after a call with the two previous methods and contains the following methods:
-* sentence(\*) *Returns the first detected sentence*
-* get(name) *Returns the first entity matching -name-*
-* all(name) *Returns all the entities matching -name-*
-* intent(\*) *Returns the first matched intent*
+* sentence(\*)  *Returns the first detected sentence*
+* get(name)     *Returns the first entity matching -name-*
+* all(name)     *Returns all the entities matching -name-*
+* intent(\*)    *Returns the first matched intent*
 
 In addition, you can access each of these attributes:
 * raw - The raw unparsed response
