@@ -54,8 +54,9 @@ export class Client {
       throw new RecastError('Token is missing')
     } else {
       request.post('https://api.recast.ai/v1/request')
+        .attach('voice', file)
         .set('Authorization', `Token ${TOKEN}`)
-        .send({ voice: file })
+        .set('Content-Type', '')
         .end((err, res) => {
           if (err) {
             throw err

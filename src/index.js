@@ -5,7 +5,7 @@ import { Entity } from './class/entity.js'
 import { RecastError } from './class/error.js'
 
 module.exports.Client = Client
-module.exports.Reponse = Response
+module.exports.Response = Response
 module.exports.Sentence = Sentence
 module.exports.Entity = Entity
 module.exports.RecastError = RecastError

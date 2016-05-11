@@ -8,8 +8,7 @@
   },
   "scripts": {
     "test": "mocha spec/test.js",
-    "start": "babel-node src/index",
-    "basic_test": "babel-node my_test",
+    "compile": "babel src --out-dir lib",
     "lint": "eslint src"
   },
   "repository": {
