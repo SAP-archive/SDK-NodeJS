@@ -1,50 +1,69 @@
-export default class Response {
-  // attributs:
-  // raw, source, intents, sentences, version, timestamp, etc...
-  contructor() {
-    // get the response of the request
-    // init each attribut
-    // create new Sentence instance
+import { Sentence } from './sentence'
+
+export class Response {
+
+  constructor (response) {
+    this.raw = response
+    response = response.results
+    this.source = response.source
+    this.intents = response.intents
+    this.sentences = response.sentences.map(sentence => new Sentence(sentence))
+    this.version = response.version
+    this.timestamp = response.timestamp
+    this.status = response.status
   }
 
-  // Batteries of getter
-  raw() {
-    // returns the raw, unparsed response
+  /*
+    Returns the first intent if there is one
+  */
+  intent () {
+    return (this.intents) ? this.intents[0] : null
   }
 
-  source() {
-    // returns the source Recast.AI processed
+  /*
+    Returns the first sentence if there is one
+  */
+  sentence () {
+    return (this.sentences) ? this.sentences[0] : null
   }
 
-  intents() {
-    // returns all the matched intents
+  /*
+    Returns the first entity whose name matches the parameter
+    | Args |
+      - name - String, the entity's name
+    | Return |
+      - An instance of Entity or undefined
+  */
+  get (name) {
+    let response
+
+    this.sentences.forEach(sentence => {
+      sentence.entities.forEach(entity => {
+        if (entity.name === name && !response) {
+          response = entity
+        }
+      })
+    })
+    return response
   }
 
-  intent() {
-    // returns the first matched intent
-  }
+  /*
+    Returns all the entities whose name matches the parameter
+    | Args |
+      - name - String, the entity's name
+    | Return |
+      - An array of Entity's instances or an empty array
+  */
+  all (name) {
+    const response = []
 
-  sentences() {
-    // returns all the detected sentences
-  }
-
-  sentence() {
-    // returns the first detected sentence
-  }
-
-  get(name) {
-    // return the first entity that matched - name -
-  }
-
-  all(name) {
-    // returns all the entities that matched - name -
-  }
-
-  version() {
-    // returns the version of the JSON
-  }
-
-  timestamp() {
-    // returns the timestamp at the end of the request
+    this.sentences.forEach(sentence => {
+      sentence.entities.forEach(entity => {
+        if (entity.name === name) {
+          response.push(entity)
+        }
+      })
+    })
+    return response
   }
 }

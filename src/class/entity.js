@@ -1,15 +1,9 @@
-export default class Entity {
-  constructor() {
-    // get name and data by the Sentence constructor
-  }
+import { forEach } from 'lodash'
 
-  name() {
-    // returns the name of the entity
+export class Entity {
+  constructor (name, data) {
+    this.name = name
+    this.raw = data
+    forEach(data, (value, key) => this[key] = value)
   }
-
-  raw() {
-    // returns the raw text on which the entity was found
-  }
-
-  // + more getter to hex, value, unit,....
 }
