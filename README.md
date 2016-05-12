@@ -108,19 +108,18 @@ import * as recast from 'recastai'
 const CLIENT = new recast.Client(YOUR_TOKEN)
 
 CLIENT.textRequest('Give me a recipe with asparagus. And tomatoes', (response) => {
-  // Get the first sentence, aka 'Give me some recipe with asparagus'
-  let firstSentence = response.sentence()
+    // Get the first sentence, aka 'Give me some recipe with asparagus'
+    let firstSentence = response.sentence()
 
-  // If the first intent matched is 'recipe'...
-  if (response.intent() === 'recipe') {
-    // ... get all the entities matching 'ingredient'
-    let ingredients = response.all('ingredient')
+    // If the first intent matched is 'recipe'...
+    if (response.intent() === 'recipe') {
+      // ... get all the entities matching 'ingredient'
+      let ingredients = response.all('ingredient')
 
-    // ...
-  }
-
-  console.log(`This request has been filled at ${response.timestamp}`)
-})
+      // ...
+    }
+    console.log(`This request has been filled at ${response.timestamp}`)
+  })
 ```
 
 ### class Sentence
@@ -140,16 +139,13 @@ import * as recast from 'recastai'
 const CLIENT = new recast.Client(YOUR_TOKEN)
 
 CLIENT.textRequest('Tell me a joke.', (response) => {
-  // Get the first sentence
-  let sentence = response.sentence()
+    // Get the first sentence
+    let sentence = response.sentence()
 
-  if (sentence.action === 'tell' && sentence.polarity === 'positive') {
-    // Tell a joke...
-  }
-}
-
-  console.log(`This request has been filled at ${response.timestamp}`)
-})
+    if (sentence.action === 'tell' && sentence.polarity === 'positive') {
+      // Tell a joke...
+    }
+  })
 ```
 
 ### class Entity
@@ -183,14 +179,14 @@ const CLIENT = new recast.Client(YOUR_TOKEN)
 
 CLIENT.textRequest('What can I cook with salmon ?', (response) => {
 
-  if (response.intent() === 'recipe') {
-    // Get the ingredient
-    let ingredient = response.get('ingredient')
+    if (response.intent() === 'recipe') {
+      // Get the ingredient
+      let ingredient = response.get('ingredient')
 
-    console.log('You asked me for a recipe with ${ingredient.value}')
-    // 'You asked me for a recipe with salmon'
-  }
-})
+      console.log('You asked me for a recipe with ${ingredient.value}')
+      // 'You asked me for a recipe with salmon'
+    }
+  })
 ```
 
 ### class RecastError
