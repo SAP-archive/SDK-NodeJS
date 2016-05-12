@@ -63,6 +63,23 @@ The Recast.AI Client can be instanciated with a token and provides the two follo
 
 *Accepted options are :token, to override the default token provided at initialization*
 
+```javascript
+import * as recast from 'recastai'
+
+// Create a new Client
+const CLIENT = new recast.Client(YOUR_TOKEN)
+
+// Performs a text request on Recast.AI
+CLIENT.textRequest('Hello World!', (response) => {
+    // Do your code...
+  })
+
+// Performs a file voice request on Recast.AI
+CLIENT.fileRequest('myfile.wav', (response) => {
+    // Do your code
+  })
+```
+
 ### class Response
 
 The Recast.AI Response is generated after a call with the two previous methods and contains the following methods:
@@ -79,6 +96,25 @@ In addition, you can access each of these attributes:
 * version *The version of the JSON*
 * timestamp *The timestamp at the end of the processing*
 * status *The status of the response*
+
+```javascript
+import * as recast from 'recastai'
+
+const CLIENT = new recast.Client(YOUR_TOKEN)
+
+CLIENT.textRequest('Give me a recipe with asparagus. And tomatoes', (response) => {
+  // Get the first sentence, aka 'Give me some recipe with asparagus'
+  let firstSentence = response.sentence()
+
+  // If the first intent matched is 'recipe'...
+  if (response.intent() === 'recipe') {
+    // ... get all the entities matching 'ingredient'
+    let ingredients = response.all('ingredient')
+    
+    // ...
+  }
+})
+```
 
 ### class Sentence
 

@@ -24,7 +24,6 @@ describe('Client class', () => {
     })
   })
 
-  // Don't pass because the timeout is too short
   it ('should perform a voice request', function(done) {
     this.timeout(15000)
     testClient.fileRequest('/Users/jhoudan/Desktop/Recast/SDK-NodeJs/spec/resource/test.wav', (response) => {
