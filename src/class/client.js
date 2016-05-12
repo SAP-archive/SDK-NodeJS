@@ -8,16 +8,13 @@ export class Client {
     this.token = token
   }
 
-  /*
-    Performs a text request on Recast.AI API
-    | Args |
-      - text - String, the text to process
-      - callback - Callback function, will be called with the result of the request
-      - options - Optional Hash, request's options
-    | Throw |
-      - Error - On bad request
-      - RecastError - On missing token
-  */
+  /**
+   * Perform a text request on Recast.AI
+   * @param {String} text: the text to process
+   * @param {Function} callback: the callback which be called with the Response of the request
+   * @param {Hash} options: [optional] request's options
+   * @throws {RecastError}: On bad request or on missing token
+   */
   textRequest (text, callback, options) {
     const TOKEN = (options && options.token) ? options.token : this.token
 
@@ -37,16 +34,13 @@ export class Client {
     }
   }
 
-  /*
-    Performs a voice file request on Recast.AI API
-    | Args |
-      - file - File, the voice file to process
-      - callback - Callback function, will be called with the result of the request
-      - options - Optional Hash, request's options
-    | Throw |
-      - Error - On bad request
-      - RecastError - On missing token
-  */
+  /**
+   * Perform a voice file request on Recast.AI
+   * @param {String} file: the name of the file to process
+   * @param {Function} callback: the callback which be called with the Response of the request
+   * @param {Hash} options: [optional] request's options
+   * @throws {RecastError}: On bad request or on missing token
+   */
   fileRequest (file, callback, options) {
     const TOKEN = (options && options.token) ? options.token : this.token
 

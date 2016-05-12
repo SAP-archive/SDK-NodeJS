@@ -17,6 +17,7 @@ describe('Client class', () => {
   })
 
   it ('should perform a text request', (done) => {
+    assert.throws(() => { recast.Client() }, TypeError, 'Cannot call a class as a function')
     testClient.textRequest('Hello world', (response) => {
       assert.equal(response.status, 200)
       done()
@@ -24,12 +25,13 @@ describe('Client class', () => {
   })
 
   // Don't pass because the timeout is too short
-  // it ('should perform a voice request', (done) => {
-  //   testClient.fileRequest('/Users/jhoudan/Desktop/Recast/SDK-NodeJs/spec/resource/test.wav', (response) => {
-  //     assert.equal(response.status, 200)
-  //     done()
-  //   })
-  // })
+  it ('should perform a voice request', function(done) {
+    this.timeout(15000)
+    testClient.fileRequest('/Users/jhoudan/Desktop/Recast/SDK-NodeJs/spec/resource/test.wav', (response) => {
+      assert.equal(response.status, 200)
+      done()
+    })
+  })
 })
 
 describe('Response class', () => {
@@ -86,8 +88,16 @@ describe('Response class', () => {
 
     assert.equal(testResponse.intent(), 'recipe')
     assert.equal(testResponse.intent(), testResponse.intents[0])
+    assert.equal(_.isEqual(testResponse.sentence(), testResponse.sentences[0]), true)
     assert.equal(_.isEqual(testResponse.get('ingredient'), arrayEntities[2]), true)
     assert.equal(_.isEqual(testResponse.all('pronoun'), slice), true)
+    assert.equal(testResponse.get('Invalid'), null)
+    assert.equal(_.isEqual(testResponse.all('Invalid'), []), true)
+
+    testClient.token = undefined
+    assert.throws(() => { testClient.textRequest('This is a test') }, Error, 'Token is missing')
+    assert.throws(() => { testClient.fileRequest('This is a test') }, Error, 'Token is missing')
+    assert.throws(() => { recast.Response() }, TypeError, 'Cannot call a class as a function')
   })
 })
 
@@ -113,6 +123,8 @@ describe('Sentence class', () => {
     assert.equal(testSentence.action, 'test')
     assert.equal(testSentence.agent, null)
     assert.equal(testSentence.polarity, 'positive')
+
+    assert.throws(() => { recast.Sentence() }, TypeError, 'Cannot call a class as a function')
   })
 })
 
@@ -138,5 +150,13 @@ describe('Entity class', () => {
     assert.equal(testEntity2.name, 'ingredient')
     assert.equal(testEntity2.value, data2.value)
     assert.equal(testEntity2.raw, data2.raw)
+
+    assert.throws(() => { recast.Entity() }, TypeError, 'Cannot call a class as a function')
+  })
+})
+
+describe('RecastError', () => {
+  it ('should throw an error', () => {
+    assert.throws(() => { recast.RecastError() }, TypeError, 'Cannot call a class as a function')
   })
 })

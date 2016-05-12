@@ -13,27 +13,27 @@ export class Response {
     this.status = response.status
   }
 
-  /*
-    Returns the first intent if there is one
-  */
+  /**
+   * Returns the first Intent if there is one
+   * @returns {Sentence}: returns the first Intent or null
+   */
   intent () {
     return (this.intents) ? this.intents[0] : null
   }
 
-  /*
-    Returns the first sentence if there is one
-  */
+  /**
+   * Returns the first Sentence if there is one
+   * @returns {Sentence}: returns the first Sentence or null
+   */
   sentence () {
     return (this.sentences) ? this.sentences[0] : null
   }
 
-  /*
-    Returns the first entity whose name matches the parameter
-    | Args |
-      - name - String, the entity's name
-    | Return |
-      - An instance of Entity or undefined
-  */
+  /**
+   * Returns the first Entity whose name matches the parameter
+   * @param {String} name: the entity's name
+   * @returns {Entity}: returns the first entity that matches - name -
+   */
   get (name) {
     let response
 
@@ -47,13 +47,11 @@ export class Response {
     return response
   }
 
-  /*
-    Returns all the entities whose name matches the parameter
-    | Args |
-      - name - String, the entity's name
-    | Return |
-      - An array of Entity's instances or an empty array
-  */
+  /**
+   * Returns all the entities whose name matches the parameter
+   * @param {String} name: the entity's name
+   * @returns {Array}: returns an array of Entity, or null
+   */
   all (name) {
     const response = []
 
