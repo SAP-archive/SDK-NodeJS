@@ -36,15 +36,30 @@ describe('Response class', () => {
   let testClient = new recast.Client(TOKEN)
   let rawValue = {
     results:
-      { source: 'Hello',
-        intents: [ 'hello-greetings', 'test' ],
-        sentences: [],
+      { source: 'Give me some recipes with asparagus.',
+        intents: [ 'recipe', 'test' ],
+        sentences: [
+          {
+            source: 'Give me some recipes with asparagus.',
+            type: 'command',
+            action: 'give',
+            agent: 'you',
+            polarity: 'positive',
+            entities: {
+              pronoun: [
+                { person: 1, number: "singular", gender: "unkown", raw: "me" },
+                { person: 1, number: "singular", gender: "unkown", raw: "me" }
+              ],
+              ingredient: [{ value: "asparagus", raw: "asparagus" }]
+            }
+          }
+        ],
         version: '0.1.4',
-        timestamp: '2016-05-11T12:14:53+02:00',
+        timestamp: '2016-05-12T09:23:12+02:00',
         status: 200
       },
-      message: 'This is an instanciated response.'
-  }
+      message: 'Requests rendered with success.'
+    }
 
   it ('should be instanciable', () => {
     expect(new recast.Response(rawValue)).to.be.an.instanceof(recast.Response)
@@ -57,17 +72,22 @@ describe('Response class', () => {
     assert.equal(testResponse.version, rawValue.results.version)
     assert.equal(testResponse.source, rawValue.results.source)
     assert.equal(testResponse.timestamp, rawValue.results.timestamp)
-    assert.equal(_.isEqual(testResponse.intents, ['hello-greetings', 'test']), true)
+    assert.equal(_.isEqual(testResponse.intents, ['recipe', 'test']), true)
     assert.equal(_.isEqual(testResponse.raw, rawValue), true)
   })
 
   it ('should have methods', () => {
     let testResponse = new recast.Response(rawValue)
+    let arrayEntities = []
+    arrayEntities.push(new recast.Entity('pronoun', { person: 1, number: 'singular', gender: 'unkown', raw: 'me' }))
+    arrayEntities.push(new recast.Entity('pronoun', { person: 1, number: 'singular', gender: 'unkown', raw: 'me' }))
+    arrayEntities.push(new recast.Entity('ingredient', { value: 'asparagus', raw: 'asparagus' }))
+    let slice = arrayEntities.slice(0, 2)
 
-    assert.equal(testResponse.intent(), 'hello-greetings')
+    assert.equal(testResponse.intent(), 'recipe')
     assert.equal(testResponse.intent(), testResponse.intents[0])
-    // get need to be tested
-    // all need to be tested
+    assert.equal(_.isEqual(testResponse.get('ingredient'), arrayEntities[2]), true)
+    assert.equal(_.isEqual(testResponse.all('pronoun'), slice), true)
   })
 })
 
