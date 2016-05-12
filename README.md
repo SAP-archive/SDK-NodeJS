@@ -1,6 +1,6 @@
 # SDK-NodeJs
 
-[logo]: https://github.com/RecastAI/SDK-NodeJs/tree/master/misc/logo-inline.png "Recast.AI"
+[logo]: https://github.com/RecastAI/SDK-NodeJs/blob/master/misc/logo-inline.png "Recast.AI"
 
 ![alt text][logo]
 
