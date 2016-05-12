@@ -93,6 +93,11 @@ describe('Response class', () => {
     assert.equal(testResponse.get('Invalid'), null)
     assert.equal(_.isEqual(testResponse.all('Invalid'), []), true)
 
+    testResponse.sentences = null
+    testResponse.intents = null
+    assert.equal(testResponse.sentence(), null)
+    assert.equal(testResponse.intent(), null)
+
     testClient.token = undefined
     assert.throws(() => { testClient.textRequest('This is a test') }, Error, 'Token is missing')
     assert.throws(() => { testClient.fileRequest('This is a test') }, Error, 'Token is missing')

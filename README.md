@@ -1,5 +1,9 @@
 # SDK-NodeJs
 
+[logo]: https://github.com/RecastAI/SDK-NodeJs/tree/master/misc/logo-inline.png "Recast.AI"
+
+![alt text][logo]
+
 Recast.AI official SDK in NodeJs.
 
 ## Synospis
@@ -27,7 +31,7 @@ npm install 'https://github.com/RecastAI/SDK-NodeJs.git'
 ### Module
 
 ```javascript
-import * as recast from 'recastai'
+import recast from 'recastai'
 
 const CLIENT = new recast.Client(YOUR_TOKEN)
 
@@ -37,8 +41,6 @@ CLIENT.textRequest(YOUR_TEXT, (response) => {
   }
 })
 ```
-
-You can find more examples in the `example/` folder.
 
 ## Specs
 
@@ -64,7 +66,7 @@ The Recast.AI Client can be instanciated with a token and provides the two follo
 *Accepted options are :token, to override the default token provided at initialization*
 
 ```javascript
-import * as recast from 'recastai'
+import recast from 'recastai'
 
 // Create a new Client
 const CLIENT = new recast.Client(YOUR_TOKEN)

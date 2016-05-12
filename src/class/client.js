@@ -1,4 +1,4 @@
-import * as request from 'superagent'
+import request from 'superagent'
 import { Response } from './response'
 import { RecastError } from './error'
 
@@ -26,7 +26,7 @@ export class Client {
         .send({ text })
         .end((err, res) => {
           if (err) {
-            throw new RecastError(res.message)
+            throw new RecastError(err.message)
           } else {
             return callback(new Response(res.body))
           }
@@ -53,7 +53,7 @@ export class Client {
         .set('Content-Type', '')
         .end((err, res) => {
           if (err) {
-            throw new RecastError(res.message)
+            throw new RecastError(err.message)
           } else {
             return callback(new Response(res.body))
           }
