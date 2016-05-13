@@ -49,6 +49,9 @@
     "rules": {
       "camelcase": [
         0
+      ],
+      "no-else-return": [
+        0
       ]
     }
   },

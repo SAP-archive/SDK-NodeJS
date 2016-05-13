@@ -17,11 +17,17 @@ describe('Client class', () => {
   })
 
   it ('should perform a text request', (done) => {
-    assert.throws(() => { recast.Client() }, TypeError, 'Cannot call a class as a function')
-    testClient.textRequest('Hello world', (response) => {
-      assert.equal(response.status, 200)
+    testClient.textRequest('Hello world', (res, err) => {
+      assert.equal(res.status, 200)
       done()
     })
+  })
+
+  it ('should return a RecastError on invalid request', (done) => {
+    testClient.textRequest('Hello world', (res, err) => {
+      expect(err).to.be.a('Error')
+      done()
+    }, { token: 'invalid_token' })
   })
 
   it ('should perform a voice request', function(done) {
@@ -99,8 +105,6 @@ describe('Response class', () => {
     assert.equal(testResponse.intent(), null)
 
     testClient.token = undefined
-    assert.throws(() => { testClient.textRequest('This is a test') }, Error, 'Token is missing')
-    assert.throws(() => { testClient.fileRequest('This is a test') }, Error, 'Token is missing')
     assert.throws(() => { recast.Response() }, TypeError, 'Cannot call a class as a function')
   })
 })
