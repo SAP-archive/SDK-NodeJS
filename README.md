@@ -17,13 +17,13 @@ This module is a NodeJs interface to the [Recast.AI](https://recast.ai) API. It 
 From [npmjs.org](https://npmjs.com/):
 
 ```bash
-npm install 'recastai'
+npm install recastai
 ```
 
 From [github.com](https://github.com/):
 
 ```bash
-npm install 'https://github.com/RecastAI/SDK-NodeJs.git'
+npm install https://github.com/RecastAI/SDK-NodeJs.git
 ```
 
 ## Usage
