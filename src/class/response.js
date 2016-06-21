@@ -7,6 +7,7 @@ export class Response {
     response = response.results
     this.source = response.source
     this.intents = response.intents
+    this.language = response.language
     this.sentences = response.sentences.map(sentence => new Sentence(sentence))
     this.version = response.version
     this.timestamp = response.timestamp

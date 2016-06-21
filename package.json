@@ -7,8 +7,8 @@
     "example": "example"
   },
   "scripts": {
-    "test": "mocha spec/test.js",
-    "make": "babel src --out-dir lib",
+    "test": "npm run build && mocha spec/test.js",
+    "build": "babel src --out-dir lib",
     "lint": "eslint src"
   },
   "repository": {

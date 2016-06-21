@@ -4,8 +4,9 @@ import { RecastError } from './error'
 
 export class Client {
 
-  constructor (token) {
+  constructor (token, language) {
     this.token = token
+    this.language = language
   }
 
   /**
@@ -15,17 +16,23 @@ export class Client {
    * @param {Hash} options: [optional] request's options
    */
   textRequest (text, callback, options) {
-    const TOKEN = (options && options.token) ? options.token : this.token
+    const TOKEN = options && options.token || this.token
+    const LANGUAGE = (options && options.language) ? options.language : this.language
+    const params = { text }
+
+    if (LANGUAGE) {
+      params.language = LANGUAGE
+    }
 
     if (!TOKEN) {
       return callback(null, new RecastError('Token is missing'))
     } else {
       request.post('https://api.recast.ai/v1/request')
         .set('Authorization', `Token ${TOKEN}`)
-        .send({ text })
+        .send(params)
         .end((err, res) => {
           if (err) {
-            return callback(null, new RecastError(err.message))
+            return callback(res, new RecastError(err.message))
           } else {
             return callback(new Response(res.body), null)
           }
@@ -41,21 +48,32 @@ export class Client {
    */
   fileRequest (file, callback, options) {
     const TOKEN = (options && options.token) ? options.token : this.token
+    const LANGUAGE = (options && options.language) ? options.language : this.language
+    const params = {}
+
+    if (LANGUAGE) {
+      params.language = LANGUAGE
+    }
 
     if (!TOKEN) {
       return callback(null, new RecastError('Token is missing'))
     } else {
-      request.post('https://api.recast.ai/v1/request')
+      const req = request.post('https://api.recast.ai/v1/request')
         .attach('voice', file)
         .set('Authorization', `Token ${TOKEN}`)
         .set('Content-Type', '')
-        .end((err, res) => {
-          if (err) {
-            return callback(null, new RecastError(err.message))
-          } else {
-            return callback(new Response(res.body))
-          }
-        })
+
+      if (LANGUAGE) {
+        req.send(params)
+      }
+
+      req.end((err, res) => {
+        if (err) {
+          return callback(res, new RecastError(err.message))
+        } else {
+          return callback(new Response(res.body))
+        }
+      })
     }
   }
 }

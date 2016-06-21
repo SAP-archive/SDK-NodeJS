@@ -8,7 +8,18 @@ const TOKEN = process.env.RECAST_TOKEN
 describe('Client class', () => {
   let testClient = new recast.Client(TOKEN)
 
-  it ('should be instanciable', () => {
+  it ('should be instanciable without language', () => {
+    const clientWithoutLanguage= new recast.Client("TOKEN")
+    expect(clientWithoutLanguage).to.be.an.instanceof(recast.Client)
+  })
+
+  it ('should be instanciable without token', () => {
+    const clientWithoutToken = new recast.Client()
+    expect(clientWithoutToken).to.be.an.instanceof(recast.Client)
+  })
+
+  it ('should be instanciable with all params', () => {
+    let testClient2 = new recast.Client(TOKEN, "EN")
     expect(testClient).to.be.an.instanceof(recast.Client)
   })
 
@@ -23,6 +34,21 @@ describe('Client class', () => {
     })
   })
 
+  it ('textRequest should fail if no token', (done) => {
+    let clientWithoutToken = new recast.Client()
+    clientWithoutToken.textRequest("text", (res, err) => {
+      expect(err).to.be.an.instanceof(Error)
+      done()
+    })
+  }) 
+
+  it ('should accept french language', done => {
+    testClient.textRequest('Bonjour', (res, err) => {
+      assert.equal(res.language, 'fr')
+      done()
+    }, {language: 'fr'})
+  })
+
   it ('should return a RecastError on invalid request', (done) => {
     testClient.textRequest('Hello world', (res, err) => {
       expect(err).to.be.a('Error')
@@ -32,7 +58,7 @@ describe('Client class', () => {
 
   it ('should perform a voice request', function(done) {
     this.timeout(15000)
-    testClient.fileRequest('/Users/jhoudan/Desktop/Recast/SDK-NodeJs/spec/resource/test.wav', (response) => {
+    testClient.fileRequest(__dirname + '/resource/test.wav', (response, err) => {
       assert.equal(response.status, 200)
       done()
     })
@@ -154,6 +180,7 @@ describe('Entity class', () => {
     assert.equal(testEntity1.number, data1.number)
     assert.equal(testEntity1.gender, data1.gender)
     assert.equal(testEntity1.raw, data1.raw)
+
     // Test on second Entity
     assert.equal(testEntity2.name, 'ingredient')
     assert.equal(testEntity2.value, data2.value)
