@@ -38,7 +38,7 @@ const CLIENT = new recast.Client(YOUR_TOKEN, YOUR_LANGUAGE)
 CLIENT.textRequest(YOUR_TEXT, (res, err) => {
   if (err) {
     // Handle error
-  } else if (response.intent() === YOUR_INTENT) {
+  } else if (res.intent() === YOUR_INTENT) {
     // Do your code...
   }
 })
