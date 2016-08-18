@@ -8,11 +8,32 @@ export class Response {
     this.source = response.source
     this.intents = response.intents
     this.language = response.language
+    this.type = response.type
     this.sentences = response.sentences.map(sentence => new Sentence(sentence))
     this.version = response.version
     this.timestamp = response.timestamp
     this.status = response.status
   }
+
+  /**
+   * Getters
+   * @returns the corresponding attribute
+   */
+  raw = () => this.raw
+
+  type = () => this.type
+
+  language = () => this.language
+
+  source = () => this.source
+
+  intents = () => this.intents
+
+  version = () => this.version
+
+  timestamp = () => this.timestamp
+
+  status = () => this.status
 
   /**
    * Returns the first Intent if there is one

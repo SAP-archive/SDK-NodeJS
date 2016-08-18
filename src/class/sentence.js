@@ -15,6 +15,18 @@ export class Sentence {
     })
   }
 
+  source = () => this.source
+
+  type = () => this.type
+
+  action = () => this.action
+
+  agent = () => this.agent
+
+  polarity = () => this.polarity
+
+  entities = () => this.entities
+
   /**
    * Returns the first Entity whose name matches the parameter
    * @param {String} name: the entity's name
