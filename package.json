@@ -34,7 +34,8 @@
     "eslint": "^2.9.0",
     "eslint-config-zavatta": "^3.0.1",
     "eslint-plugin-import": "^1.6.1",
-    "mocha": "^2.4.5"
+    "mocha": "^2.4.5",
+    "sinon": "^1.17.5"
   },
   "babel": {
     "presets": [

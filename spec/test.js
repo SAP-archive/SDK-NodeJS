@@ -1,34 +1,68 @@
-const recast = require('../lib/index')
 const assert = require('chai').assert
 const expect = require('chai').expect
+const sinon = require('sinon')
+const request = require('superagent')
 const _ = require('lodash')
 
-const TOKEN = process.env.RECAST_TOKEN
+const recast = require('../lib/index')
+const json = require('./resource/json.js')
+
+const TOKEN = process.env.RECAST_TOKEN || 'FAKE_TOKEN'
+const LANGUAGE = 'FR'
 
 describe('Client class', () => {
-  let testClient = new recast.Client(TOKEN)
 
-  it ('should be instanciable without language', () => {
-    const clientWithoutLanguage= new recast.Client("TOKEN")
-    expect(clientWithoutLanguage).to.be.an.instanceof(recast.Client)
+  // Instanciation
+
+  it ('it should be instanciable without token', () => {
+    expect(new recast.Client(null, LANGUAGE)).to.be.an.instanceof(recast.Client)
   })
 
-  it ('should be instanciable without token', () => {
-    const clientWithoutToken = new recast.Client()
-    expect(clientWithoutToken).to.be.an.instanceof(recast.Client)
+  it ('it should be instanciable without language', () => {
+    expect(new recast.Client(TOKEN, null)).to.be.an.instanceof(recast.Client)
+  })
+
+  it ('should be instanciable without params', () => {
+    expect(new recast.Client()).to.be.an.instanceof(recast.Client)
   })
 
   it ('should be instanciable with all params', () => {
-    let testClient2 = new recast.Client(TOKEN, "EN")
-    expect(testClient).to.be.an.instanceof(recast.Client)
+    expect(new recast.Client(TOKEN, LANGUAGE)).to.be.an.instanceof(recast.Client)
   })
+
+  // Attribute
 
   it ('should have attributes', () => {
-    assert.equal(testClient.token, TOKEN)
+    const client = new recast.Client(TOKEN, LANGUAGE)
+
+    assert.equal(client.token, TOKEN)
+    assert.equal(client.language, LANGUAGE)
   })
 
+  // Methods
+
+  const client = new recast.Client(TOKEN)
+  before(done => {
+    sinon.stub(request, 'post').returns(json)
+    done()
+  })
+
+  after(done => {
+    request.post.restore()
+    done()
+  })
+
+  it ('should perform a text request', done => {
+    client.textRequest('HELLO WORLD', (err, res) => {
+      console.log('error', err)
+      console.log('res', res)
+      done()
+    })
+  })
+  /*
   it ('should perform a text request', (done) => {
-    testClient.textRequest('Hello world', (res, err) => {
+    const client = new recast.Client(TOKEN)
+    client.textRequest('Hello world', (res, err) => {
       assert.equal(res.status, 200)
       done()
     })
@@ -62,103 +96,53 @@ describe('Client class', () => {
       assert.equal(response.status, 200)
       done()
     })
-  })
+  })*/
 })
 
 describe('Response class', () => {
-  let testClient = new recast.Client(TOKEN)
-  let rawValue = {
-    results:
-      { source: 'Give me some recipes with asparagus.',
-        intents: [ 'recipe', 'test' ],
-        sentences: [
-          {
-            source: 'Give me some recipes with asparagus.',
-            type: 'command',
-            action: 'give',
-            agent: 'you',
-            polarity: 'positive',
-            entities: {
-              pronoun: [
-                { person: 1, number: "singular", gender: "unkown", raw: "me" },
-                { person: 1, number: "singular", gender: "unkown", raw: "me" }
-              ],
-              ingredient: [{ value: "asparagus", raw: "asparagus" }]
-            }
-          }
-        ],
-        version: '0.1.4',
-        timestamp: '2016-05-12T09:23:12+02:00',
-        status: 200
-      },
-      message: 'Requests rendered with success.'
-    }
 
   it ('should be instanciable', () => {
-    expect(new recast.Response(rawValue)).to.be.an.instanceof(recast.Response)
+    expect(new recast.Response(json)).to.be.an.instanceof(recast.Response)
   })
 
   it ('should have attributes', () => {
-    let testResponse = new recast.Response(rawValue)
+    const response = new recast.Response(json)
 
-    assert.equal(testResponse.status, 200)
-    assert.equal(testResponse.version, rawValue.results.version)
-    assert.equal(testResponse.source, rawValue.results.source)
-    assert.equal(testResponse.timestamp, rawValue.results.timestamp)
-    assert.equal(_.isEqual(testResponse.intents, ['recipe', 'test']), true)
-    assert.equal(_.isEqual(testResponse.raw, rawValue), true)
+    assert.equal(response.act, json.act)
+    assert.equal(response.type, json.type)
+    assert.equal(response.source, json.source)
+    assert.equal(response.intents, json.intents)
+    assert.equal(response.negated, json.negated)
+    assert.equal(response.sentiment, json.sentiment)
+    assert.equal(response.language, json.language)
+    assert.equal(response.version, json.version)
+    assert.equal(response.timestamp, json.timestamp)
+    assert.equal(response.entities.length, 4)
   })
 
   it ('should have methods', () => {
-    let testResponse = new recast.Response(rawValue)
-    let arrayEntities = []
-    arrayEntities.push(new recast.Entity('pronoun', { person: 1, number: 'singular', gender: 'unkown', raw: 'me' }))
-    arrayEntities.push(new recast.Entity('pronoun', { person: 1, number: 'singular', gender: 'unkown', raw: 'me' }))
-    arrayEntities.push(new recast.Entity('ingredient', { value: 'asparagus', raw: 'asparagus' }))
-    let slice = arrayEntities.slice(0, 2)
+    const response = new recast.Response(json)
 
-    assert.equal(testResponse.intent(), 'recipe')
-    assert.equal(testResponse.intent(), testResponse.intents[0])
-    assert.equal(_.isEqual(testResponse.sentence(), testResponse.sentences[0]), true)
-    assert.equal(_.isEqual(testResponse.get('ingredient'), arrayEntities[2]), true)
-    assert.equal(_.isEqual(testResponse.all('pronoun'), slice), true)
-    assert.equal(testResponse.get('Invalid'), null)
-    assert.equal(_.isEqual(testResponse.all('Invalid'), []), true)
+    assert.equal(response.intent(), json.intents[0])
+    assert.equal(response.all('location').length, 2)
+    assert.equal(response.get('location').name, 'location')
 
-    testResponse.sentences = null
-    testResponse.intents = null
-    assert.equal(testResponse.sentence(), null)
-    assert.equal(testResponse.intent(), null)
+    //assert.equal(response.isNegated(),)
+    assert.equal(response.isAssert(), false)
+    assert.equal(response.isCommand(), false)
+    assert.equal(response.isWhQuery(), true)
+    assert.equal(response.isYnQuery(), false)
+    assert.equal(response.isAbbreviation(), false)
+    assert.equal(response.isEntity(), false)
+    assert.equal(response.isDescription(), true)
+    assert.equal(response.isHuman(), false)
+    assert.equal(response.isLocation(), false)
+    assert.equal(response.isNumber(), false)
+    assert.equal(response.isPositive(), false)
+    assert.equal(response.isNeutral(), true)
+    assert.equal(response.isNegative(), false)
 
-    testClient.token = undefined
     assert.throws(() => { recast.Response() }, TypeError, 'Cannot call a class as a function')
-  })
-})
-
-describe('Sentence class', () => {
-  let rawValue = {
-    source: 'This is a test',
-    type: 'command',
-    action: 'test',
-    agent: null,
-    polarity: 'positive',
-    entities: []
-  }
-
-  it ('should be instanciable', () => {
-    expect(new recast.Sentence(rawValue)).to.be.an.instanceof(recast.Sentence)
-  })
-
-  it ('should have attributes', () => {
-    let testSentence = new recast.Sentence(rawValue)
-
-    assert.equal(testSentence.source, 'This is a test')
-    assert.equal(testSentence.type, 'command')
-    assert.equal(testSentence.action, 'test')
-    assert.equal(testSentence.agent, null)
-    assert.equal(testSentence.polarity, 'positive')
-
-    assert.throws(() => { recast.Sentence() }, TypeError, 'Cannot call a class as a function')
   })
 })
 

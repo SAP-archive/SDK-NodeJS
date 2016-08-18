@@ -1,1 +1,1 @@
-export class RecastError extends Error { }
+export default class RecastError extends Error { }

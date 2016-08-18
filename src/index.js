@@ -1,11 +1,4 @@
-import { Client } from './class/client.js'
-import { Response } from './class/response.js'
-import { Sentence } from './class/sentence.js'
-import { Entity } from './class/entity.js'
-import { RecastError } from './class/error.js'
-
-module.exports.Client = Client
-module.exports.Response = Response
-module.exports.Sentence = Sentence
-module.exports.Entity = Entity
-module.exports.RecastError = RecastError
+export Client from './class/client'
+export Response from './class/response'
+export Entity from './class/entity'
+export RecastError from './class/error'
