@@ -129,14 +129,14 @@ The Response is generated after a call to either fileRequest or textRequest.
 
 | Method        | Params | Return                    |
 | ------------- |:------:| :-------------------------|
-| intent()      |        | the first detected intent |
+| intent()      |        | Object: the first detected intent |
 
 ```javascript
 client.textRequest(YOUR_TEXT, function(res, err) {
 
     var intent = res.intent()
 
-    if (intent === 'greetings') {
+    if (intent.name === 'greetings' && intent.confidence > 0.7) {
       // Do your code...
 
     }
@@ -149,7 +149,7 @@ client.textRequest(YOUR_TEXT, function(res, err) {
 
 | Method        | Params | Return             |
 | ------------- |:------:| :------------------|
-| sentence()    |        | the first sentence |
+| sentence()    |        | Sentence: the first sentence |
 
 ```javascript
 client.textRequest(YOUR_TEXT, function(res, err) {
@@ -163,7 +163,7 @@ client.textRequest(YOUR_TEXT, function(res, err) {
 
 | Method        | Params        | Return                    |
 | ------------- |:-------------:| :-------------------------|
-| get(name)     | name: String  | the first Entity matched  |
+| get(name)     | name: String  | Entity: the first Entity matched  |
 
 
 ```javascript
@@ -178,7 +178,7 @@ client.textRequest(YOUR_TEXT, function(res, err) {
 
 | Method        | Params        | Return                    |
 | ------------- |:-------------:| :-------------------------|
-| all(name)     | name: String  | all the Entities matched  |
+| all(name)     | name: String  | Array[Entity]: all the Entities matched  |
 
 ```javascript
 client.textRequest(YOUR_TEXT, function(res, err) {
@@ -192,29 +192,29 @@ client.textRequest(YOUR_TEXT, function(res, err) {
 
 | Method        | Params | Return                                  |
 | ------------- |-------:| :---------------------------------------|
-| isAssert()    |        | wheither or not the act is an assertion |
-| isCommand()   |        | wheither or not the act is a command    |
-| isWhQuery()   |        | wheither or not the act is a wh-query   |
-| isYnQuery()   |        | wheither or not the act is a yn-query   |
+| isAssert()    |        | Bool: wheither or not the act is an assertion |
+| isCommand()   |        | Bool: wheither or not the act is a command    |
+| isWhQuery()   |        | Bool: wheither or not the act is a wh-query   |
+| isYnQuery()   |        | Bool: wheither or not the act is a yn-query   |
 
 ### Type helper
 
 | Method           | Params | Return                                                     |
 | ---------------- |-------:| :----------------------------------------------------------|
-| isAbbreviation() |        | wheither or not the sentence is asking for an abbreviation |
-| isEntity()       |        | wheither or not the sentence is asking for an entity       |
-| isDescription()  |        | wheither or not the sentence is asking for a description   |
-| isHuman()        |        | wheither or not the sentence is asking for a human         |
-| isLocation()     |        | wheither or not the sentence is asking for a location      |
-| isNumber()       |        | wheither or not the sentence is asking for a number        |
+| isAbbreviation() |        | Bool: wheither or not the sentence is asking for an abbreviation |
+| isEntity()       |        | Bool: wheither or not the sentence is asking for an entity       |
+| isDescription()  |        | Bool: wheither or not the sentence is asking for a description   |
+| isHuman()        |        | Bool: wheither or not the sentence is asking for a human         |
+| isLocation()     |        | Bool: wheither or not the sentence is asking for a location      |
+| isNumber()       |        | Bool: wheither or not the sentence is asking for a number        |
 
 ### Sentiment helper
 
 | Method        | Params | Return                                    |
 | ------------- |-------:| :-----------------------------------------|
-| isPositive()  |        | wheither or not the sentiment is positive |
-| isNegative()  |        | wheither or not the sentiment is negative |
-| isNeutral()   |        | wheither or not the sentiment is neutral  |
+| isPositive()  |        | Bool: wheither or not the sentiment is positive |
+| isNegative()  |        | Bool: wheither or not the sentiment is negative |
+| isNeutral()   |        | Bool: wheither or not the sentiment is neutral  |
 
 ### Attributes
 
