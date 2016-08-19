@@ -1,4 +1,4 @@
-# SDK Node.js
+# Recast.AI - SDK Node.js
 
 [logo]: https://github.com/RecastAI/SDK-NodeJs/blob/master/misc/logo-inline.png "Recast.AI"
 
