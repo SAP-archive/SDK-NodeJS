@@ -27,9 +27,9 @@ export default class Client {
     }
 
     if (!TOKEN) {
-      return callback(null, new RecastError('Token is missing'))
+      return callback(new RecastError('Token is missing'), null)
     } else {
-      request.post('https://api.recast.ai/v1/request')
+      request.post(constants.API_ENDPOINT)
         .set('Authorization', `Token ${TOKEN}`)
         .send(params)
         .end((err, res) => {
@@ -58,9 +58,9 @@ export default class Client {
     }
 
     if (!TOKEN) {
-      return callback(null, new RecastError('Token is missing'))
+      return callback(new RecastError('Token is missing'), null)
     } else {
-      const req = request.post('https://api.recast.ai/v1/request')
+      const req = request.post(constants.API_ENDPOINT)
         .attach('voice', file)
         .set('Authorization', `Token ${TOKEN}`)
         .set('Content-Type', '')

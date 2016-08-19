@@ -1,7 +1,7 @@
 const assert = require('chai').assert
 const expect = require('chai').expect
-const sinon = require('sinon')
 const request = require('superagent')
+const nock = require('nock')
 const _ = require('lodash')
 
 const recast = require('../lib/index')
@@ -9,6 +9,7 @@ const json = require('./resource/json.js')
 
 const TOKEN = process.env.RECAST_TOKEN || 'FAKE_TOKEN'
 const LANGUAGE = 'FR'
+
 
 describe('Client class', () => {
 
@@ -37,66 +38,84 @@ describe('Client class', () => {
 
     assert.equal(client.token, TOKEN)
     assert.equal(client.language, LANGUAGE)
+
+    assert.throws(() => { recast.Client() }, TypeError, 'Cannot call a class as a function')
   })
 
   // Methods
 
   const client = new recast.Client(TOKEN)
-  before(done => {
-    sinon.stub(request, 'post').returns(json)
-    done()
-  })
 
-  after(done => {
-    request.post.restore()
-    done()
-  })
+  describe('textRequest', () => {
+    const apiNockedSuccess = nock('https://api.recast.ai')
+      .post('/v2/request')
+      .once()
+      .reply(200, json)
 
-  it ('should perform a text request', done => {
-    client.textRequest('HELLO WORLD', (err, res) => {
-      console.log('error', err)
-      console.log('res', res)
-      done()
+    const apiNockedError = nock('https://api.recast.ai')
+      .post('/v2/request')
+      .once()
+      .reply(404, 'invalid parameter')
+
+    it ('should perform a text request', done => {
+      client.textRequest('Hello world', (err, res) => {
+        assert.equal(res.status, 200)
+        done()
+      })
+    })
+
+    it ('should fail if no token', (done) => {
+      let clientWithoutToken = new recast.Client()
+      clientWithoutToken.textRequest("text", (err, res) => {
+        expect(err).to.be.an.instanceof(Error)
+        assert.equal(err.message, 'Token is missing')
+        done()
+      })
+    }) 
+
+    it ('should return an error on 404', done => {
+      client.textRequest('Hello world', (err, res) => {
+        assert.equal(res.status, 404)
+        done()
+      }, { language: 'fr' })
     })
   })
-  /*
-  it ('should perform a text request', (done) => {
-    const client = new recast.Client(TOKEN)
-    client.textRequest('Hello world', (res, err) => {
-      assert.equal(res.status, 200)
-      done()
+
+  describe('fileRequest', () => {
+    const apiNockedSuccess = nock('https://api.recast.ai')
+      .post('/v2/request')
+      .once()
+      .reply(200, json)
+
+    const apiNockedError = nock('https://api.recast.ai')
+      .post('/v2/request')
+      .once()
+      .reply(404, 'invalid parameter')
+
+    it ('should perform a voice request', function(done) {
+      this.timeout(15000)
+      client.fileRequest(__dirname + '/resource/test.wav', (err, res) => {
+        assert.equal(res.status, 200)
+        done()
+      })
+    })
+
+    it ('should return an error on 404', done => {
+      client.fileRequest('spec/resource/test.wav', (err, res) => {
+        assert.equal(res.status, 404)
+        done()
+      }, { language: 'fr' })
+    })
+
+    it ('should perform a voice request', function(done) {
+      let clientWithoutToken = new recast.Client()
+      clientWithoutToken.fileRequest(__dirname + '/resource/test.wav', (err, res) => {
+        expect(err).to.be.an.instanceof(Error)
+        assert.equal(err.message, 'Token is missing')
+        done()
+      })
     })
   })
-
-  it ('textRequest should fail if no token', (done) => {
-    let clientWithoutToken = new recast.Client()
-    clientWithoutToken.textRequest("text", (res, err) => {
-      expect(err).to.be.an.instanceof(Error)
-      done()
-    })
-  }) 
-
-  it ('should accept french language', done => {
-    testClient.textRequest('Bonjour', (res, err) => {
-      assert.equal(res.language, 'fr')
-      done()
-    }, {language: 'fr'})
-  })
-
-  it ('should return a RecastError on invalid request', (done) => {
-    testClient.textRequest('Hello world', (res, err) => {
-      expect(err).to.be.a('Error')
-      done()
-    }, { token: 'invalid_token' })
-  })
-
-  it ('should perform a voice request', function(done) {
-    this.timeout(15000)
-    testClient.fileRequest(__dirname + '/resource/test.wav', (response, err) => {
-      assert.equal(response.status, 200)
-      done()
-    })
-  })*/
 })
 
 describe('Response class', () => {
@@ -112,7 +131,6 @@ describe('Response class', () => {
     assert.equal(response.type, json.type)
     assert.equal(response.source, json.source)
     assert.equal(response.intents, json.intents)
-    assert.equal(response.negated, json.negated)
     assert.equal(response.sentiment, json.sentiment)
     assert.equal(response.language, json.language)
     assert.equal(response.version, json.version)
@@ -127,7 +145,6 @@ describe('Response class', () => {
     assert.equal(response.all('location').length, 2)
     assert.equal(response.get('location').name, 'location')
 
-    //assert.equal(response.isNegated(),)
     assert.equal(response.isAssert(), false)
     assert.equal(response.isCommand(), false)
     assert.equal(response.isWhQuery(), true)

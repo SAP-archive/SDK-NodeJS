@@ -16,5 +16,5 @@ export default {
 
   SENTIMENT_POSITIVE: 'positive',
   SENTIMENT_NEUTRAL: 'neutral',
-  SENTIMENT_NEGATIVE: 'negative'
+  SENTIMENT_NEGATIVE: 'negative',
 }

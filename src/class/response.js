@@ -21,6 +21,7 @@ export default class Response {
     this.language = response.language
     this.version = response.version
     this.timestamp = response.timestamp
+    this.status = response.status
   }
 
   /**
@@ -42,12 +43,6 @@ export default class Response {
    * @returns {Intent}: thie first Intent or null
    */
   intent = () => this.intents[0] || null
-
-  /**
-   * Returns whether or not the source is negated
-   * @returns {boolean}: true or false
-   */
-  isNegated = () => this.negated === 0
 
   /**
    * ACT HELPERS
