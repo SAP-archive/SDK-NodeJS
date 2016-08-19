@@ -61,14 +61,14 @@ __Your tokens:__
 
 ![alt text][token]
 
-*Copy paste your request access token in your bot's settings.*
+*Copy paste your request access token from your bot's settings.*
 
 __Your language__
 
 ```javascript
 var client = new recastai.Client(YOUR_TOKEN, 'en')
 ```
-*The language is a lowercase isocode.*
+*The language is a lowercase 639-1 isocode.*
 
 ## Text Request
 
@@ -92,13 +92,9 @@ client.textRequest(YOUR_TEXT, function(res, err) {
 }, { token: YOUR_TOKEN, language: YOUR_LANGUAGE })
 ```
 
-__If a language is provided:__
+__If a language is provided:__ the language you've given is used for processing if your bot has expressions for it, else your bot's primary language is used.
 
-The language you've given is used for processing if your bot has expressions for it, else your bot's primary language is used.
-
-__If no language is provided:__
-
-The language of the text is detected and is used for processing if your bot has expressions for it, else your bot's primary language is used for processing.
+__If no language is provided:__ the language of the text is detected and is used for processing if your bot has expressions for it, else your bot's primary language is used for processing.
 
 ## File Request
 
@@ -204,12 +200,12 @@ client.textRequest(YOUR_TEXT, function(res, err) {
 
 Each of the following methods corresponds to a Response attribute
 
-| Method      | Params | Return                                      |
-| ----------- |:------:| :-------------------------------------------|
+| Method      | Params | Return                                              |
+| ----------- |:------:| :---------------------------------------------------|
 | raw         |        | String: the raw unparsed json response              |
 | source      |        | String: the user input                              |
-| intents     |        | Array[object]: all the matched intents                     |
-| sentences   |        | Array[Sentence]: all the detected sentences                  |
+| intents     |        | Array[object]: all the matched intents              |
+| sentences   |        | Array[Sentence]: all the detected sentences         |
 | version     |        | String: the version of the json                     |
 | timestamp   |        | String: the timestamp at the end of the processing  |
 | status      |        | String: the status of the response                  |
