@@ -1,7 +1,7 @@
 import { forEach } from 'lodash'
 
 import Entity from './entity'
-import config from '../config.js'
+import constants from '../constants.js'
 
 export default class Response {
 
@@ -12,7 +12,6 @@ export default class Response {
     this.type = response.type
     this.source = response.source
     this.intents = response.intents
-    this.negated = response.negated
     this.sentiment = response.sentiment
 
     forEach(response.entities, (value, key) => {
@@ -55,40 +54,40 @@ export default class Response {
    * Returns whether or not the response act corresponds to the checked one
    * @returns {boolean}: true or false
    */
-  isAssert = () => this.act === config.ACT_ASSERT
+  isAssert = () => this.act === constants.ACT_ASSERT
 
-  isCommand = () => this.act === config.ACT_COMMAND
+  isCommand = () => this.act === constants.ACT_COMMAND
 
-  isWhQuery = () => this.act === config.ACT_WH_QUERY
+  isWhQuery = () => this.act === constants.ACT_WH_QUERY
 
-  isYnQuery = () => this.act === config.ACT_YN_QUERY
+  isYnQuery = () => this.act === constants.ACT_YN_QUERY
 
   /**
    * TYPE HELPERS
    * Returns whether or not the response type corresponds to the checked one
    * @returns {boolean}: true or false
    */
-  isAbbreviation = () => this.type.indexOf(config.TYPE_ABBREVIATION) !== -1
+  isAbbreviation = () => this.type.indexOf(constants.TYPE_ABBREVIATION) !== -1
 
-  isEntity = () => this.type.indexOf(config.TYPE_ENTITY) !== -1
+  isEntity = () => this.type.indexOf(constants.TYPE_ENTITY) !== -1
 
-  isDescription = () => this.type.indexOf(config.TYPE_DESCRIPTION) !== -1
+  isDescription = () => this.type.indexOf(constants.TYPE_DESCRIPTION) !== -1
 
-  isHuman = () => this.type.indexOf(config.TYPE_HUMAN) !== -1
+  isHuman = () => this.type.indexOf(constants.TYPE_HUMAN) !== -1
 
-  isLocation = () => this.type.indexOf(config.TYPE_LOCATION) !== -1
+  isLocation = () => this.type.indexOf(constants.TYPE_LOCATION) !== -1
 
-  isNumber = () => this.type.indexOf(config.TYPE_NUMBER) !== -1
+  isNumber = () => this.type.indexOf(constants.TYPE_NUMBER) !== -1
 
   /**
    * SENTIMENT HELPERS
    * Returns whether or not the response sentiment corresponds to the checked one
    * @returns {boolean}: true or false
    */
-  isPositive = () => this.sentiment === config.SENTIMENT_POSITIVE
+  isPositive = () => this.sentiment === constants.SENTIMENT_POSITIVE
 
-  isNeutral = () => this.sentiment === config.SENTIMENT_NEUTRAL
+  isNeutral = () => this.sentiment === constants.SENTIMENT_NEUTRAL
 
-  isNegative = () => this.sentiment === config.SENTIMENT_NEGATIVE
+  isNegative = () => this.sentiment === constants.SENTIMENT_NEGATIVE
 
 }

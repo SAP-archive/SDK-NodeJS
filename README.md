@@ -1,44 +1,31 @@
-# SDK-NodeJs
+# Recast.AI - SDK Node.js
 
 [logo]: https://github.com/RecastAI/SDK-NodeJs/blob/master/misc/logo-inline.png "Recast.AI"
 
 ![alt text][logo]
 
-Recast.AI official SDK in NodeJs.
+Recast.AI official SDK in Node.js
 
 ## Synospis
 
-This module is a NodeJs interface to the [Recast.AI](https://recast.ai) API. It allows you to make request to your bots
+This module is a Node.js interface to the [Recast.AI](https://recast.ai) API. It allows you to make request to your bots
 
 ## Installation
 
-### Via NPM
-
-From [npmjs.org](https://npmjs.com/):
-
 ```bash
-npm install recastai
+npm install --save recastai
 ```
-
-From [github.com](https://github.com/):
-
-```bash
-npm install https://github.com/RecastAI/SDK-NodeJs.git
-```
-
 ## Usage
 
-### Module
-
 ```javascript
-import recast from 'recastai'
+var recastai = require('recastai')
 
-const CLIENT = new recast.Client(YOUR_TOKEN, YOUR_LANGUAGE)
+var client = new recastai.Client(YOUR_TOKEN, YOUR_LANGUAGE)
 
-CLIENT.textRequest(YOUR_TEXT, (res, err) => {
+client.textRequest(YOUR_TEXT, function(res, err) {
   if (err) {
     // Handle error
-  } else if (response.intent() === YOUR_INTENT) {
+  } else if (res.intent() === YOUR_INTENT) {
     // Do your code...
   }
 })
@@ -48,156 +35,231 @@ CLIENT.textRequest(YOUR_TEXT, (res, err) => {
 
 ### Classes
 
-This module contains 5 main classes, as follows:
+This module contains 5 classes, as follows:
 
 * Client is the client allowing you to make requests.
 * Response contains the response from [Recast.AI](https://recast.ai).
-* Sentence represents a sentence of the response.
-* Entity represents an entity found by Recast.AI in your user's input.
+* Intent represents an intent of the response
 * RecastError is the error returned by the module.
 
 Don't hesitate to dive into the code, it's commented ;)
 
-### class Client
+## class Client
 
-The Recast.AI Client can be instanciated with a token (optional) and a language (optional), and provides the two following methods:
-
-* textRequest(text, callback, options = {}) *Performs a text request*
-* fileRequest(file, callback, options = {}) *Performs a voice file request*
-
-On each call to `textRequest` or `fileRequest` you can override either your token or your language by passing a hash of options.
-
-If no language is provided in the request, Recast.AI does the following:
-
-* textRequest: the language of the text is detected and is used for processing if your bot has expressions for it, else your bot's primary language is used for processing.
-* voiceRequest: your bot's primary language us used for processing as we do not provide language detection for speech.
-
-If a language is provided, Recast.AI does the following:
-
-* textRequest: the language you've given is used for processing if your bot has expressions for it, else your bot's primary language is used.
-* voiceRequest: the language you've given is used for processing if your bot has expressions for it, else your bot's primary language is used
-
-*Both callbacks should take two parameters: a Response and a RecastError*
-*Accepted options are: token and language, to override the defaults provided at initialization*
+The Client can be instanciated with a token and a language (both optional).
 
 ```javascript
-import recast from 'recastai'
+var client = new recastai.Client(YOUR_TOKEN, YOUR_LANGUAGE)
+```
 
-// Create a new Client
-const CLIENT = new recast.Client(YOUR_TOKEN, YOUR_LANGUAGE)
+__Your tokens:__
 
-// Performs a text request on Recast.AI
-CLIENT.textRequest('Hello, world', (res, err) => {
+[token]: https://github.com/RecastAI/SDK-NodeJs/blob/master/misc/recast-ai-tokens.png "Tokens"
+
+![alt text][token]
+
+*Copy paste your request access token from your bot's settings.*
+
+__Your language__
+
+```javascript
+var client = new recastai.Client(YOUR_TOKEN, 'en')
+```
+*The language is a lowercase 639-1 isocode.*
+
+## Text Request
+
+textRequest(text, callback, options = { token: YOUR_TOKEN, language: YOUR_LANGUAGE })
+
+If your pass a token or a language in the options parameter, it will override your default client language or token.
+
+```javascript
+client.textRequest(YOUR_TEXT, function(res, err) {
+    // Do your code...¯
+
+})
+```
+
+```javascript
+// With optional parameters
+
+client.textRequest(YOUR_TEXT, function(res, err) {
   // Do your code...
+
+}, { token: YOUR_TOKEN, language: YOUR_LANGUAGE })
+```
+
+__If a language is provided:__ the language you've given is used for processing if your bot has expressions for it, else your bot's primary language is used.
+
+__If no language is provided:__ the language of the text is detected and is used for processing if your bot has expressions for it, else your bot's primary language is used for processing.
+
+## File Request
+
+fileRequest(file, callback, options = { token: YOUR_TOKEN, language: YOUR_LANGUAGE })
+
+If your pass a token or a language in the options parameter, it will override your default client language or token.
+
+__file format: .wav__
+
+```javascript
+client.fileRequest('myFile.wav', function(err, res) {
+  // Do your code...
+
+})
+```
+
+```javascript
+client.fileRequest('myFile.wav', function(err, res) {
+  // Do your code...
+
+}, { token: YOUR_TOKEN, language: YOUR_LANGUAGE })
+```
+
+__If a language is provided:__
+Your bot's primary language is used for processing as we do not provide language detection for speech.
+
+__If no language is provided:__
+The language you've given is used for processing if your bot has expressions for it, else your bot's primary language is used
+
+## class Response
+
+The Response is generated after a call to either fileRequest or textRequest.
+
+### Get the first detected intent
+
+| Method        | Params | Return                    |
+| ------------- |:------:| :-------------------------|
+| intent()      |        | the first detected intent |
+
+```javascript
+client.textRequest(YOUR_TEXT, function(res, err) {
+
+    var intent = res.intent()
+
+    if (intent === 'greetings') {
+      // Do your code...
+
+    }
+
 })
 
-// Performs a voice file request on Recast.AI with the optional token
-CLIENT.fileRequest('myfile.wav', (res, err) => {
-  // Do your code
-}, { token: ANOTHER_TOKEN })
-
-// Performs a text request on Recast.AI with the optional language
-CLIENT.textRequest('Hello, world', (res, err) => {
-  // Do your code
-}, { language: ANOTHER_LANGUAGE })
 ```
 
-### class Response
+### Get the sentence
 
-The Recast.AI Response is generated after a call to one of the two previous methods and contains the following methods:
-* sentence(\*)  *Returns the first detected sentence*
-* get(name)     *Returns the first entity matching -name-*
-* all(name)     *Returns all the entities matching -name-*
-* intent(\*)    *Returns the first matched intent*
-
-In addition, you can access each of these attributes:
-* raw *The raw unparsed response*
-* source *The source sentence Recast.AI processed*
-* intents *All the matched intents*
-* sentences *All the detected sentences*
-* version *The version of the JSON*
-* timestamp *The timestamp at the end of the processing*
-* status *The status of the response*
+| Method        | Params | Return             |
+| ------------- |:------:| :------------------|
+| sentence()    |        | the first sentence |
 
 ```javascript
-CLIENT.textRequest('Give me a recipe with asparagus. And tomatoes', (res, err) => {
-    // Get the first sentence, aka 'Give me some recipe with asparagus'
-    let firstSentence = response.sentence()
+client.textRequest(YOUR_TEXT, function(res, err) {
 
-    // If the first intent matched is 'recipe'...
-    if (response.intent() === 'recipe') {
-      // ... get all the entities matching 'ingredient'
-      let ingredients = response.all('ingredient')
+    var firstSentence = res.sentence()
 
-      // ...
-    }
-    console.log(`This request has been filled at ${response.timestamp}`)
-  })
+})
 ```
 
-### class Sentence
+### Get one entity
 
-The Recast.AI Sentence is generated by the Recast.AI Response constructor and provides the following methods:
-* get(name)     *Returns the first entity matching -name-*
-* all(name)     *Returns all the entities matching -name-*
+| Method        | Params        | Return                    |
+| ------------- |:-------------:| :-------------------------|
+| get(name)     | name: String  | the first Entity matched  |
 
-In addition, you can access each of these attributes:
-* source *The source of the sentence*
-* type *The type of the sentence*
-* action *The action of the sentence*
-* agent *The agent of the sentence*
-* polarity *The polarity (negation or not) of the sentence*
-* entities *All the entities detected in the sentence*
 
 ```javascript
-CLIENT.textRequest('Tell me a joke.', (res, err) => {
-    // Get the first sentence
-    let sentence = response.sentence()
+client.textRequest(YOUR_TEXT, function(res, err) {
 
-    if (sentence.action === 'tell' && sentence.polarity === 'positive') {
-      // Tell a joke...
-    }
-  })
+    var location = res.get('location')
+
+})
 ```
 
-### class Entity
+### Get all entities matching name
 
-The Recast.AI Entity is generated by the Recast.AI Sentence constructor and provides the following attributes:
-
-* name *The name of the entity*
-* raw *The raw text on which the entity was detected*
-
-In addition to this method, more attributes are generated depending of the nature of the entity, which can be one of the following:
-
-* hex
-* value
-* deg
-* formated
-* lng
-* lat
-* unit
-* code
-* person
-* number
-* gender
-* next
-* grain
-* order
+| Method        | Params        | Return                    |
+| ------------- |:-------------:| :-------------------------|
+| all(name)     | name: String  | all the Entities matched  |
 
 ```javascript
-CLIENT.textRequest('What can I cook with salmon ?', (res, err) => {
+client.textRequest(YOUR_TEXT, function(res, err) {
 
-    if (response.intent() === 'recipe') {
-      // Get the ingredient
-      let ingredient = response.get('ingredient')
+    var locations = res.all('location')
 
-      console.log('You asked me for a recipe with ${ingredient.value}')
-      // 'You asked me for a recipe with salmon'
-    }
-  })
+})
 ```
 
-### class RecastError
+### Act helper
+
+| Method        | Params | Return                                  |
+| ------------- |-------:| :---------------------------------------|
+| isAssert()    |        | wheither or not the act is an assertion |
+| isCommand()   |        | wheither or not the act is a command    |
+| isWhQuery()   |        | wheither or not the act is a wh-query   |
+| isYnQuery()   |        | wheither or not the act is a yn-query   |
+
+### Type helper
+
+| Method           | Params | Return                                                     |
+| ---------------- |-------:| :----------------------------------------------------------|
+| isAbbreviation() |        | wheither or not the sentence is asking for an abbreviation |
+| isEntity()       |        | wheither or not the sentence is asking for an entity       |
+| isDescription()  |        | wheither or not the sentence is asking for a description   |
+| isHuman()        |        | wheither or not the sentence is asking for a human         |
+| isLocation()     |        | wheither or not the sentence is asking for a location      |
+| isNumber()       |        | wheither or not the sentence is asking for a number        |
+
+### Sentiment helper
+
+| Method        | Params | Return                                    |
+| ------------- |-------:| :-----------------------------------------|
+| isPositive()  |        | wheither or not the sentiment is positive |
+| isNegative()  |        | wheither or not the sentiment is negative |
+| isNeutral()   |        | wheither or not the sentiment is neutral  |
+
+### Attributes
+
+Each of the following methods corresponds to a Response attribute
+
+| Attributes  | Type                                                |
+| ----------- | :---------------------------------------------------|
+| raw         | String: the raw unparsed json response              |
+| type        | String: the type of the processed sentence          |
+| act         | String: the act of the processed sentence           |
+| sentiment   | String: the sentiment of the processed sentence     |
+| source      | String: the user input                              |
+| intents     | Array[object]: all the matched intents              |
+| sentences   | Array[Sentence]: all the detected sentences         |
+| status      | String: the status of the response                  |
+| version     | String: the version of the json                     |
+| timestamp   | String: the timestamp at the end of the processing  |
+
+## class Entity
+
+The Entity is generated by the Sentence constructor.
+
+### Attributes 
+
+Each of the following methods corresponds to a Response attribute
+
+| Attributes  | Description                                                   |
+| ----------- |:--------------------------------------------------------------|
+| name        | String: the name of the entity                                |
+| raw         | String: the unparsed json value of the entity                 |
+
+In addition to those methods, more attributes are generated depending of the nature of the entity.
+The full list can be found there: [man.recast.ai](https://man.recast.ai/#list-of-entities)
+
+```javascript
+client.textRequest(YOUR_TEXT, function(res, err) {
+
+    var location = res.get('location')
+
+    console.log(location.raw)
+    console.log(location.name)
+})
+```
+
+## class RecastError
 
 The Recast.AI Error is thrown when receiving an non-200 response from Recast.AI.
 
@@ -206,7 +268,6 @@ As it inherits from Error, it implements the default Error methods.
 ## More
 
 You can view the whole API reference at [man.recast.ai](https://man.recast.ai).
-
 
 ## Author
 

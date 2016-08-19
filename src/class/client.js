@@ -2,6 +2,7 @@ import request from 'superagent'
 
 import Response from './response'
 import RecastError from './error'
+import constants from '../constants'
 
 export default class Client {
 
@@ -14,7 +15,7 @@ export default class Client {
    * Perform a text request on Recast.AI
    * @param {String} text: the text to process
    * @param {Function} callback: the callback which be called with the Response of the request or a the RecastError
-   * @param {Hash} options: [optional] request's options
+   * @param {Object} options: [optional] request's options
    */
   textRequest (text, callback, options) {
     const TOKEN = options && options.token || this.token
@@ -45,7 +46,7 @@ export default class Client {
    * Perform a voice file request on Recast.AI
    * @param {String} file: the name of the file to process
    * @param {Function} callback: the callback which be called with the Response of the request or with a RecastError
-   * @param {Hash} options: [optional] request's options
+   * @param {Object} options: [optional] request's options
    */
   fileRequest (file, callback, options) {
     const TOKEN = options && options.token || this.token
