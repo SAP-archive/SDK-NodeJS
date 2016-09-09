@@ -27,7 +27,8 @@ describe('Client class', () => {
     assert.equal(testClient.token, TOKEN)
   })
 
-  it ('should perform a text request', (done) => {
+  it ('should perform a text request', function(done) {
+    this.timeout(10000)
     testClient.textRequest('Hello world', (res, err) => {
       assert.equal(res.status, 200)
       done()
@@ -42,7 +43,8 @@ describe('Client class', () => {
     })
   }) 
 
-  it ('should accept french language', done => {
+  it ('should accept french language', function(done) {
+    this.timeout(15000)
     testClient.textRequest('Bonjour', (res, err) => {
       assert.equal(res.language, 'fr')
       done()
@@ -57,7 +59,7 @@ describe('Client class', () => {
   })
 
   it ('should perform a voice request', function(done) {
-    this.timeout(15000)
+    this.timeout(20000)
     testClient.fileRequest(__dirname + '/resource/test.wav', (response, err) => {
       assert.equal(response.status, 200)
       done()

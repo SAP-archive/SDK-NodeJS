@@ -72,9 +72,10 @@ var client = new recastai.Client(YOUR_TOKEN, 'en')
 
 ## Text Request
 
-textRequest(text, callback, options = { token: YOUR_TOKEN, language: YOUR_LANGUAGE })
+textRequest(text, callback, options = { token: YOUR_TOKEN, language: YOUR_LANGUAGE, proxy: YOUR_URL_PROXY })
 
 If your pass a token or a language in the options parameter, it will override your default client language or token.
+You can pass a proxy url in the options if needed.
 
 ```javascript
 client.textRequest(YOUR_TEXT, function(res, err) {
@@ -98,9 +99,10 @@ __If no language is provided:__ the language of the text is detected and is used
 
 ## File Request
 
-fileRequest(file, callback, options = { token: YOUR_TOKEN, language: YOUR_LANGUAGE })
+fileRequest(file, callback, options = { token: YOUR_TOKEN, language: YOUR_LANGUAGE, proxy: YOUR_PROXY_URL })
 
 If your pass a token or a language in the options parameter, it will override your default client language or token.
+You can pass a proxy url in the options if needed.
 
 __file format: .wav__
 

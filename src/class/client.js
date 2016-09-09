@@ -1,4 +1,6 @@
 import request from 'superagent'
+require('superagent-proxy')(request)
+
 import { Response } from './response'
 import { RecastError } from './error'
 
@@ -18,6 +20,7 @@ export class Client {
   textRequest (text, callback, options) {
     const TOKEN = options && options.token || this.token
     const LANGUAGE = (options && options.language) ? options.language : this.language
+    const PROXY = options && options.proxy
     const params = { text }
 
     if (LANGUAGE) {
@@ -27,16 +30,19 @@ export class Client {
     if (!TOKEN) {
       return callback(null, new RecastError('Token is missing'))
     } else {
-      request.post('https://api.recast.ai/v1/request')
+      const req = request.post('https://api.recast.ai/v1/request')
         .set('Authorization', `Token ${TOKEN}`)
         .send(params)
-        .end((err, res) => {
-          if (err) {
-            return callback(res, new RecastError(err.message))
-          } else {
-            return callback(new Response(res.body), null)
-          }
-        })
+
+      if (PROXY) { req.proxy(PROXY) }
+
+      req.end((err, res) => {
+        if (err) {
+          return callback(res, new RecastError(err.message))
+        } else {
+          return callback(new Response(res.body), null)
+        }
+      })
     }
   }
 
@@ -49,6 +55,7 @@ export class Client {
   fileRequest (file, callback, options) {
     const TOKEN = (options && options.token) ? options.token : this.token
     const LANGUAGE = (options && options.language) ? options.language : this.language
+    const PROXY = options && options.proxy
     const params = {}
 
     if (LANGUAGE) {
@@ -63,9 +70,8 @@ export class Client {
         .set('Authorization', `Token ${TOKEN}`)
         .set('Content-Type', '')
 
-      if (LANGUAGE) {
-        req.send(params)
-      }
+      if (LANGUAGE) { req.send(params) }
+      if (PROXY) { req.proxy(PROXY) }
 
       req.end((err, res) => {
         if (err) {
