@@ -1,5 +1,6 @@
 import { forEach } from 'lodash'
 
+import Intent from './intent'
 import Entity from './entity'
 import constants from '../constants.js'
 
@@ -7,13 +8,17 @@ export default class Response {
 
   constructor (response) {
 
-    this.entities = []
-    this.act = response.act
-    this.type = response.type
     this.source = response.source
     this.intents = response.intents
+
+    this.intents = []
+    response.intents.forEach(intent => this.intents.push(new Intent(intent)))
+
+    this.act = response.act
+    this.type = response.type
     this.sentiment = response.sentiment
 
+    this.entities = []
     forEach(response.entities, (value, key) => {
       value.forEach(entity => this.entities.push(new Entity(key, entity)))
     })
@@ -79,10 +84,14 @@ export default class Response {
    * Returns whether or not the response sentiment corresponds to the checked one
    * @returns {boolean}: true or false
    */
+  isVPositive = () => this.sentiment === constants.SENTIMENT_VERY_POSITIVE
+
   isPositive = () => this.sentiment === constants.SENTIMENT_POSITIVE
 
   isNeutral = () => this.sentiment === constants.SENTIMENT_NEUTRAL
 
   isNegative = () => this.sentiment === constants.SENTIMENT_NEGATIVE
+
+  isVNegative = () => this.sentiment === constants.SENTIMENT_VERY_NEGATIVE
 
 }

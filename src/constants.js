@@ -14,7 +14,9 @@ export default {
   TYPE_LOCATION: 'loc:',
   TYPE_NUMBER: 'num:',
 
+  SENTIMENT_VERY_POSITIVE: 'vpositive',
   SENTIMENT_POSITIVE: 'positive',
   SENTIMENT_NEUTRAL: 'neutral',
   SENTIMENT_NEGATIVE: 'negative',
+  SENTIMENT_VERY_NEGATIVE: 'vnegative',
 }

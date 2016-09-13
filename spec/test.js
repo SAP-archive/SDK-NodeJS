@@ -71,7 +71,7 @@ describe('Client class', () => {
         assert.equal(err.message, 'Token is missing')
         done()
       })
-    }) 
+    })
 
     it ('should return an error on 404', done => {
       client.textRequest('Hello world', (err, res) => {
@@ -130,8 +130,11 @@ describe('Response class', () => {
     assert.equal(response.act, json.act)
     assert.equal(response.type, json.type)
     assert.equal(response.source, json.source)
-    assert.equal(response.intents, json.intents)
+    expect(response.intents).to.be.an.instanceof(Array)
+    expect(response.intents[0]).to.be.an.instanceof(recast.Intent)
     assert.equal(response.sentiment, json.sentiment)
+    expect(response.entities).to.be.an.instanceof(Array)
+    expect(response.entities[0]).to.be.an.instanceof(recast.Entity)
     assert.equal(response.language, json.language)
     assert.equal(response.version, json.version)
     assert.equal(response.timestamp, json.timestamp)
@@ -141,7 +144,7 @@ describe('Response class', () => {
   it ('should have methods', () => {
     const response = new recast.Response(json)
 
-    assert.equal(response.intent(), json.intents[0])
+    assert.equal(response.intent(), response.intents[0])
     assert.equal(response.all('location').length, 2)
     assert.equal(response.get('location').name, 'location')
 
@@ -155,11 +158,30 @@ describe('Response class', () => {
     assert.equal(response.isHuman(), false)
     assert.equal(response.isLocation(), false)
     assert.equal(response.isNumber(), false)
+    assert.equal(response.isVPositive(), false)
     assert.equal(response.isPositive(), false)
     assert.equal(response.isNeutral(), true)
     assert.equal(response.isNegative(), false)
+    assert.equal(response.isVNegative(), false)
 
     assert.throws(() => { recast.Response() }, TypeError, 'Cannot call a class as a function')
+  })
+})
+
+describe('Intent class', () => {
+  let data = { name: 'weather', confidence: 0.89 }
+
+  it ('should be instanciable', () => {
+    expect(new recast.Intent(data)).to.be.an.instanceof(recast.Intent)
+  })
+
+  it ('should have attributes', () => {
+    let testIntent = new recast.Intent(data)
+
+    assert.equal(testIntent.name, data.name)
+    assert.equal(testIntent.confidence, data.confidence)
+
+    assert.throws(() => { recast.Intent() }, TypeError, 'Cannot call a class as a function')
   })
 })
 
