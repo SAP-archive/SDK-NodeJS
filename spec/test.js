@@ -1,6 +1,5 @@
 const assert = require('chai').assert
 const expect = require('chai').expect
-const request = require('superagent')
 const nock = require('nock')
 const _ = require('lodash')
 
@@ -58,26 +57,27 @@ describe('Client class', () => {
       .reply(404, 'invalid parameter')
 
     it ('should perform a text request', done => {
-      client.textRequest('Hello world', (err, res) => {
-        assert.equal(res.status, 200)
-        done()
-      })
+      client.textRequest('Hello world')
+        .then(res => {
+          assert.equal(res.status, 200)
+          done()
+        })
     })
 
     it ('should fail if no token', (done) => {
       let clientWithoutToken = new recast.Client()
-      clientWithoutToken.textRequest("text", (err, res) => {
-        expect(err).to.be.an.instanceof(Error)
-        assert.equal(err.message, 'Token is missing')
-        done()
-      })
+      clientWithoutToken.textRequest("text")
+        .catch(err => {
+          assert.equal(err, 'Token is missing')
+          done()
+        })
     })
 
     it ('should return an error on 404', done => {
-      client.textRequest('Hello world', (err, res) => {
-        assert.equal(res.status, 404)
-        done()
-      }, { language: 'fr' })
+      client.textRequest('Hello world')
+        .catch(err => {
+          done()
+        })
     })
   })
 
@@ -94,26 +94,28 @@ describe('Client class', () => {
 
     it ('should perform a voice request', function(done) {
       this.timeout(15000)
-      client.fileRequest(__dirname + '/resource/test.wav', (err, res) => {
-        assert.equal(res.status, 200)
-        done()
-      })
+      client.fileRequest(__dirname + '/resource/test.wav')
+        .then(res => {
+          assert.equal(res.status, 200)
+          done()
+        })
     })
 
     it ('should return an error on 404', done => {
-      client.fileRequest('spec/resource/test.wav', (err, res) => {
-        assert.equal(res.status, 404)
-        done()
-      }, { language: 'fr' })
+      client.fileRequest('spec/resource/test.wav')
+        .catch(err => {
+          done()
+        })
     })
 
-    it ('should perform a voice request', function(done) {
+    it ('should throw an error on missing token', function(done) {
       let clientWithoutToken = new recast.Client()
-      clientWithoutToken.fileRequest(__dirname + '/resource/test.wav', (err, res) => {
-        expect(err).to.be.an.instanceof(Error)
-        assert.equal(err.message, 'Token is missing')
-        done()
-      })
+      clientWithoutToken.fileRequest(__dirname + '/resource/test.wav')
+        .catch(err => {
+          expect(err).to.be.an.instanceof(Error)
+          assert.equal(err.message, 'Token is missing')
+          done()
+        })
     })
   })
 })
@@ -131,7 +133,6 @@ describe('Response class', () => {
     assert.equal(response.type, json.type)
     assert.equal(response.source, json.source)
     expect(response.intents).to.be.an.instanceof(Array)
-    expect(response.intents[0]).to.be.an.instanceof(recast.Intent)
     assert.equal(response.sentiment, json.sentiment)
     expect(response.entities).to.be.an.instanceof(Array)
     expect(response.entities[0]).to.be.an.instanceof(recast.Entity)
@@ -165,23 +166,6 @@ describe('Response class', () => {
     assert.equal(response.isVNegative(), false)
 
     assert.throws(() => { recast.Response() }, TypeError, 'Cannot call a class as a function')
-  })
-})
-
-describe('Intent class', () => {
-  let data = { name: 'weather', confidence: 0.89 }
-
-  it ('should be instanciable', () => {
-    expect(new recast.Intent(data)).to.be.an.instanceof(recast.Intent)
-  })
-
-  it ('should have attributes', () => {
-    let testIntent = new recast.Intent(data)
-
-    assert.equal(testIntent.name, data.name)
-    assert.equal(testIntent.confidence, data.confidence)
-
-    assert.throws(() => { recast.Intent() }, TypeError, 'Cannot call a class as a function')
   })
 })
 

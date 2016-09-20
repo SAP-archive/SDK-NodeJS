@@ -1,5 +1,4 @@
 export Client from './class/client'
 export Response from './class/response'
-export Intent from './class/intent'
 export Entity from './class/entity'
 export RecastError from './class/error'

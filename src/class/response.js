@@ -1,6 +1,5 @@
 import { forEach } from 'lodash'
 
-import Intent from './intent'
 import Entity from './entity'
 import constants from '../constants.js'
 
@@ -11,8 +10,8 @@ export default class Response {
     this.source = response.source
     this.intents = response.intents
 
-    this.intents = []
-    response.intents.forEach(intent => this.intents.push(new Intent(intent)))
+    this.intents = response.intents
+    //response.intents.forEach(intent => this.intents.push(new Intent(intent)))
 
     this.act = response.act
     this.type = response.type
