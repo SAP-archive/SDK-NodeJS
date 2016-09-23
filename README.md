@@ -22,24 +22,27 @@ var recastai = require('recastai')
 
 var client = new recastai.Client(YOUR_TOKEN, YOUR_LANGUAGE)
 
-client.textRequest(YOUR_TEXT, function(res, err) {
-  if (err) {
+client.textRequest(YOUR_TEXT)
+  .then(function(res) {
+    var intent = res.intent()
+
+    if (intent.slug === YOUR_INTENT) {
+      // Do your code
+    }
+  }).catch(function(err) {
     // Handle error
-  } else if (res.intent() === YOUR_INTENT) {
-    // Do your code...
-  }
-})
+  })
 ```
 
 ## Specs
 
 ### Classes
 
-This module contains 5 classes, as follows:
+This module contains 4 classes, as follows:
 
 * Client is the client allowing you to make requests.
 * Response contains the response from [Recast.AI](https://recast.ai).
-* Intent represents an intent of the response
+* Entity represents an entity of the response
 * RecastError is the error returned by the module.
 
 Don't hesitate to dive into the code, it's commented ;)
@@ -69,25 +72,29 @@ var client = new recastai.Client(YOUR_TOKEN, 'en')
 
 ## Text Request
 
-textRequest(text, callback, options = { token: YOUR_TOKEN, language: YOUR_LANGUAGE, proxy: YOUR_PROXY_URL })
+textRequest(text, options = { token: YOUR_TOKEN, language: YOUR_LANGUAGE, proxy: YOUR_PROXY_URL })
 
 If you pass a token or a language in the options parameter, it will override your default client language or token.
 You can pass a proxy url in the options if needed.
 
 ```javascript
-client.textRequest(YOUR_TEXT, function(res, err) {
-    // Do your code...¯
-
-})
+client.textRequest(YOUR_TEXT)
+  .then(function(res) => {
+    // Do your code
+  }).catch(function(err) => {
+    // Handle error
+  })
 ```
 
 ```javascript
 // With optional parameters
 
-client.textRequest(YOUR_TEXT, function(res, err) {
-  // Do your code...
-
-}, { token: YOUR_TOKEN, language: YOUR_LANGUAGE })
+client.textRequest(YOUR_TOKEN, YOUR_LANGUAGE)
+  .then(function(res) => {
+    // Do your code
+  }).catch(function(err) => {
+    // Handle error
+  })
 ```
 
 __If a language is provided:__ the language you've given is used for processing if your bot has expressions for it, else your bot's primary language is used.
@@ -96,7 +103,7 @@ __If no language is provided:__ the language of the text is detected and is used
 
 ## File Request
 
-fileRequest(file, callback, options = { token: YOUR_TOKEN, language: YOUR_LANGUAGE, proxy: YOUR_PROXY_URL })
+fileRequest(file, options = { token: YOUR_TOKEN, language: YOUR_LANGUAGE, proxy: YOUR_PROXY_URL })
 
 If you pass a token or a language in the options parameter, it will override your default client language or token.
 You can pass a proxy url in the options if needed.
@@ -104,17 +111,23 @@ You can pass a proxy url in the options if needed.
 __file format: .wav__
 
 ```javascript
-client.fileRequest('myFile.wav', function(err, res) {
-  // Do your code...
-
-})
+client.fileRequest('myFile.wav')
+  .then(function(res) => {
+    // Do your code
+  }).catch(function(err) => {
+    // Handle error
+  })
 ```
 
 ```javascript
-client.fileRequest('myFile.wav', function(err, res) {
-  // Do your code...
+// With optional parameters
 
-}, { token: YOUR_TOKEN, language: YOUR_LANGUAGE })
+client.fileRequest('myFile.wav', { token: YOUR_TOKEN, language: YOUR_LANGUAGE })
+  .then(function(res) => {
+    // Do your code
+  }).catch(function(err) => {
+    // Handle error
+  })
 ```
 
 __If a language is provided:__
@@ -134,31 +147,16 @@ The Response is generated after a call to either fileRequest or textRequest.
 | intent()      |        | Object: the first detected intent |
 
 ```javascript
-client.textRequest(YOUR_TEXT, function(res, err) {
+client.textRequest(YOUR_TEXT)
+  .then(function(res) {
 
     var intent = res.intent()
 
-    if (intent.name === 'greetings' && intent.confidence > 0.7) {
-      // Do your code...
-
+    if (intent.slug === 'geetings' && intent.confidence > 0.7) {
+      // Do your code
     }
 
-})
-
-```
-
-### Get the sentence
-
-| Method        | Params | Return             |
-| ------------- |:------:| :------------------|
-| sentence()    |        | Sentence: the first sentence |
-
-```javascript
-client.textRequest(YOUR_TEXT, function(res, err) {
-
-    var firstSentence = res.sentence()
-
-})
+  })
 ```
 
 ### Get one entity
@@ -169,11 +167,12 @@ client.textRequest(YOUR_TEXT, function(res, err) {
 
 
 ```javascript
-client.textRequest(YOUR_TEXT, function(res, err) {
+client.textRequest(YOUR_TEXT)
+  .then(function(res) {
 
     var location = res.get('location')
 
-})
+  })
 ```
 
 ### Get all entities matching name
@@ -183,11 +182,12 @@ client.textRequest(YOUR_TEXT, function(res, err) {
 | all(name)     | name: String  | Array[Entity]: all the Entities matched  |
 
 ```javascript
-client.textRequest(YOUR_TEXT, function(res, err) {
+client.textRequest(YOUR_TEXT)
+  .then(function(res) {
 
     var locations = res.all('location')
 
-})
+  })
 ```
 
 ### Act helper
@@ -214,9 +214,11 @@ client.textRequest(YOUR_TEXT, function(res, err) {
 
 | Method        | Params | Return                                    |
 | ------------- |-------:| :-----------------------------------------|
+| isVPositive()  |        | Bool: wheither or not the sentiment is very positive |
 | isPositive()  |        | Bool: wheither or not the sentiment is positive |
-| isNegative()  |        | Bool: wheither or not the sentiment is negative |
 | isNeutral()   |        | Bool: wheither or not the sentiment is neutral  |
+| isNegative()  |        | Bool: wheither or not the sentiment is negative |
+| isVNegative()  |        | Bool: wheither or not the sentiment is very negative |
 
 ### Attributes
 
@@ -230,7 +232,6 @@ Each of the following methods corresponds to a Response attribute
 | sentiment   | String: the sentiment of the processed sentence     |
 | source      | String: the user input                              |
 | intents     | Array[object]: all the matched intents              |
-| sentences   | Array[Sentence]: all the detected sentences         |
 | status      | String: the status of the response                  |
 | version     | String: the version of the json                     |
 | timestamp   | String: the timestamp at the end of the processing  |
@@ -239,7 +240,7 @@ Each of the following methods corresponds to a Response attribute
 
 The Entity is generated by the Sentence constructor.
 
-### Attributes 
+### Attributes
 
 Each of the following methods corresponds to a Response attribute
 
@@ -252,13 +253,15 @@ In addition to those methods, more attributes are generated depending of the nat
 The full list can be found there: [man.recast.ai](https://man.recast.ai/#list-of-entities)
 
 ```javascript
-client.textRequest(YOUR_TEXT, function(res, err) {
+client.textRequest(YOUR_TEXT)
+  .then(function(res) {
 
     var location = res.get('location')
 
     console.log(location.raw)
-    console.log(location.name)
-})
+    console.log(location.slug)
+
+  })
 ```
 
 ## class RecastError

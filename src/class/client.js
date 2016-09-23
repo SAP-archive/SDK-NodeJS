@@ -22,12 +22,12 @@ export default class Client {
     const token = options && options.token || this.token
     const data = { text, language: options && options.language || this.language }
     const proxy = options && options.proxy
-    if (!token) { return Promise.reject('Token is missing')}
+    if (!token) { return Promise.reject('Token is missing') }
 
     const request = {
       method: 'post',
       url: constants.API_ENDPOINT,
-      headers: { 'Authorization': `Token ${token}`},
+      headers: { Authorization: `Token ${token}` },
       data,
     }
     if (proxy) { request.proxy = proxy }
@@ -49,7 +49,7 @@ export default class Client {
     const token = options && options.token || this.token
     const language = options && options.language || this.language
     const proxy = options && options.proxy
-    if (!token) { return Promise.reject(new RecastError('Token is missing'))}
+    if (!token) { return Promise.reject(new RecastError('Token is missing')) }
 
     const data = new FormData()
     data.append('voice', file)
@@ -58,7 +58,7 @@ export default class Client {
     const request = {
       method: 'post',
       url: constants.API_ENDPOINT,
-      headers: { 'Authorization': `Token ${token}`},
+      headers: { Authorization: `Token ${token}` },
       data,
     }
     if (proxy) { request.proxy = proxy }

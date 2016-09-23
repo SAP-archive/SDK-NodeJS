@@ -49,12 +49,9 @@
       "zavatta"
     ],
     "rules": {
-      "camelcase": [
-        0
-      ],
-      "no-else-return": [
-        0
-      ]
+      "camelcase": 0,
+      "no-undef": 0,
+      "no-else-return": 0
     }
   },
   "dependencies": {

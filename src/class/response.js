@@ -11,7 +11,6 @@ export default class Response {
     this.intents = response.intents
 
     this.intents = response.intents
-    //response.intents.forEach(intent => this.intents.push(new Intent(intent)))
 
     this.act = response.act
     this.type = response.type
