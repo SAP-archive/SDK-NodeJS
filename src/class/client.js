@@ -34,7 +34,7 @@ export default class Client {
 
     return new Promise((resolve, reject) => {
       axios(request)
-        .then(res => resolve(new Response(res.data)))
+        .then(res => resolve(new Response(res.data.results)))
         .catch(err => reject(new RecastError(err.message)))
     })
   }
@@ -65,7 +65,7 @@ export default class Client {
 
     return new Promise((resolve, reject) => {
       axios(request)
-        .then(res => resolve(new Response(res.data)))
+        .then(res => resolve(new Response(res.data.results)))
         .catch(err => reject(new RecastError(err.message)))
     })
   }

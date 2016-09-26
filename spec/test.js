@@ -123,27 +123,27 @@ describe('Client class', () => {
 describe('Response class', () => {
 
   it ('should be instanciable', () => {
-    expect(new recast.Response(json)).to.be.an.instanceof(recast.Response)
+    expect(new recast.Response(json.results)).to.be.an.instanceof(recast.Response)
   })
 
   it ('should have attributes', () => {
-    const response = new recast.Response(json)
+    const response = new recast.Response(json.results)
 
-    assert.equal(response.act, json.act)
-    assert.equal(response.type, json.type)
-    assert.equal(response.source, json.source)
+    assert.equal(response.act, json.results.act)
+    assert.equal(response.type, json.results.type)
+    assert.equal(response.source, json.results.source)
     expect(response.intents).to.be.an.instanceof(Array)
-    assert.equal(response.sentiment, json.sentiment)
+    assert.equal(response.sentiment, json.results.sentiment)
     expect(response.entities).to.be.an.instanceof(Array)
     expect(response.entities[0]).to.be.an.instanceof(recast.Entity)
-    assert.equal(response.language, json.language)
-    assert.equal(response.version, json.version)
-    assert.equal(response.timestamp, json.timestamp)
+    assert.equal(response.language, json.results.language)
+    assert.equal(response.version, json.results.version)
+    assert.equal(response.timestamp, json.results.timestamp)
     assert.equal(response.entities.length, 4)
   })
 
   it ('should have methods', () => {
-    const response = new recast.Response(json)
+    const response = new recast.Response(json.results)
 
     assert.equal(response.intent(), response.intents[0])
     assert.equal(response.all('location').length, 2)
