@@ -187,35 +187,35 @@ client.textRequest(YOUR_TEXT)
   })
 ```
 
-### Act helper
+### Act helpers
 
-| Method        | Params | Return                                  |
-| ------------- |-------:| :---------------------------------------|
-| isAssert()    |        | Bool: wheither or not the act is an assertion |
-| isCommand()   |        | Bool: wheither or not the act is a command    |
-| isWhQuery()   |        | Bool: wheither or not the act is a wh-query   |
-| isYnQuery()   |        | Bool: wheither or not the act is a yn-query   |
+| Method        | Params | Return                                       |
+| ------------- |-------:| :--------------------------------------------|
+| isAssert()    |        | Bool: whether or not the act is an assertion |
+| isCommand()   |        | Bool: whether or not the act is a command    |
+| isWhQuery()   |        | Bool: whether or not the act is a question   |
+| isYnQuery()   |        | Bool: whether or not the act is a query      |
 
-### Type helper
+### Type helpers
 
-| Method           | Params | Return                                                     |
-| ---------------- |-------:| :----------------------------------------------------------|
-| isAbbreviation() |        | Bool: wheither or not the sentence is asking for an abbreviation |
-| isEntity()       |        | Bool: wheither or not the sentence is asking for an entity       |
-| isDescription()  |        | Bool: wheither or not the sentence is asking for a description   |
-| isHuman()        |        | Bool: wheither or not the sentence is asking for a human         |
-| isLocation()     |        | Bool: wheither or not the sentence is asking for a location      |
-| isNumber()       |        | Bool: wheither or not the sentence is asking for a number        |
+| Method           | Params | Return                                                          |
+| ---------------- |-------:| :---------------------------------------------------------------|
+| isAbbreviation() |        | Bool: whether or not the sentence is asking for an abbreviation |
+| isEntity()       |        | Bool: whether or not the sentence is asking for an entity       |
+| isDescription()  |        | Bool: whether or not the sentence is asking for a description   |
+| isHuman()        |        | Bool: whether or not the sentence is asking for a human         |
+| isLocation()     |        | Bool: whether or not the sentence is asking for a location      |
+| isNumber()       |        | Bool: whether or not the sentence is asking for a number        |
 
-### Sentiment helper
+### Sentiment helpers
 
-| Method        | Params | Return                                    |
-| ------------- |-------:| :-----------------------------------------|
-| isVPositive()  |        | Bool: wheither or not the sentiment is very positive |
-| isPositive()  |        | Bool: wheither or not the sentiment is positive |
-| isNeutral()   |        | Bool: wheither or not the sentiment is neutral  |
-| isNegative()  |        | Bool: wheither or not the sentiment is negative |
-| isVNegative()  |        | Bool: wheither or not the sentiment is very negative |
+| Method        | Params | Return                                               |
+| ------------- |-------:| :----------------------------------------------------|
+| isVPositive() |        | Bool: whether or not the sentiment is very positive  |
+| isPositive()  |        | Bool: whether or not the sentiment is positive       |
+| isNeutral()   |        | Bool: whether or not the sentiment is neutral        |
+| isNegative()  |        | Bool: whether or not the sentiment is negative       |
+| isVNegative() |        | Bool: whether or not the sentiment is very negative  |
 
 ### Attributes
 
@@ -224,14 +224,17 @@ Each of the following methods corresponds to a Response attribute
 | Attributes  | Type                                                |
 | ----------- | :---------------------------------------------------|
 | raw         | String: the raw unparsed json response              |
-| type        | String: the type of the processed sentence          |
-| act         | String: the act of the processed sentence           |
-| sentiment   | String: the sentiment of the processed sentence     |
+| uuid        | String: the uuid of the request                     |
 | source      | String: the user input                              |
 | intents     | Array[object]: all the matched intents              |
-| status      | String: the status of the response                  |
+| act         | String: the act of the processed sentence           |
+| type        | String: the type of the processed sentence          |
+| sentiment   | String: the sentiment of the processed sentence     |
+| entities    | Array[Entity]: the array of entities                |
+| language    | String: the language of the input                   |
 | version     | String: the version of the json                     |
 | timestamp   | String: the timestamp at the end of the processing  |
+| status      | String: the status of the response                  |
 
 ## class Entity
 
@@ -244,7 +247,8 @@ Each of the following methods corresponds to a Response attribute
 | Attributes  | Description                                                   |
 | ----------- |:--------------------------------------------------------------|
 | name        | String: the name of the entity                                |
-| raw         | String: the unparsed json value of the entity                 |
+| raw         | String: the raw value extracted from the sentence             |
+| confidence  | Float: the detection score between 0 and 100 excluded         |
 
 In addition to those methods, more attributes are generated depending of the nature of the entity.
 The full list can be found there: [man.recast.ai](https://man.recast.ai/#list-of-entities)
