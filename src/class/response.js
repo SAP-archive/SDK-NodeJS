@@ -6,10 +6,11 @@ import constants from '../constants.js'
 export default class Response {
 
   constructor (response) {
+    this.raw = response
+    this.uuid = response.uuid
 
     this.source = response.source
     this.intents = response.intents
-
     this.act = response.act
     this.type = response.type
     this.sentiment = response.sentiment
@@ -21,8 +22,8 @@ export default class Response {
 
     this.language = response.language
     this.version = response.version
-    this.timestamp = response.timestamp
     this.status = response.status
+    this.timestamp = response.timestamp
   }
 
   /**
