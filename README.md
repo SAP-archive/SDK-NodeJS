@@ -15,40 +15,39 @@ This module is a Node.js interface to the [Recast.AI](https://recast.ai) API. It
 ```bash
 npm install --save recastai
 ```
-
 ## Usage
-
 
 ```javascript
 var recastai = require('recastai')
 
 var client = new recastai.Client(YOUR_TOKEN, YOUR_LANGUAGE)
 
-client.textRequest(YOUR_TEXT, function(res, err) {
-  if (err) {
+client.textRequest(YOUR_TEXT)
+  .then(function(res) {
+    var intent = res.intent()
+
+    if (intent.slug === YOUR_INTENT) {
+      // Do your code
+    }
+  }).catch(function(err) {
     // Handle error
-  } else if (res.intent() === YOUR_INTENT) {
-    // Do your code...
-  }
-})
+  })
 ```
 
 ## Specs
 
 ### Classes
 
-This module contains 5 classes, as follows:
+This module contains 4 classes, as follows:
 
 * Client is the client allowing you to make requests.
 * Response contains the response from [Recast.AI](https://recast.ai).
-* Sentence represents a sentence of the response.
-* Entity represents an entity found by Recast.AI in your user's input.
+* Entity represents an entity of the response
 * RecastError is the error returned by the module.
 
 Don't hesitate to dive into the code, it's commented ;)
 
 ## class Client
-
 The Client can be instanciated with a token and a language (both optional).
 
 ```javascript
@@ -64,7 +63,6 @@ __Your tokens:__
 *Copy paste your request access token from your bot's settings.*
 
 __Your language__
-
 ```javascript
 var client = new recastai.Client(YOUR_TOKEN, 'en')
 ```
@@ -72,52 +70,61 @@ var client = new recastai.Client(YOUR_TOKEN, 'en')
 
 ## Text Request
 
-textRequest(text, callback, options = { token: YOUR_TOKEN, language: YOUR_LANGUAGE, proxy: YOUR_URL_PROXY })
+textRequest(text, options = { token: YOUR_TOKEN, language: YOUR_LANGUAGE, proxy: YOUR_PROXY_URL })
 
-If your pass a token or a language in the options parameter, it will override your default client language or token.
+If you pass a token or a language in the options parameter, it will override your default client language or token.
 You can pass a proxy url in the options if needed.
 
 ```javascript
-client.textRequest(YOUR_TEXT, function(res, err) {
-    // Do your code...¯
-
-})
+client.textRequest(YOUR_TEXT)
+  .then(function(res) => {
+    // Do your code
+  }).catch(function(err) => {
+    // Handle error
+  })
 ```
 
 ```javascript
 // With optional parameters
 
-client.textRequest(YOUR_TEXT, function(res, err) {
-  // Do your code...
-
-}, { token: YOUR_TOKEN, language: YOUR_LANGUAGE })
+client.textRequest(YOUR_TOKEN, YOUR_LANGUAGE)
+  .then(function(res) => {
+    // Do your code
+  }).catch(function(err) => {
+    // Handle error
+  })
 ```
 
 __If a language is provided:__ the language you've given is used for processing if your bot has expressions for it, else your bot's primary language is used.
 
 __If no language is provided:__ the language of the text is detected and is used for processing if your bot has expressions for it, else your bot's primary language is used for processing.
-
 ## File Request
 
-fileRequest(file, callback, options = { token: YOUR_TOKEN, language: YOUR_LANGUAGE, proxy: YOUR_PROXY_URL })
+fileRequest(file, options = { token: YOUR_TOKEN, language: YOUR_LANGUAGE, proxy: YOUR_PROXY_URL })
 
-If your pass a token or a language in the options parameter, it will override your default client language or token.
+If you pass a token or a language in the options parameter, it will override your default client language or token.
 You can pass a proxy url in the options if needed.
 
 __file format: .wav__
 
 ```javascript
-client.fileRequest('myFile.wav', function(err, res) {
-  // Do your code...
-
-})
+client.fileRequest('myFile.wav')
+  .then(function(res) => {
+    // Do your code
+  }).catch(function(err) => {
+    // Handle error
+  })
 ```
 
 ```javascript
-client.fileRequest('myFile.wav', function(err, res) {
-  // Do your code...
+// With optional parameters
 
-}, { token: YOUR_TOKEN, language: YOUR_LANGUAGE })
+client.fileRequest('myFile.wav', { token: YOUR_TOKEN, language: YOUR_LANGUAGE })
+  .then(function(res) => {
+    // Do your code
+  }).catch(function(err) => {
+    // Handle error
+  })
 ```
 
 __If a language is provided:__
@@ -134,145 +141,103 @@ The Response is generated after a call to either fileRequest or textRequest.
 
 | Method        | Params | Return                    |
 | ------------- |:------:| :-------------------------|
-| intent()      |        | the first detected intent |
+| intent()      |        | Object: the first detected intent |
 
 ```javascript
-client.textRequest(YOUR_TEXT, function(res, err) {
+client.textRequest(YOUR_TEXT)
+  .then(function(res) {
 
     var intent = res.intent()
 
-    if (intent === 'greetings') {
-      // Do your code...
-
+    if (intent.slug === 'geetings' && intent.confidence > 0.7) {
+      // Do your code
     }
 
-})
-
-```
-
-### Get the sentence
-
-| Method        | Params | Return             |
-| ------------- |:------:| :------------------|
-| sentence()    |        | the first sentence |
-
-
-```javascript
-client.textRequest(YOUR_TEXT, function(res, err) {
-
-    var firstSentence = res.sentence()
-
-})
-
+  })
 ```
 
 ### Get one entity
 
 | Method        | Params        | Return                    |
 | ------------- |:-------------:| :-------------------------|
-| get(name)     | name: String  | the first Entity matched  |
+| get(name)     | name: String  | Entity: the first Entity matched  |
 
 
 ```javascript
-client.textRequest(YOUR_TEXT, function(res, err) {
+client.textRequest(YOUR_TEXT)
+  .then(function(res) {
 
     var location = res.get('location')
 
-})
-
+  })
 ```
 
 ### Get all entities matching name
 
 | Method        | Params        | Return                    |
 | ------------- |:-------------:| :-------------------------|
-| all(name)     | name: String  | all the Entities matched  |
-
+| all(name)     | name: String  | Array[Entity]: all the Entities matched  |
 
 ```javascript
-client.textRequest(YOUR_TEXT, function(res, err) {
+client.textRequest(YOUR_TEXT)
+  .then(function(res) {
 
     var locations = res.all('location')
 
-})
-
+  })
 ```
 
-### Getters
+### Act helper
+
+| Method        | Params | Return                                  |
+| ------------- |-------:| :---------------------------------------|
+| isAssert()    |        | Bool: wheither or not the act is an assertion |
+| isCommand()   |        | Bool: wheither or not the act is a command    |
+| isWhQuery()   |        | Bool: wheither or not the act is a wh-query   |
+| isYnQuery()   |        | Bool: wheither or not the act is a yn-query   |
+
+### Type helper
+
+| Method           | Params | Return                                                     |
+| ---------------- |-------:| :----------------------------------------------------------|
+| isAbbreviation() |        | Bool: wheither or not the sentence is asking for an abbreviation |
+| isEntity()       |        | Bool: wheither or not the sentence is asking for an entity       |
+| isDescription()  |        | Bool: wheither or not the sentence is asking for a description   |
+| isHuman()        |        | Bool: wheither or not the sentence is asking for a human         |
+| isLocation()     |        | Bool: wheither or not the sentence is asking for a location      |
+| isNumber()       |        | Bool: wheither or not the sentence is asking for a number        |
+
+### Sentiment helper
+
+| Method        | Params | Return                                    |
+| ------------- |-------:| :-----------------------------------------|
+| isVPositive()  |        | Bool: wheither or not the sentiment is very positive |
+| isPositive()  |        | Bool: wheither or not the sentiment is positive |
+| isNeutral()   |        | Bool: wheither or not the sentiment is neutral  |
+| isNegative()  |        | Bool: wheither or not the sentiment is negative |
+| isVNegative()  |        | Bool: wheither or not the sentiment is very negative |
+
+### Attributes
 
 Each of the following methods corresponds to a Response attribute
 
-| Method      | Params | Return                                              |
-| ----------- |:------:| :---------------------------------------------------|
-| raw         |        | String: the raw unparsed json response              |
-| source      |        | String: the user input                              |
-| intents     |        | Array[object]: all the matched intents              |
-| sentences   |        | Array[Sentence]: all the detected sentences         |
-| version     |        | String: the version of the json                     |
-| timestamp   |        | String: the timestamp at the end of the processing  |
-| status      |        | String: the status of the response                  |
-| type        |        | String: the type of the response                    |
-
-## class Sentence
-
-A Sentence is generated by the Response constructor.
-
-### Get one entity matching a name
-
-| Method        | Params        | Return                    |
-| ------------- |:-------------:| :-------------------------|
-| get(name)     | name: String  | the first Entity matched  |
-
-
-```javascript
-client.textRequest(YOUR_TEXT, function(res, err) {
-
-    var sentence = res.sentence()
-
-    var location = sentence.get('location')
-
-})
-
-```
-
-### Get all entities matching a name
-
-| Method        | Params        | Return                    |
-| ------------- |:-------------:| :-------------------------|
-| all(name)     | name: String  | all the Entities matched  |
-
-
-```javascript
-client.textRequest(YOUR_TEXT, function(res, err) {
-
-    var sentence = res.sentence()
-
-    var locations = sentence.all('location')
-
-})
-
-```
-
-
-### Getters
-
-Each of the following methods corresponds to a Response attribute
-
-| Method      | Params | Return                                               |
-| ----------- |:------:| :----------------------------------------------------|
-| source      |        | String: the source of the sentence                   |
-| type        |        | String: the type of the sentence                     |
-| action      |        | String: The action of the sentence                   |
-| agent       |        | String: the agent of the sentence                    |
-| polarity    |        | String: the polarity of the sentence                 |
-| entities    |        | Array[Entity]: the entities detected in the sentence |
-
+| Attributes  | Type                                                |
+| ----------- | :---------------------------------------------------|
+| raw         | String: the raw unparsed json response              |
+| type        | String: the type of the processed sentence          |
+| act         | String: the act of the processed sentence           |
+| sentiment   | String: the sentiment of the processed sentence     |
+| source      | String: the user input                              |
+| intents     | Array[object]: all the matched intents              |
+| status      | String: the status of the response                  |
+| version     | String: the version of the json                     |
+| timestamp   | String: the timestamp at the end of the processing  |
 
 ## class Entity
 
 The Entity is generated by the Sentence constructor.
 
-### Getters
+### Attributes
 
 Each of the following methods corresponds to a Response attribute
 
@@ -285,13 +250,15 @@ In addition to those methods, more attributes are generated depending of the nat
 The full list can be found there: [man.recast.ai](https://man.recast.ai/#list-of-entities)
 
 ```javascript
-client.textRequest(YOUR_TEXT, function(res, err) {
+client.textRequest(YOUR_TEXT)
+  .then(function(res) {
 
     var location = res.get('location')
 
     console.log(location.raw)
-    console.log(location.name)
-})
+    console.log(location.slug)
+
+  })
 ```
 
 ## class RecastError

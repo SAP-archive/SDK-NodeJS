@@ -1,10 +1,11 @@
-import request from 'superagent'
-require('superagent-proxy')(request)
+import axios from 'axios'
+import FormData from 'form-data'
 
-import { Response } from './response'
-import { RecastError } from './error'
+import Response from './response'
+import RecastError from './error'
+import constants from '../constants'
 
-export class Client {
+export default class Client {
 
   constructor (token, language) {
     this.token = token
@@ -14,72 +15,56 @@ export class Client {
   /**
    * Perform a text request on Recast.AI
    * @param {String} text: the text to process
-   * @param {Function} callback: the callback which be called with the Response of the request or a the RecastError
-   * @param {Hash} options: [optional] request's options
+   * @param {Object} options: [optional] request's options
    */
-  textRequest (text, callback, options) {
-    const TOKEN = options && options.token || this.token
-    const LANGUAGE = (options && options.language) ? options.language : this.language
-    const PROXY = options && options.proxy
-    const params = { text }
+  textRequest (text, options) {
+    const token = options && options.token || this.token
+    const data = { text, language: options && options.language || this.language }
+    const proxy = options && options.proxy
+    if (!token) { return Promise.reject('Token is missing') }
 
-    if (LANGUAGE) {
-      params.language = LANGUAGE
+    const request = {
+      method: 'post',
+      url: constants.API_ENDPOINT,
+      headers: { Authorization: `Token ${token}` },
+      data,
     }
+    if (proxy) { request.proxy = proxy }
 
-    if (!TOKEN) {
-      return callback(null, new RecastError('Token is missing'))
-    } else {
-      const req = request.post('https://api.recast.ai/v1/request')
-        .set('Authorization', `Token ${TOKEN}`)
-        .send(params)
-
-      if (PROXY) { req.proxy(PROXY) }
-
-      req.end((err, res) => {
-        if (err) {
-          return callback(res, new RecastError(err.message))
-        } else {
-          return callback(new Response(res.body), null)
-        }
-      })
-    }
+    return new Promise((resolve, reject) => {
+      axios(request)
+        .then(res => resolve(new Response(res.data.results)))
+        .catch(err => reject(new RecastError(err.message)))
+    })
   }
 
   /**
    * Perform a voice file request on Recast.AI
    * @param {String} file: the name of the file to process
-   * @param {Function} callback: the callback which be called with the Response of the request or with a RecastError
-   * @param {Hash} options: [optional] request's options
+   * @param {Object} options: [optional] request's options
    */
-  fileRequest (file, callback, options) {
-    const TOKEN = (options && options.token) ? options.token : this.token
-    const LANGUAGE = (options && options.language) ? options.language : this.language
-    const PROXY = options && options.proxy
-    const params = {}
+  fileRequest (file, options) {
+    const token = options && options.token || this.token
+    const language = options && options.language || this.language
+    const proxy = options && options.proxy
+    if (!token) { return Promise.reject(new RecastError('Token is missing')) }
 
-    if (LANGUAGE) {
-      params.language = LANGUAGE
+    const data = new FormData()
+    data.append('voice', file)
+    if (language) { data.append('language', language) }
+
+    const request = {
+      method: 'post',
+      url: constants.API_ENDPOINT,
+      headers: { Authorization: `Token ${token}` },
+      data,
     }
+    if (proxy) { request.proxy = proxy }
 
-    if (!TOKEN) {
-      return callback(null, new RecastError('Token is missing'))
-    } else {
-      const req = request.post('https://api.recast.ai/v1/request')
-        .attach('voice', file)
-        .set('Authorization', `Token ${TOKEN}`)
-        .set('Content-Type', '')
-
-      if (LANGUAGE) { req.send(params) }
-      if (PROXY) { req.proxy(PROXY) }
-
-      req.end((err, res) => {
-        if (err) {
-          return callback(res, new RecastError(err.message))
-        } else {
-          return callback(new Response(res.body))
-        }
-      })
-    }
+    return new Promise((resolve, reject) => {
+      axios(request)
+        .then(res => resolve(new Response(res.data.results)))
+        .catch(err => reject(new RecastError(err.message)))
+    })
   }
 }

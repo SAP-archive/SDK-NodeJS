@@ -8,6 +8,7 @@
   },
   "scripts": {
     "test": "npm run build && mocha spec/test.js",
+    "test_coverage": "npm run build && istanbul cover _mocha spec/test.js",
     "build": "babel src --out-dir lib",
     "lint": "eslint src"
   },
@@ -34,7 +35,8 @@
     "eslint": "^2.9.0",
     "eslint-config-zavatta": "^3.0.1",
     "eslint-plugin-import": "^1.6.1",
-    "mocha": "^2.4.5"
+    "mocha": "^2.4.5",
+    "sinon": "^1.17.5"
   },
   "babel": {
     "presets": [
@@ -47,17 +49,15 @@
       "zavatta"
     ],
     "rules": {
-      "camelcase": [
-        0
-      ],
-      "no-else-return": [
-        0
-      ]
+      "camelcase": 0,
+      "no-undef": 0,
+      "no-else-return": 0
     }
   },
   "dependencies": {
+    "axios": "^0.14.0",
+    "form-data": "^1.0.1",
     "lodash": "^4.12.0",
-    "superagent": "^1.8.3",
-    "superagent-proxy": "^1.0.1"
+    "nock": "^8.0.0"
   }
 }
