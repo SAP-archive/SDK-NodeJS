@@ -17,6 +17,7 @@ npm install --save recastai
 ```
 ## Usage
 
+### ES5
 ```javascript
 var recastai = require('recastai')
 
@@ -33,6 +34,24 @@ client.textRequest(YOUR_TEXT)
     // Handle error
   })
 ```
+### ES6
+```javascript
+import { Client } from 'recastai'
+
+const client = new Client(YOUR_TOKEN, YOUR_LANGUAGE)
+
+client.textRequest(YOUR_TEXT)
+  .then((res) => {
+    const intent = res.intent()
+
+    if (intent.slug === YOUR_INTENT) {
+      // Do your code
+    }
+  }).catch((err) => {
+    // Handle error
+  })
+```
+
 
 ## Specs
 
