@@ -88,15 +88,15 @@ var client = new recastai.Client(YOUR_TOKEN, 'en')
 ```
 *The language is a lowercase 639-1 isocode.*
 
-## Converse Request
+## Text Converse
 
-converseRequest(text, options = { token: YOUR_TOKEN, language: YOUR_LANGUAGE, proxy: YOUR_PROXY_URL })
+textConverse(text, options = { converseToken: YOUR_CONVERSE_TOKEN, token: YOUR_TOKEN, language: YOUR_LANGUAGE, proxy: YOUR_PROXY_URL })
 
 If you pass a token or a language in the options parameter, it will override your default client language or token.
 You can pass a proxy url in the options if needed.
 
 ```javascript
-client.converseRequest(YOUR_TEXT)
+client.textConverse(YOUR_TEXT)
   .then(function(res) => {
     // Do your code
   }).catch(function(err) => {
@@ -107,7 +107,7 @@ client.converseRequest(YOUR_TEXT)
 ```javascript
 // With optional parameters
 
-client.converseRequest(YOUR_TOKEN, YOUR_LANGUAGE)
+client.textConverse(YOUR_TEXT, { converseToken: YOUR_CONVERSE_TOKEN })
   .then(function(res) => {
     // Do your code
   }).catch(function(err) => {
@@ -184,6 +184,117 @@ Your bot's primary language is used for processing as we do not provide language
 
 __If no language is provided:__
 The language you've given is used for processing if your bot has expressions for it, else your bot's primary language is used
+
+## class Converse
+
+The Converse is generated after a call to textConverse
+
+### Get the first reply
+
+| Method        | Params | Return                    |
+| ------------- |:------:| :-------------------------|
+| reply()       |        | String: the first reply    |
+
+```javascript
+client.textConverse(YOUR_TEXT)
+  .then(function(res) {
+
+    var reply = res.reply()
+
+    console.log(reply)
+
+  })
+```
+
+### Join all the replies
+
+| Method          | Params         | Return                            |
+| --------------- |:--------------:| :---------------------------------|
+| joinedReplies() | sep: String    | String: the replies concatenated  |
+
+If a separator is not provided, the replies will be joined with a space.
+
+```javascript
+client.textConverse(YOUR_TEXT)
+  .then(function(res) {
+
+    var reply = res.joinedReplies()
+
+    console.log(reply)
+
+  })
+```
+
+### Get the memory
+
+| Method          | Params         | Return                            |
+| --------------- |:--------------:| :---------------------------------|
+| getMemory()     | key: String    | object: the memory                |
+
+If there is no key parameter provided, the entire memory is returned
+
+```javascript
+client.textConverse(YOUR_TEXT)
+  .then(function(res) {
+
+    var city = res.getMemory('city')
+
+    if (city.value === 'Paris') {
+      // Do your code
+    }
+
+  })
+```
+
+### Attributes
+
+Each of the following methods corresponds to a Converse attribute
+
+| Attributes    | Type                                                |
+| -----------   | :---------------------------------------------------|
+| raw           | String: the raw unparsed json response              |
+| source        | String: the user input                              |
+| replies       | Array[String]: all the replies                      |
+| action        | Object: the action of the response                  |
+| next_action   | Object: the next_action of the response             |
+| memory        | Object: the memory                                  |
+| entities      | Array[Entity]: the array of entities                |
+| intents       | Array[object]: all the matched intents              |
+| converseToken | String: the conversation token                      |
+| language      | String: the language of the input                   |
+| timestamp     | String: the timestamp at the end of the processing  |
+| status        | String: the status of the response                  |
+
+## Static methods
+
+The Converse class provides three static methods
+
+## setMemory
+
+setMemory(token, converse_token, { key: {value} })
+
+```javascript
+// Example to set a city object in the memory
+Client.setMemory(YOUR_TOKEN, YOUR_CONVERSE_TOKEN, { city: { value: 'Paris' } })
+```
+
+## resetMemory
+
+resetMemory(token, converse_token, key)
+
+```javascript
+// Example to reset the city object in memory
+Client.resetMemory(YOUR_TOKEN, YOUR_CONVERSE_TOKEN, 'city')
+```
+
+## resetMemory
+
+resetMemory(token, converse_token, key)
+
+```javascript
+// Reset the conversation
+Client.resetConversation(YOUR_TOKEN, YOUR_CONVERSE_TOKEN)
+```
 
 ## class Response
 
