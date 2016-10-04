@@ -1,6 +1,7 @@
 import axios from 'axios'
 import FormData from 'form-data'
 
+import Converse from './converse'
 import Response from './response'
 import RecastError from './error'
 import constants from '../constants'
@@ -10,6 +11,32 @@ export default class Client {
   constructor (token, language) {
     this.token = token
     this.language = language
+  }
+
+  /**
+   * Perform a text request on /converse Recast.AI API endpoint
+   * @param {String} text: the text to process
+   * @param {Object} options: [optional] request's options
+   */
+  converseRequest (text, options) {
+    const token = options && options.token || this.token
+    const data = { text, language: options && options.language || this.language }
+    const proxy = options && options.proxy
+    if (!token) { return Promise.reject('Token is missing') }
+
+    const request = {
+      method: 'post',
+      url: constants.CONVERSE_ENDPOINT,
+      headers: { Authorization: `Token ${token}` },
+      data,
+    }
+    if (proxy) { request.proxy = proxy }
+
+    return new Promise((resolve, reject) => {
+      axios(request)
+        .then(res => resolve(new Converse(res.data.results)))
+        .catch(err => reject(new RecastError(err.message)))
+    })
   }
 
   /**
