@@ -57,10 +57,11 @@ client.textRequest(YOUR_TEXT)
 
 ### Classes
 
-This module contains 4 classes, as follows:
+This module contains 5 classes, as follows:
 
 * Client is the client allowing you to make requests.
-* Response contains the response from [Recast.AI](https://recast.ai).
+* Converse contains the response from [Recast.AI](https://recast.ai) on /converse
+* Response contains the response from [Recast.AI](https://recast.ai) on /request
 * Entity represents an entity of the response
 * RecastError is the error returned by the module.
 
@@ -86,6 +87,38 @@ __Your language__
 var client = new recastai.Client(YOUR_TOKEN, 'en')
 ```
 *The language is a lowercase 639-1 isocode.*
+
+## Converse Request
+
+converseRequest(text, options = { token: YOUR_TOKEN, language: YOUR_LANGUAGE, proxy: YOUR_PROXY_URL })
+
+If you pass a token or a language in the options parameter, it will override your default client language or token.
+You can pass a proxy url in the options if needed.
+
+```javascript
+client.converseRequest(YOUR_TEXT)
+  .then(function(res) => {
+    // Do your code
+  }).catch(function(err) => {
+    // Handle error
+  })
+```
+
+```javascript
+// With optional parameters
+
+client.converseRequest(YOUR_TOKEN, YOUR_LANGUAGE)
+  .then(function(res) => {
+    // Do your code
+  }).catch(function(err) => {
+    // Handle error
+  })
+```
+
+__If a language is provided:__ the language you've given is used for processing if your bot has expressions for it, else your bot's primary language is used.
+
+__If no language is provided:__ the language of the text is detected and is used for processing if your bot has expressions for it, else your bot's primary language is used for processing.
+
 
 ## Text Request
 

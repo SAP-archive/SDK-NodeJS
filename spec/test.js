@@ -82,7 +82,7 @@ describe('Client class', () => {
     })
   })
 
-  describe('converseRequest', () => {
+  describe('textConverse', () => {
     const apiNockedSuccess = nock('https://api.recast.ai')
       .post('/v2/converse')
       .once()

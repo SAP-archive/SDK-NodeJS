@@ -18,9 +18,13 @@ export default class Client {
    * @param {String} text: the text to process
    * @param {Object} options: [optional] request's options
    */
-  converseRequest (text, options) {
+  textConverse (text, options) {
     const token = options && options.token || this.token
-    const data = { text, language: options && options.language || this.language }
+    const data = {
+      text,
+      converseToken: options && options.converseToken,
+      language: options && options.language || this.language,
+    }
     const proxy = options && options.proxy
     if (!token) { return Promise.reject('Token is missing') }
 
