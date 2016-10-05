@@ -92,6 +92,8 @@ var client = new recastai.Client(YOUR_TOKEN, 'en')
 
 textConverse(text, options = { converseToken: YOUR_CONVERSE_TOKEN, token: YOUR_TOKEN, language: YOUR_LANGUAGE, proxy: YOUR_PROXY_URL })
 
+To continue a conversation, pass the converseToken in the options of the method.
+
 If you pass a token or a language in the options parameter, it will override your default client language or token.
 You can pass a proxy url in the options if needed.
 
@@ -139,7 +141,7 @@ client.textRequest(YOUR_TEXT)
 ```javascript
 // With optional parameters
 
-client.textRequest(YOUR_TOKEN, YOUR_LANGUAGE)
+client.textRequest(YOUR_TOKEN, { language: YOUR_LANGUAGE })
   .then(function(res) => {
     // Do your code
   }).catch(function(err) => {
@@ -187,7 +189,7 @@ The language you've given is used for processing if your bot has expressions for
 
 ## class Converse
 
-The Converse is generated after a call to textConverse
+An instance of Converse is generated after a call to textConverse
 
 ### Get the first reply
 
@@ -212,24 +214,26 @@ client.textConverse(YOUR_TEXT)
 | --------------- |:--------------:| :---------------------------------|
 | joinedReplies() | sep: String    | String: the replies concatenated  |
 
-If a separator is not provided, the replies will be joined with a space.
+If there is no sep parameter provided, the replies will be joined with a space.
 
 ```javascript
 client.textConverse(YOUR_TEXT)
   .then(function(res) {
 
-    var reply = res.joinedReplies()
+    var replyJoinedBySpace = res.joinedReplies()
 
-    console.log(reply)
+    var replyJoinedByNewline = res.joinedReplies('\n')
+
+    // Do your code
 
   })
 ```
 
 ### Get the memory
 
-| Method          | Params         | Return                            |
-| --------------- |:--------------:| :---------------------------------|
-| getMemory()     | key: String    | object: the memory                |
+| Method          | Params         | Return                           |
+| --------------- |:--------------:| :-------------------------------------|
+| getMemory()     | key: String    | object: the memory of the onversation                |
 
 If there is no key parameter provided, the entire memory is returned
 
@@ -257,7 +261,7 @@ Each of the following methods corresponds to a Converse attribute
 | replies       | Array[String]: all the replies                      |
 | action        | Object: the action of the response                  |
 | next_action   | Object: the next_action of the response             |
-| memory        | Object: the memory                                  |
+| memory        | Object: the memory of the conversation              |
 | entities      | Array[Entity]: the array of entities                |
 | intents       | Array[object]: all the matched intents              |
 | converseToken | String: the conversation token                      |
@@ -273,6 +277,9 @@ The Converse class provides three static methods
 
 setMemory(token, converse_token, { key: {value} })
 
+This method allows you to modify the memory of a conversation.
+Please note that you can only set value whose key exists in your conversation on the platform.
+
 ```javascript
 // Example to set a city object in the memory
 Client.setMemory(YOUR_TOKEN, YOUR_CONVERSE_TOKEN, { city: { value: 'Paris' } })
@@ -282,6 +289,8 @@ Client.setMemory(YOUR_TOKEN, YOUR_CONVERSE_TOKEN, { city: { value: 'Paris' } })
 
 resetMemory(token, converse_token, key)
 
+This method allows you to reset a specific field in the memory of a conversation.
+
 ```javascript
 // Example to reset the city object in memory
 Client.resetMemory(YOUR_TOKEN, YOUR_CONVERSE_TOKEN, 'city')
@@ -290,6 +299,8 @@ Client.resetMemory(YOUR_TOKEN, YOUR_CONVERSE_TOKEN, 'city')
 ## resetMemory
 
 resetMemory(token, converse_token, key)
+
+This method allows you to reset the entire memory of a conversation.
 
 ```javascript
 // Reset the conversation
