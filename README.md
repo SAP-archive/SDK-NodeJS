@@ -282,10 +282,10 @@ Please note that you can only set value whose key exists in your conversation on
 
 ```javascript
 // Example to set a city object in the memory
-Client.setMemory(YOUR_TOKEN, YOUR_CONVERSE_TOKEN, { city: { value: 'Paris' } })
+Converse.setMemory(YOUR_TOKEN, YOUR_CONVERSE_TOKEN, { city: { value: 'Paris' } })
 
 // Example to set an ingredient object in the memory
-Client.setMemory(YOUR_TOKEN, YOUR_CONVERSE_TOKEN, {
+Converse.setMemory(YOUR_TOKEN, YOUR_CONVERSE_TOKEN, {
   ingredient: {
     value: 'asparagus',
     type: 'vegetable',
@@ -303,18 +303,18 @@ This method allows you to reset a specific field in the memory of a conversation
 
 ```javascript
 // Example to reset the city object in memory
-Client.resetMemory(YOUR_TOKEN, YOUR_CONVERSE_TOKEN, 'city')
+Converse.resetMemory(YOUR_TOKEN, YOUR_CONVERSE_TOKEN, 'city')
 ```
 
 ## resetConversation
 
-resetConversation(token, converse_token, key)
+resetConversation(token, converse_token)
 
 This method allows you to reset the entire memory of a conversation.
 
 ```javascript
 // Reset the conversation
-Client.resetConversation(YOUR_TOKEN, YOUR_CONVERSE_TOKEN)
+Converse.resetConversation(YOUR_TOKEN, YOUR_CONVERSE_TOKEN)
 ```
 
 ## class Response
