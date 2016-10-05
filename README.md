@@ -17,11 +17,12 @@ This module is a wrapper around the [Recast.AI](https://recast.ai) API, and allo
 ```bash
 npm install --save recastai
 ```
+
+## Documentation
+
+You can find the full documentation [here](https://github.com/RecastAI/SDK-NodeJS/wiki).
+
 ## Specs
-
-Please refer to the [documentation](https://github.com/RecastAI/SDK-NodeJS/wiki) to get more details.
-
-### Classes
 
 This module contains 5 classes, as follows:
 
