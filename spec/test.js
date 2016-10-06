@@ -145,9 +145,10 @@ describe('Response class', () => {
   it ('should have attributes', () => {
     const response = new recast.Response(json.results)
 
+    assert.equal(response.uuid, json.results.uuid)
+    assert.equal(response.source, json.results.source)
     assert.equal(response.act, json.results.act)
     assert.equal(response.type, json.results.type)
-    assert.equal(response.source, json.results.source)
     expect(response.intents).to.be.an.instanceof(Array)
     assert.equal(response.sentiment, json.results.sentiment)
     expect(response.entities).to.be.an.instanceof(Array)
@@ -228,6 +229,7 @@ describe('Conversation class', () => {
     const converse = new recast.Conversation(conversationJson.results)
     const results = conversationJson.results
 
+    assert.equal(converse.uuid, results.uuid)
     assert.equal(converse.source, results.source)
     assert.equal(converse.replies, results.replies)
     assert.equal(converse.action, results.action)
