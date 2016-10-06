@@ -22,7 +22,7 @@ export default class Converse {
     })
 
     this.intents = response.intents
-    this.converseToken = response.converse_token
+    this.conversationToken = response.conversation_token
 
     this.language = response.language
     this.timestamp = response.timestamp
@@ -53,8 +53,8 @@ export default class Converse {
    * Returns the memory updated
    * @returns {object}: the memory updated
    */
-  static setMemory (token, converse_token, memory) {
-    const data = { converse_token, memory: JSON.stringify(memory) }
+  static setMemory (token, conversation_token, memory) {
+    const data = { conversation_token, memory: JSON.stringify(memory) }
     const request = {
       method: 'put',
       url: constants.CONVERSE_ENDPOINT,
@@ -73,10 +73,10 @@ export default class Converse {
    * Reset the memory of the conversation
    * @returns {object}: the updated memory
    */
-  static resetMemory (token, converse_token, alias) {
+  static resetMemory (token, conversation_token, alias) {
     const memory = {}
     memory[alias] = null
-    const data = { converse_token, memory: JSON.stringify(memory) }
+    const data = { conversation_token, memory: JSON.stringify(memory) }
     const request = {
       method: 'put',
       url: constants.CONVERSE_ENDPOINT,
@@ -95,12 +95,12 @@ export default class Converse {
    * Reset the conversation
    * @returns {object}: the updated memory
    */
-  static resetConversation (token, converse_token) {
+  static resetConversation (token, conversation_token) {
     const request = {
       method: 'delete',
       url: constants.CONVERSE_ENDPOINT,
       headers: { Authorization: `Token ${token}` },
-      data: { converse_token },
+      data: { conversation_token },
     }
 
     return new Promise((resolve, reject) => {

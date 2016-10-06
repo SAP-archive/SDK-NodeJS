@@ -233,7 +233,7 @@ describe('Converse class', () => {
     assert.equal(converse.action, results.action)
     assert.equal(converse.nextActions, results['next_actions'])
     assert.equal(converse.intents, results.intents)
-    assert.equal(converse.converseToken, results['converse_token'])
+    assert.equal(converse.conversationToken, results['conversation_token'])
     assert.equal(converse.language, results.language)
     assert.equal(converse.timestamp, results.timestamp)
     assert.equal(converse.status, results.status)

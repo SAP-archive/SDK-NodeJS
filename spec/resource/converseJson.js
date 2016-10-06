@@ -21,7 +21,7 @@ module.exports = {
     },
     "entities": {},
      "intents": [],
-     "converse_token": '8641d38b059cde2826e3cdf2f9b00725',
+     "conversation_token": '8641d38b059cde2826e3cdf2f9b00725',
      "language": 'en',
      "timestamp": '2016-10-04T15:26:11.876Z',
        "status": 200

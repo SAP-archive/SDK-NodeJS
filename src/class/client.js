@@ -22,7 +22,7 @@ export default class Client {
     const token = options && options.token || this.token
     const data = {
       text,
-      converseToken: options && options.converseToken,
+      conversationToken: options && options.conversationToken,
       language: options && options.language || this.language,
     }
     const proxy = options && options.proxy
