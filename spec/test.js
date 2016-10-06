@@ -5,7 +5,7 @@ const _ = require('lodash')
 
 const recast = require('../lib/index')
 const json = require('./resource/json.js')
-const converseJson = require('./resource/converseJson.js')
+const conversationJson = require('./resource/conversationJson.js')
 
 const TOKEN = process.env.RECAST_TOKEN || 'FAKE_TOKEN'
 const LANGUAGE = 'FR'
@@ -82,7 +82,7 @@ describe('Client class', () => {
     })
   })
 
-  describe('textConverse', () => {
+  describe('textConversation', () => {
     const apiNockedSuccess = nock('https://api.recast.ai')
       .post('/v2/converse')
       .once()
@@ -219,14 +219,14 @@ describe('RecastError', () => {
   })
 })
 
-describe('Converse class', () => {
+describe('Conversation class', () => {
   it ('should be instanciable', () => {
-    expect(new recast.Converse(converseJson)).to.be.an.instanceof(recast.Converse)
+    expect(new recast.Conversation(conversationJson)).to.be.an.instanceof(recast.Conversation)
   })
 
   it ('should have attributes', () => {
-    const converse = new recast.Converse(converseJson.results)
-    const results = converseJson.results
+    const converse = new recast.Conversation(conversationJson.results)
+    const results = conversationJson.results
 
     assert.equal(converse.source, results.source)
     assert.equal(converse.replies, results.replies)
@@ -240,19 +240,20 @@ describe('Converse class', () => {
   })
 
   it ('should have methods', () => {
-    const converse = new recast.Converse(converseJson.results)
-    const results = converseJson.results
+    const converse = new recast.Conversation(conversationJson.results)
+    const results = conversationJson.results
 
     assert.equal(converse.reply(), results.replies[0])
-    assert.equal(converse.joinedReplies(), results.replies.join(' ')) 
-    assert.equal(converse.joinedReplies('\n'), results.replies.join('\n')) 
+    assert.equal(converse.nextAction(), results.next_actions[0])
+    assert.equal(converse.joinedReplies(), results.replies.join(' '))
+    assert.equal(converse.joinedReplies('\n'), results.replies.join('\n'))
     assert.equal(converse.getMemory(), results.memory)
     assert.equal(converse.getMemory('lieu'), results.memory.lieu)
   })
 
   it ('should have statics methods', () => {
-    expect(recast.Converse).to.have.property('setMemory')
-    expect(recast.Converse).to.have.property('resetMemory')
-    expect(recast.Converse).to.have.property('resetConversation')
+    expect(recast.Conversation).to.have.property('setMemory')
+    expect(recast.Conversation).to.have.property('resetMemory')
+    expect(recast.Conversation).to.have.property('resetConversation')
   })
 })
