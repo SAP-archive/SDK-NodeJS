@@ -5,11 +5,12 @@ import constants from '../constants'
 import RecastError from './error'
 import Entity from './entity'
 
-export default class Converse {
+export default class Conversation {
 
   constructor (response) {
     this.raw = response
 
+    this.uuid = response.uuid
     this.source = response.source
     this.replies = response.replies
     this.action = response.action
@@ -36,6 +37,12 @@ export default class Converse {
   reply = () => this.replies[0] || null
 
   /**
+   * Returns the first next action if there is one
+   * @returns {String}: this first reply or null
+   */
+  nextAction = () => this.nextActions[0] || null
+
+  /**
    * Returns a concatenation of the replies
    * @returns {String}: the concatenation of the replies
    */
@@ -53,8 +60,8 @@ export default class Converse {
    * Returns the memory updated
    * @returns {object}: the memory updated
    */
-  static setMemory (token, conversation_token, memory) {
-    const data = { conversation_token, memory: JSON.stringify(memory) }
+  static setMemory (token, conversationToken, memory) {
+    const data = { conversation_token: conversationToken, memory }
     const request = {
       method: 'put',
       url: constants.CONVERSE_ENDPOINT,
@@ -73,10 +80,11 @@ export default class Converse {
    * Reset the memory of the conversation
    * @returns {object}: the updated memory
    */
-  static resetMemory (token, conversation_token, alias) {
-    const memory = {}
-    memory[alias] = null
-    const data = { conversation_token, memory: JSON.stringify(memory) }
+  static resetMemory (token, conversationToken, alias) {
+    const data = { conversation_token: conversationToken }
+    if (alias) {
+      data.memory = { alias: null }
+    }
     const request = {
       method: 'put',
       url: constants.CONVERSE_ENDPOINT,
@@ -95,12 +103,12 @@ export default class Converse {
    * Reset the conversation
    * @returns {object}: the updated memory
    */
-  static resetConversation (token, conversation_token) {
+  static resetConversation (token, conversationToken) {
     const request = {
       method: 'delete',
       url: constants.CONVERSE_ENDPOINT,
       headers: { Authorization: `Token ${token}` },
-      data: { conversation_token },
+      data: { conversation_token: conversationToken },
     }
 
     return new Promise((resolve, reject) => {

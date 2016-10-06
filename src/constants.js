@@ -1,7 +1,6 @@
 export default {
-  API_ENDPOINT: 'https://api.recast.ai/v2/request',
-  // This need to be changed to https://api.recast.ai/v2/converse
-  CONVERSE_ENDPOINT: 'https://api-staging.recast.ai/v2/converse',
+  REQUEST_ENDPOINT: 'https://api.recast.ai/v2/request',
+  CONVERSE_ENDPOINT: 'https://api.recast.ai/v2/converse',
   WS_ENDPOINT: 'wss://api.recast.ai/v2/request',
 
   ACT_ASSERT: 'assert',

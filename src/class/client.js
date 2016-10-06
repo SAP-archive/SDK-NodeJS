@@ -1,8 +1,8 @@
 import axios from 'axios'
 import FormData from 'form-data'
 
-import Converse from './converse'
 import Response from './response'
+import Conversation from './conversation'
 import RecastError from './error'
 import constants from '../constants'
 
@@ -22,8 +22,9 @@ export default class Client {
     const token = options && options.token || this.token
     const data = {
       text,
-      conversationToken: options && options.conversationToken,
       language: options && options.language || this.language,
+      conversationToken: options && options.conversationToken,
+      memory: options && options.memory,
     }
     const proxy = options && options.proxy
     if (!token) { return Promise.reject('Token is missing') }
@@ -38,7 +39,7 @@ export default class Client {
 
     return new Promise((resolve, reject) => {
       axios(request)
-        .then(res => resolve(new Converse(res.data.results)))
+        .then(res => resolve(new Conversation(res.data.results)))
         .catch(err => reject(new RecastError(err.message)))
     })
   }
@@ -56,7 +57,7 @@ export default class Client {
 
     const request = {
       method: 'post',
-      url: constants.API_ENDPOINT,
+      url: constants.REQUEST_ENDPOINT,
       headers: { Authorization: `Token ${token}` },
       data,
     }
@@ -86,7 +87,7 @@ export default class Client {
 
     const request = {
       method: 'post',
-      url: constants.API_ENDPOINT,
+      url: constants.REQUEST_ENDPOINT,
       headers: { Authorization: `Token ${token}` },
       data,
     }

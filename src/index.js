@@ -1,5 +1,5 @@
 export Client from './class/client'
 export Response from './class/response'
+export Conversation from './class/conversation'
 export Entity from './class/entity'
 export RecastError from './class/error'
-export Converse from './class/converse'
