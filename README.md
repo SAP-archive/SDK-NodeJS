@@ -168,7 +168,7 @@ client.textRequest(YOUR_TEXT)
 
     var intent = res.intent()
 
-    if (intent.slug === 'geetings' && intent.confidence > 0.7) {
+    if (intent.slug === 'greetings' && intent.confidence > 0.7) {
       // Do your code
     }
 
