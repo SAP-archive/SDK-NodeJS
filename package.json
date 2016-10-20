@@ -10,7 +10,7 @@
     "test": "npm run build && mocha spec/test.js",
     "test_coverage": "npm run build && istanbul cover _mocha spec/test.js",
     "build": "babel src -d lib",
-    "lint": "eslint src"
+    "lint": "eslint src spec"
   },
   "repository": {
     "type": "git",
