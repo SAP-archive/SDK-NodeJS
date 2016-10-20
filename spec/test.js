@@ -1,13 +1,12 @@
 /* eslint-disable max-nested-callbacks */
 
-const assert = require('chai').assert
-const expect = require('chai').expect
-const nock = require('nock')
-const path = require('path')
+import { assert, expect } from 'chai'
+import nock from 'nock'
+import path from 'path'
 
-const recast = require('../lib/index')
-const json = require('./resource/json.js')
-const conversationJson = require('./resource/conversationJson.js')
+import * as recast from '../src'
+import json from './resource/json'
+import conversationJson from './resource/conversationJson'
 
 const TOKEN = process.env.RECAST_TOKEN || 'FAKE_TOKEN'
 const LANGUAGE = 'FR'
