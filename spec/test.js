@@ -110,7 +110,7 @@ describe('Client class', () => {
 
     it('should perform a voice request', function (done) {
       this.timeout(15000)
-      client.fileRequest(path.resolve(__dirname, '/resource/test.wav'))
+      client.fileRequest(path.join(__dirname, '/resource/test.wav'))
         .then(res => {
           assert.equal(res.status, 200)
           done()

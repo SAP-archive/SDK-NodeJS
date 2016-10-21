@@ -1,10 +1,11 @@
-import axios from 'axios'
 import FormData from 'form-data'
 
 import Response from './response'
 import Conversation from './conversation'
 import RecastError from './error'
 import constants from '../constants'
+
+const agent = require('superagent-promise')(require('superagent-proxy')(require('superagent')), Promise)
 
 export default class Client {
 
@@ -29,17 +30,13 @@ export default class Client {
     const proxy = options && options.proxy
     if (!token) { return Promise.reject('Token is missing') }
 
-    const request = {
-      method: 'post',
-      url: constants.CONVERSE_ENDPOINT,
-      headers: { Authorization: `Token ${token}` },
-      data,
-    }
-    if (proxy) { request.proxy = proxy }
+    const request = agent('POST', constants.CONVERSE_ENDPOINT)
+      .set('Authorization', `Token ${token}`)
+    if (proxy) { request.proxy(proxy) }
 
     return new Promise((resolve, reject) => {
-      axios(request)
-        .then(res => resolve(new Conversation(res.data.results)))
+      request.send(data)
+        .then(res => resolve(new Conversation(res.body.results)))
         .catch(err => reject(new RecastError(err.message)))
     })
   }
@@ -55,18 +52,14 @@ export default class Client {
     const proxy = options && options.proxy
     if (!token) { return Promise.reject('Token is missing') }
 
-    const request = {
-      method: 'post',
-      url: constants.REQUEST_ENDPOINT,
-      headers: { Authorization: `Token ${token}` },
-      data,
-    }
-    if (proxy) { request.proxy = proxy }
+    const request = agent('POST', constants.REQUEST_ENDPOINT)
+      .set('Authorization', `Token ${token}`)
+    if (proxy) { request.proxy(proxy) }
 
     return new Promise((resolve, reject) => {
-      axios(request)
-        .then(res => resolve(new Response(res.data.results)))
-        .catch(err => reject(new RecastError(err.message)))
+      request.send(data)
+      .then(res => resolve(new Response(res.body.results)))
+      .catch(err => reject(new RecastError(err.message)))
     })
   }
 
@@ -85,17 +78,13 @@ export default class Client {
     data.append('voice', file)
     if (language) { data.append('language', language) }
 
-    const request = {
-      method: 'post',
-      url: constants.REQUEST_ENDPOINT,
-      headers: { Authorization: `Token ${token}` },
-      data,
-    }
-    if (proxy) { request.proxy = proxy }
+    const request = agent('POST', constants.REQUEST_ENDPOINT)
+      .set('Authorization', `Token ${token}`)
+    if (proxy) { request.proxy(proxy) }
 
     return new Promise((resolve, reject) => {
-      axios(request)
-        .then(res => resolve(new Response(res.data.results)))
+      request.attach('voice', file).send()
+        .then(res => resolve(new Response(res.body.results)))
         .catch(err => reject(new RecastError(err.message)))
     })
   }
