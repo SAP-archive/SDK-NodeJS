@@ -74,8 +74,8 @@ export default class Conversation {
    * @returns {object}: the updated memory
    */
   static resetMemory (token, conversationToken, alias) {
-    const data = { conversation_token: conversationToken }
-    if (alias) { data.memory = { alias: null } }
+    const data = { conversation_token: conversationToken, memory: {} }
+    if (alias) { data.memory[alias] = null }
 
     return new Promise((resolve, reject) => {
       agent('PUT', constants.CONVERSE_ENDPOINT)
