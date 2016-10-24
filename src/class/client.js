@@ -58,8 +58,8 @@ export default class Client {
 
     return new Promise((resolve, reject) => {
       request.send(data)
-      .then(res => resolve(new Response(res.body.results)))
-      .catch(err => reject(new RecastError(err.message)))
+        .then(res => resolve(new Response(res.body.results)))
+        .catch(err => reject(new RecastError(err.message)))
     })
   }
 

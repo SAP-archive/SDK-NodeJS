@@ -1,15 +1,15 @@
-import axios from 'axios'
 import { forEach } from 'lodash'
 
 import constants from '../constants'
 import RecastError from './error'
 import Entity from './entity'
 
+const agent = require('superagent-promise')(require('superagent-proxy')(require('superagent')), Promise)
+
 export default class Conversation {
 
   constructor (response) {
     this.raw = response
-
     this.uuid = response.uuid
     this.source = response.source
     this.replies = response.replies
@@ -24,7 +24,6 @@ export default class Conversation {
 
     this.intents = response.intents
     this.conversationToken = response.conversation_token
-
     this.language = response.language
     this.timestamp = response.timestamp
     this.status = response.status
@@ -61,17 +60,11 @@ export default class Conversation {
    * @returns {object}: the memory updated
    */
   static setMemory (token, conversationToken, memory) {
-    const data = { conversation_token: conversationToken, memory }
-    const request = {
-      method: 'put',
-      url: constants.CONVERSE_ENDPOINT,
-      headers: { Authorization: `Token ${token}` },
-      data,
-    }
-
     return new Promise((resolve, reject) => {
-      axios(request)
-        .then(res => resolve(res.data.results))
+      agent('PUT', constants.CONVERSE_ENDPOINT)
+        .set('Authorization', `Token ${token}`)
+        .send({ conversation_token: conversationToken, memory })
+        .then(res => resolve(res.body.results))
         .catch(err => reject(new RecastError(err.message)))
     })
   }
@@ -82,19 +75,13 @@ export default class Conversation {
    */
   static resetMemory (token, conversationToken, alias) {
     const data = { conversation_token: conversationToken }
-    if (alias) {
-      data.memory = { alias: null }
-    }
-    const request = {
-      method: 'put',
-      url: constants.CONVERSE_ENDPOINT,
-      headers: { Authorization: `Token ${token}` },
-      data,
-    }
+    if (alias) { data.memory = { alias: null } }
 
     return new Promise((resolve, reject) => {
-      axios(request)
-        .then(res => resolve(res.data.results))
+      agent('PUT', constants.CONVERSE_ENDPOINT)
+        .set('Authorization', `Token ${token}`)
+        .send(data)
+        .then(res => resolve(res.body.results))
         .catch(err => reject(new RecastError(err.message)))
     })
   }
@@ -104,16 +91,11 @@ export default class Conversation {
    * @returns {object}: the updated memory
    */
   static resetConversation (token, conversationToken) {
-    const request = {
-      method: 'delete',
-      url: constants.CONVERSE_ENDPOINT,
-      headers: { Authorization: `Token ${token}` },
-      data: { conversation_token: conversationToken },
-    }
-
     return new Promise((resolve, reject) => {
-      axios(request)
-        .then(res => resolve(res.data.results))
+      agent('DELETE', constants.CONVERSE_ENDPOINT)
+        .set('Authorization', `Token ${token}`)
+        .send({ conversation_token: conversationToken })
+        .then(res => resolve(res.body.results))
         .catch(err => reject(new RecastError(err.message)))
     })
   }
