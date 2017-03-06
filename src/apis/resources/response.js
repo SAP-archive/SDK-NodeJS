@@ -1,7 +1,7 @@
 import { forEach } from 'lodash'
 
 import Entity from './entity'
-import constants from '../constants.js'
+import constants from '../constants'
 
 export default class Response {
 
