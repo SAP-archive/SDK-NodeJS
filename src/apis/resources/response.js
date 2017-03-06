@@ -6,24 +6,10 @@ import constants from '../constants'
 export default class Response {
 
   constructor (response) {
+    for (const key in response) {
+      this[key] = response[key]
+    }
     this.raw = response
-    this.uuid = response.uuid
-
-    this.source = response.source
-    this.intents = response.intents
-    this.act = response.act
-    this.type = response.type
-    this.sentiment = response.sentiment
-
-    this.entities = []
-    forEach(response.entities, (value, key) => {
-      value.forEach(entity => this.entities.push(new Entity(key, entity)))
-    })
-
-    this.language = response.language
-    this.version = response.version
-    this.status = response.status
-    this.timestamp = response.timestamp
   }
 
   /**
@@ -31,14 +17,14 @@ export default class Response {
    * @param {String} name: the entity's name
    * @returns {Entity}: returns the first entity that matches - name -
    */
-  get = name => this.entities.find(entity => entity.name === name)
+  get = name => this.entities[name] && this.entities[name][0] || null
 
   /**
    * Returns all the entities whose name matches the parameter
    * @param {String} name: the entity's name
    * @returns {Array}: returns an array of Entity
    */
-  all = name => this.entities.filter(entity => entity.name === name)
+  all = name => this.entities[name] || null
 
   /**
    * Returns the first Intent if there is one

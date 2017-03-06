@@ -1,8 +1,12 @@
 import FormData from 'form-data'
 import superagent from 'superagent'
+import superagentProxy from 'superagent-proxy'
 import superagentPromise from 'superagent-promise'
 
-const agent = superagentPromise(superagent, Promise)
+import constants from '../constants'
+import { Response, RecastError } from '../resources'
+
+const agent = superagentPromise(superagentProxy(superagent), Promise)
 
 export default class Request {
   
@@ -25,7 +29,7 @@ export default class Request {
       let res = await request.send(data)
       return new Response(res.body.results)
     } catch (err) {
-      throw new RecastError(err.message)
+      throw new RecastError(err)
     }
   }
 
@@ -43,7 +47,7 @@ export default class Request {
       let res = await request.attach('voice', file).send()
       return new Response(res.body.results)
     } catch (err) {
-      throw new RecastError(err.message)
+      throw new RecastError(err)
     }
   }
 }
