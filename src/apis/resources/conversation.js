@@ -1,35 +1,21 @@
-import { forEach } from 'lodash'
 import superagent from 'superagent'
 import superagentProxy from 'superagent-proxy'
 import superagentPromise from 'superagent-promise'
 
 import constants from '../constants'
 import RecastError from './recastError'
-import Entity from './entity'
 
 const agent = superagentPromise(superagentProxy(superagent), Promise)
 
 export default class Conversation {
 
-  constructor (response) {
-    this.raw = response
-    this.uuid = response.uuid
-    this.source = response.source
-    this.replies = response.replies
-    this.action = response.action
-    this.nextActions = response.next_actions
-    this.memory = response.memory
+  constructor ({ conversation_token, next_actions, ...response }) {
+    for (const key in response) {
+      this[key] = response[key]
+    }
 
-    this.entities = []
-    forEach(response.entities, (value, key) => {
-      value.forEach(entity => this.entities.push(new Entity(key, entity)))
-    })
-
-    this.intents = response.intents
-    this.conversationToken = response.conversation_token
-    this.language = response.language
-    this.timestamp = response.timestamp
-    this.status = response.status
+    this.nextActions = next_actions
+    this.conversationToken = conversation_token
   }
 
   /**
@@ -58,6 +44,20 @@ export default class Conversation {
   getMemory = alias => alias ? this.memory[alias] : this.memory
 
   /**
+   * Returns the first Entity whose name matches the parameter
+   * @param {String} name: the entity's name
+   * @returns {Entity}: returns the first entity that matches - name -
+   */
+  get = name => this.entities[name] && this.entities[name][0] || null
+
+  /**
+   * Returns all the entities whose name matches the parameter
+   * @param {String} name: the entity's name
+   * @returns {Array}: returns an array of Entity
+   */
+  all = name => this.entities[name] || null
+
+  /**
    * Merge the conversation memory with the one in parameter
    * Returns the memory updated
    * @returns {object}: the memory updated
@@ -66,11 +66,12 @@ export default class Conversation {
     try {
       let res = await agent('PUT', constants.CONVERSE_ENDPOINT)
         .set('Authorization', `Token ${this.recastToken}`)
-        .send({ memory, conversationToken: this.conversationToken })
-      // TODO merge the new memory
+        .send({ memory, conversation_token: this.conversationToken })
+
+      this.memory = { ...this.memory, ...memory }
       return res.body.results
     } catch (err) {
-      throw new RecastError(err.message)
+      throw new RecastError(err)
     }
     
   }
@@ -84,10 +85,11 @@ export default class Conversation {
       const data = { conversation_token: this.conversationToken, memory: {} }
       if (alias) { data.memory[alias] = null }
 
-      let res = agent('PUT', constants.CONVERSE_ENDPOINT)
+      let res = await agent('PUT', constants.CONVERSE_ENDPOINT)
         .set('Authorization', `Token ${this.recastToken}`)
         .send(data)
-      // TODO reset memory
+
+      this.memory = { ...this.memory, ...data.memory }
       return res.body.results
     } catch (err) {
       throw new RecastError(err.message)
@@ -100,10 +102,20 @@ export default class Conversation {
    */
   resetConversation = async () => {
     try {
-      let res = agent('DELETE', constants,CONVERSE_ENDPOINT)
+      let res = await agent('DELETE', constants.CONVERSE_ENDPOINT)
         .set('Authorization', `Token ${this.recastToken}`)
         .send({ conversation_token: this.conversationToken })
-      // TODO reset the entire conversation
+
+      this.intents = []
+      this.replies = []
+      this.nextActions = []
+      this.entities = []
+      this.action = null
+      for (const key in this.memory) {
+        this.memory[key] = null
+      }
+
+      return res.body.results
     } catch (err) {
       throw new RecastError(err.message)
     }

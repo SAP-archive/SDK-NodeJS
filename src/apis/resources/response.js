@@ -1,6 +1,3 @@
-import { forEach } from 'lodash'
-
-import Entity from './entity'
 import constants from '../constants'
 
 export default class Response {
@@ -9,6 +6,7 @@ export default class Response {
     for (const key in response) {
       this[key] = response[key]
     }
+
     this.raw = response
   }
 

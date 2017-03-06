@@ -1,7 +1,13 @@
 import superagent from 'superagent'
+import superagentProxy from 'superagent-proxy'
 import superagentPromise from 'superagent-promise'
 
-export default class Conversation {
+import constants from '../constants'
+import { Conversation, RecastError } from '../resources'
+
+const agent = superagentPromise(superagentProxy(superagent), Promise)
+
+export default class Converse {
 
   constructor (token, language) {
     this.token = token
@@ -25,7 +31,7 @@ export default class Conversation {
       if (proxy) { request.proxy(proxy) }
 
       let res = await request.send(data)
-      return new Converse(res.body.results)
+      return new Conversation({ ...res.body.results, recastToken: this.token })
     } catch (err) {
       throw new RecastError(err.message)
     }
