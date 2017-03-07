@@ -8,4 +8,8 @@ export default class Client {
     }
   }
 
+  static connect = apis.connect
+
+  static request = apis.request
+
 }
