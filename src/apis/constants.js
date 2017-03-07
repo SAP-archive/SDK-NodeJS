@@ -1,6 +1,8 @@
 export default {
   REQUEST_ENDPOINT: 'https://api.recast.ai/v2/request',
   CONVERSE_ENDPOINT: 'https://api.recast.ai/v2/converse',
+  CONVERSATION_ENDPOINT: 'https://api.recast.ai/connect/v1/messages',
+  MESSAGE_ENDPOINT: 'https://api.recast.ai/connect/v1/conversations/:conversation_id/messages',
 
   ACT_ASSERT: 'assert',
   ACT_COMMAND: 'command',
