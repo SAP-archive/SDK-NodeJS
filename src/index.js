@@ -1,5 +1,3 @@
-export Client from './class/client'
-export Response from './class/response'
-export Conversation from './class/conversation'
-export Entity from './class/entity'
-export RecastError from './class/error'
+import Client from './client'
+
+export default Client
