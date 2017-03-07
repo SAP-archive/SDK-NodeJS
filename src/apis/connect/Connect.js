@@ -1,29 +1,40 @@
 import superagent from 'superagent'
-import superagentPromise from 'superagentPromise'
+import superagentProxy from 'superagent-proxy'
+import superagentPromise from 'superagent-promise'
+
+const agent = superagentPromise(superagentProxy(superagent), Promise)
+
+import constants from '../constants'
+import { Message } from '../resources'
 
 export default class Connect {
-  
+
   constructor (token) {
     this.token = token
   }
 
   handleMessage = (req, res, onMessageReceived) => {
-    // TODO extract the informations we need from the request
-    // TODO send back a 200 to the BotConnector
-    // TODO call onMessageReceived with the extracted informations
+    if (typeof res.status === 'function') {
+      res.status(200).send()
+    } else {
+      res.status = 200
+    }
+
+    onMessageReceived(new Message(req.body, this.token))
   }
 
   sendMessage = (messages, conversationId) => {
-    return agent('POST', '//URL HERE')
+    return agent('POST', constants.MESSAGE_ENDPOINT.replace(':conversation_id', conversationId))
       .set('Authorization', `Token ${this.token}`)
       .send(messages)
-      .catch(err => new RecastError(err))
+      .catch(err => { throw new RecastError(err) })
   }
 
   broadcast = (messages) => {
-    return agent('POST', '//URL HERE')
+    return agent('POST', constants.CONVERSATION_ENDPOINT)
       .set('Authorization', `Token ${this.token}`)
       .send({ messages })
-      .catch(err => new RecastError(err))
+      .catch(err => { throw new RecastError(err) })
   }
-} 
+
+}
