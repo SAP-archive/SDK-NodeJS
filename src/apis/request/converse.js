@@ -26,11 +26,11 @@ export default class Converse {
     if (!token) { throw new RecastError('Parameter token is missing') }
 
     try {
-      let request = agent('POST', constants.CONVERSE_ENDPOINT)
+      const request = agent('POST', constants.CONVERSE_ENDPOINT)
         .set('Authorization', `Token ${this.token}`)
       if (proxy) { request.proxy(proxy) }
 
-      let res = await request.send(data)
+      const res = await request.send(data)
       return new Conversation({ ...res.body.results, recastToken: this.token })
     } catch (err) {
       throw new RecastError(err.message)
