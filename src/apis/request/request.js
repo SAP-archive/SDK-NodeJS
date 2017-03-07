@@ -1,0 +1,52 @@
+import superagent from 'superagent'
+import superagentProxy from 'superagent-proxy'
+import superagentPromise from 'superagent-promise'
+
+import constants from '../constants'
+import { Response, RecastError } from '../resources'
+
+const agent = superagentPromise(superagentProxy(superagent), Promise)
+
+export default class Request {
+
+  constructor (token, language) {
+    this.token = token
+    this.language = language
+  }
+
+  textRequest = async (text, options = {}) => {
+    const token = options.token || this.token
+    const proxy = options.proxy
+    const data = { text, language: options.language || this.language }
+    if (!token) { throw new RecastError('Parameter token is missing') }
+
+    try {
+      const request = agent('POST', constants.REQUEST_ENDPOINT)
+        .set('Authorization', `Token ${this.token}`)
+      if (proxy) { request.proxy(proxy) }
+
+      const res = await request.send(data)
+      return new Response(res.body.results)
+    } catch (err) {
+      throw new RecastError(err)
+    }
+  }
+
+  fileRequest = async (file, options = {}) => {
+    const token = options.token || this.token
+    const proxy = options.token
+    if (!token) { throw new RecastError('Parameter token is missing') }
+
+    try {
+      const request = agent('POST', constants.REQUEST_ENDPOINT)
+        .set('Authorization', `Token ${this.token}`)
+      if (proxy) { request.proxy(proxy) }
+
+      const res = await request.attach('voice', file).send()
+      return new Response(res.body.results)
+    } catch (err) {
+      throw new RecastError(err)
+    }
+  }
+}
+
