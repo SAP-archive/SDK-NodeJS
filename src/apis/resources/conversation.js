@@ -64,7 +64,7 @@ export default class Conversation {
    */
   setMemory = async (memory) => {
     try {
-      let res = await agent('PUT', constants.CONVERSE_ENDPOINT)
+      const res = await agent('PUT', constants.CONVERSE_ENDPOINT)
         .set('Authorization', `Token ${this.recastToken}`)
         .send({ memory, conversation_token: this.conversationToken })
 
@@ -73,7 +73,7 @@ export default class Conversation {
     } catch (err) {
       throw new RecastError(err)
     }
-    
+
   }
 
   /**
@@ -85,7 +85,7 @@ export default class Conversation {
       const data = { conversation_token: this.conversationToken, memory: {} }
       if (alias) { data.memory[alias] = null }
 
-      let res = await agent('PUT', constants.CONVERSE_ENDPOINT)
+      const res = await agent('PUT', constants.CONVERSE_ENDPOINT)
         .set('Authorization', `Token ${this.recastToken}`)
         .send(data)
 
@@ -102,7 +102,7 @@ export default class Conversation {
    */
   resetConversation = async () => {
     try {
-      let res = await agent('DELETE', constants.CONVERSE_ENDPOINT)
+      const res = await agent('DELETE', constants.CONVERSE_ENDPOINT)
         .set('Authorization', `Token ${this.recastToken}`)
         .send({ conversation_token: this.conversationToken })
 
