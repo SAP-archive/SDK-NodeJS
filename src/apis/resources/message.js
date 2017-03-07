@@ -1,22 +1,33 @@
 import superagent from 'superagent'
+import superagentProxy from 'superagent-proxy'
 import superagentPromise from 'superagent-promise'
 
-const agent = superagentPromise(superagent, Promise)
+import { RecastError } from '../resources'
+import constants from '../constants'
+
+const agent = superagentPromise(superagentProxy(superagent), Promise)
 
 export default class Message {
 
-  constructor (token) {
-    this.messageStack = []
-    this.token = token
+  constructor (body, recastToken) {
+    for (const key in body) {
+      this[key] = body[key]
+    }
+
+    this.content = body.message.attachment.content
+    this.type = body.message.attachment.type
+    this.conversationId = body.message.conversation
+    this.recastToken = recastToken
+    this._messageStack = []
   }
 
-  addReply = (replies) => this.messageStack.concat(replies)
+  addReply = (replies) => this._messageStack = this._messageStack.concat(replies)
 
   reply = (replies = []) => {
-    return agent('POST', '//URL HERE')
-      .set('Authorization', `Token ${this.token}`)
-      .send({ messages: [...this.messageStack, ...replies] })
-      .catch(err => new RecastError(err))
+    return agent('POST', constants.MESSAGE_ENDPOINT.replace(':conversation_id', this.conversationId))
+      .set('Authorization', `Token ${this.recastToken}`)
+      .send({ messages: [...this._messageStack, ...replies] })
+      .catch(err => { throw new RecastError(err) })
   }
 
 }
