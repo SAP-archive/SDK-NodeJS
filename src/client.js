@@ -2,9 +2,9 @@ import apis from './apis'
 
 export default class Client {
 
-  constructor (token) {
+  constructor (token, language) {
     for (const name in apis) {
-      this[name] = new apis[name](token)
+      this[name] = new apis[name](token, language)
     }
   }
 
