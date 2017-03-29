@@ -26,7 +26,7 @@ export default class Connect {
   sendMessage = (messages, conversationId) => {
     return agent('POST', constants.MESSAGE_ENDPOINT.replace(':conversation_id', conversationId))
       .set('Authorization', `Token ${this.token}`)
-      .send(messages)
+      .send({ messages })
       .catch(err => { throw new RecastError(err) })
   }
 
