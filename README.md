@@ -9,13 +9,49 @@ Recast.AI official SDK in Node.js
 ## Synospis
 
 This module is a wrapper around the [Recast.AI](https://recast.ai) API, and allows you to:
-* [build a bot](https://github.com/RecastAI/SDK-NodeJS/wiki/Build-your-bot)
-* [analyze your text](https://github.com/RecastAI/SDK-NodeJS/wiki/Analyse-text)
+* [Analyse your text](https://github.com/RecastAI/SDK-NodeJS/wiki/Analyse-text)
+* [Manage your conversation](https://github.com/RecastAI/SDK-NodeJS/wiki/Build-your-bot)
+* [Receive and send messages](https://github.com/RecastAI/SDK-NodeJS/wiki/Build-your-bot)
 
 ## Installation
 
+Install the package using npm, as shown below:
 ```bash
 npm install --save recastai
+```
+
+You can now use the SDK in your code.
+
+#### ES5
+
+Using the entire SDK:
+```js
+var recastai = require('recastai')
+
+var client = new recastai('YOUR_TOKEN')
+```
+
+Extracting one single API:
+```js
+var recastai = require('recastai')
+
+var converse = new recastai.converse('YOUR_TOKEN')
+```
+
+#### ES6
+
+Using the entire SDK:
+```js
+import recastai from 'recastai'
+
+const client = new recastai('YOUR_TOKEN')
+```
+
+Extracting one single API:
+```js
+import { converse } from 'recastai'
+
+const converse = new connect('YOUR_TOKEN')
 ```
 
 ## Documentation
