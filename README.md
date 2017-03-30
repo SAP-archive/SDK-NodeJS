@@ -1,9 +1,9 @@
-# Recast.AI - SDK Node.js
 
 [logo]: https://cdn.recast.ai/brand/recast-ai-logo-inline.png "Recast.AI"
 
 ![alt text][logo]
 
+# Recast.AI - SDK Node.js
 Recast.AI official SDK in Node.js
 
 ## Synospis
