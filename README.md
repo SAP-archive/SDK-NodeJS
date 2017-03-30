@@ -1,36 +1,62 @@
-# Recast.AI - SDK Node.js
 
-[logo]: https://github.com/RecastAI/SDK-NodeJs/blob/master/misc/logo-inline.png "Recast.AI"
+[logo]: https://cdn.recast.ai/brand/recast-ai-logo-inline.png "Recast.AI"
 
 ![alt text][logo]
 
+# Recast.AI - SDK Node.js
 Recast.AI official SDK in Node.js
 
 ## Synospis
 
 This module is a wrapper around the [Recast.AI](https://recast.ai) API, and allows you to:
-* [build a bot](https://github.com/RecastAI/SDK-NodeJS/wiki/Build-your-bot)
-* [analyze your text](https://github.com/RecastAI/SDK-NodeJS/wiki/Analyse-text)
+* [Analyse your text](https://github.com/RecastAI/SDK-NodeJS/wiki/Analyse-text)
+* [Manage your conversation](https://github.com/RecastAI/SDK-NodeJS/wiki/Manage-your-conversation)
+* [Receive and send messages](https://github.com/RecastAI/SDK-NodeJS/wiki/Receive-and-send-messages)
 
 ## Installation
 
+Install the package using npm, as shown below:
 ```bash
 npm install --save recastai
+```
+
+You can now use the SDK in your code.
+
+#### ES5
+
+Using the entire SDK:
+```js
+var recastai = require('recastai')
+
+var client = new recastai('YOUR_TOKEN')
+```
+
+Extracting one single API:
+```js
+var recastai = require('recastai')
+
+var converse = new recastai.converse('YOUR_TOKEN')
+```
+
+#### ES6
+
+Using the entire SDK:
+```js
+import recastai from 'recastai'
+
+const client = new recastai('YOUR_TOKEN')
+```
+
+Extracting one single API:
+```js
+import { converse } from 'recastai'
+
+const converse = new connect('YOUR_TOKEN')
 ```
 
 ## Documentation
 
 You can find the full documentation [here](https://github.com/RecastAI/SDK-NodeJS/wiki).
-
-## Specs
-
-This module contains 5 classes, as follows:
-
-* [Client](https://github.com/RecastAI/SDK-NodeJS/wiki/Class-Client) is the client allowing you to make requests.
-* [Conversation](https://github.com/RecastAI/SDK-NodeJS/wiki/Class-Conversation) wraps the response from a call to [Recast.AI](https://recast.ai) API with the textConverse Client method.
-* [Response](https://github.com/RecastAI/SDK-NodeJS/wiki/Class-Response) wraps the response from a call to [Recast.AI](https://recast.ai) API with the textRequest or fileRequest Client methods.
-* [Entity](https://github.com/RecastAI/SDK-NodeJS/wiki/Class-Entity) represents an entity extracted from an input.
-* [RecastError](https://github.com/RecastAI/SDK-NodeJS/wiki/Class-RecastError) is the error returned by the module.
 
 ## More
 
