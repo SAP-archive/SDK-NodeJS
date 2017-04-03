@@ -24,7 +24,13 @@ export default class Message {
   addReply = (replies) => this._messageStack = this._messageStack.concat(replies)
 
   reply = (replies = []) => {
-    const messages = [...replies, ...this._messageStack]
+    const messages = this._messageStack
+    
+    if (replies instanceof Array) {
+      messages.push(...replies)
+    } else {
+      messages.push(replies)
+    }
     this._messageStack = []
     return agent('POST', constants.MESSAGE_ENDPOINT.replace(':conversation_id', this.conversationId))
       .set('Authorization', `Token ${this.recastToken}`)
