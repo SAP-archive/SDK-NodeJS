@@ -5,7 +5,7 @@ import superagentPromise from 'superagent-promise'
 const agent = superagentPromise(superagentProxy(superagent), Promise)
 
 import constants from '../constants'
-import { Message } from '../resources'
+import { Message, RecastError } from '../resources'
 
 export default class Connect {
 
