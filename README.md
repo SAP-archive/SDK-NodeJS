@@ -51,7 +51,7 @@ Extracting one single API:
 ```js
 import { converse } from 'recastai'
 
-const converse = new connect('YOUR_TOKEN')
+const clientConverse = new connect('YOUR_TOKEN')
 ```
 
 ## Documentation
