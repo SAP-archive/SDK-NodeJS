@@ -23,16 +23,12 @@ export default class Request {
     const data = { text, language: options.language || this.language }
     if (!token) { throw new RecastError('Parameter token is missing') }
 
-    try {
-      const request = agent('POST', constants.REQUEST_ENDPOINT)
-        .set('Authorization', `Token ${this.token}`)
-      if (proxy) { request.proxy(proxy) }
+    const request = agent('POST', constants.REQUEST_ENDPOINT)
+      .set('Authorization', `Token ${this.token}`)
+    if (proxy) { request.proxy(proxy) }
 
-      const res = await request.send(data)
-      return new Response(res.body.results)
-    } catch (err) {
-      throw new RecastError(err)
-    }
+    const res = await request.send(data)
+    return new Response(res.body.results)
   }
 
   /*
@@ -43,16 +39,12 @@ export default class Request {
     const proxy = options.proxy
     if (!token) { throw new RecastError('Parameter token is missing') }
 
-    try {
-      const request = agent('POST', constants.REQUEST_ENDPOINT)
-        .set('Authorization', `Token ${this.token}`)
-      if (proxy) { request.proxy(proxy) }
+    const request = agent('POST', constants.REQUEST_ENDPOINT)
+      .set('Authorization', `Token ${this.token}`)
+    if (proxy) { request.proxy(proxy) }
 
-      const res = await request.attach('voice', file).send()
-      return new Response(res.body.results)
-    } catch (err) {
-      throw new RecastError(err)
-    }
+    const res = await request.attach('voice', file).send()
+    return new Response(res.body.results)
   }
 
   /*
@@ -69,16 +61,12 @@ export default class Request {
     }
     if (!token) { throw new RecastError('Parameter token is missing') }
 
-    try {
-      const request = agent('POST', constants.CONVERSE_ENDPOINT)
-        .set('Authorization', `Token ${this.token}`)
-      if (proxy) { request.proxy(proxy) }
+    const request = agent('POST', constants.CONVERSE_ENDPOINT)
+      .set('Authorization', `Token ${this.token}`)
+    if (proxy) { request.proxy(proxy) }
 
-      const res = await request.send(data)
-      return new Conversation({ ...res.body.results, recastToken: this.token })
-    } catch (err) {
-      throw new RecastError(err.message)
-    }
+    const res = await request.send(data)
+    return new Conversation({ ...res.body.results, recastToken: this.token })
   }
 
   converseFile = async (file, options = {}) => {
@@ -91,17 +79,12 @@ export default class Request {
 
     if (!token) { throw new RecastError('Parameter token is missing') }
 
-    try {
-      const request = agent('POST', constants.CONVERSE_ENDPOINT)
-        .set('Authorization', `Token ${this.token}`)
-      if (proxy) { request.proxy(proxy) }
+    const request = agent('POST', constants.CONVERSE_ENDPOINT)
+      .set('Authorization', `Token ${this.token}`)
+    if (proxy) { request.proxy(proxy) }
 
-      const res = await request.attach('voice', file).send(data)
-      return new Conversation({ ...res.body.results, recastToken: this.token })
-    } catch (err) {
-      throw new RecastError(err.message)
-    }
+    const res = await request.attach('voice', file).send(data)
+    return new Conversation({ ...res.body.results, recastToken: this.token })
   }
-
 
 }

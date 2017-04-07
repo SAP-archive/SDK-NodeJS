@@ -3,7 +3,6 @@ import superagentProxy from 'superagent-proxy'
 import superagentPromise from 'superagent-promise'
 
 import constants from '../constants'
-import RecastError from './recastError'
 
 const agent = superagentPromise(superagentProxy(superagent), Promise)
 
@@ -63,17 +62,12 @@ export default class Conversation {
    * @returns {object}: the memory updated
    */
   setMemory = async (memory) => {
-    try {
-      const res = await agent('PUT', constants.CONVERSE_ENDPOINT)
-        .set('Authorization', `Token ${this.recastToken}`)
-        .send({ memory, conversation_token: this.conversationToken })
+    const res = await agent('PUT', constants.CONVERSE_ENDPOINT)
+      .set('Authorization', `Token ${this.recastToken}`)
+      .send({ memory, conversation_token: this.conversationToken })
 
-      this.memory = { ...this.memory, ...memory }
-      return res.body.results
-    } catch (err) {
-      throw new RecastError(err)
-    }
-
+    this.memory = { ...this.memory, ...memory }
+    return res.body.results
   }
 
   /**
@@ -81,19 +75,15 @@ export default class Conversation {
    * @returns {object}: the updated memory
    */
   resetMemory = async (alias) => {
-    try {
-      const data = { conversation_token: this.conversationToken, memory: {} }
-      if (alias) { data.memory[alias] = null }
+    const data = { conversation_token: this.conversationToken, memory: {} }
+    if (alias) { data.memory[alias] = null }
 
-      const res = await agent('PUT', constants.CONVERSE_ENDPOINT)
-        .set('Authorization', `Token ${this.recastToken}`)
-        .send(data)
+    const res = await agent('PUT', constants.CONVERSE_ENDPOINT)
+      .set('Authorization', `Token ${this.recastToken}`)
+      .send(data)
 
-      this.memory = { ...this.memory, ...data.memory }
-      return res.body.results
-    } catch (err) {
-      throw new RecastError(err.message)
-    }
+    this.memory = { ...this.memory, ...data.memory }
+    return res.body.results
   }
 
   /**
@@ -101,23 +91,19 @@ export default class Conversation {
    * @returns {object}: the updated memory
    */
   resetConversation = async () => {
-    try {
-      const res = await agent('DELETE', constants.CONVERSE_ENDPOINT)
-        .set('Authorization', `Token ${this.recastToken}`)
-        .send({ conversation_token: this.conversationToken })
+    const res = await agent('DELETE', constants.CONVERSE_ENDPOINT)
+      .set('Authorization', `Token ${this.recastToken}`)
+      .send({ conversation_token: this.conversationToken })
 
-      this.intents = []
-      this.replies = []
-      this.nextActions = []
-      this.entities = []
-      this.action = null
-      for (const key in this.memory) {
-        this.memory[key] = null
-      }
-
-      return res.body.results
-    } catch (err) {
-      throw new RecastError(err.message)
+    this.intents = []
+    this.replies = []
+    this.nextActions = []
+    this.entities = []
+    this.action = null
+    for (const key in this.memory) {
+      this.memory[key] = null
     }
+
+    return res.body.results
   }
 }
