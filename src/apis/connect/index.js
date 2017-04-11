@@ -5,7 +5,7 @@ import superagentPromise from 'superagent-promise'
 const agent = superagentPromise(superagentProxy(superagent), Promise)
 
 import constants from '../constants'
-import { Message, RecastError } from '../resources'
+import { Message } from '../resources'
 
 export default class Connect {
 
@@ -27,14 +27,12 @@ export default class Connect {
     return agent('POST', constants.MESSAGE_ENDPOINT.replace(':conversation_id', conversationId))
       .set('Authorization', `Token ${this.token}`)
       .send({ messages })
-      .catch(err => { throw new RecastError(err) })
   }
 
   broadcastMessage = (messages) => {
     return agent('POST', constants.CONVERSATION_ENDPOINT)
       .set('Authorization', `Token ${this.token}`)
       .send({ messages })
-      .catch(err => { throw new RecastError(err) })
   }
 
 }

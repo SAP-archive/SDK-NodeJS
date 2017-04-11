@@ -2,7 +2,6 @@ import superagent from 'superagent'
 import superagentProxy from 'superagent-proxy'
 import superagentPromise from 'superagent-promise'
 
-import { RecastError } from '../resources'
 import constants from '../constants'
 
 const agent = superagentPromise(superagentProxy(superagent), Promise)
@@ -25,7 +24,7 @@ export default class Message {
 
   reply = (replies = []) => {
     const messages = this._messageStack
-    
+
     if (replies instanceof Array) {
       messages.push(...replies)
     } else {
@@ -35,7 +34,6 @@ export default class Message {
     return agent('POST', constants.MESSAGE_ENDPOINT.replace(':conversation_id', this.conversationId))
       .set('Authorization', `Token ${this.recastToken}`)
       .send({ messages })
-      .catch(err => { throw new RecastError(err) })
   }
 
 }
