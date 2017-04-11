@@ -24,7 +24,7 @@ export default class Request {
     if (!token) { throw new RecastError('Parameter token is missing') }
 
     const request = agent('POST', constants.REQUEST_ENDPOINT)
-      .set('Authorization', `Token ${this.token}`)
+      .set('Authorization', `Token ${token}`)
     if (proxy) { request.proxy(proxy) }
 
     const res = await request.send(data)
@@ -40,7 +40,7 @@ export default class Request {
     if (!token) { throw new RecastError('Parameter token is missing') }
 
     const request = agent('POST', constants.REQUEST_ENDPOINT)
-      .set('Authorization', `Token ${this.token}`)
+      .set('Authorization', `Token ${token}`)
     if (proxy) { request.proxy(proxy) }
 
     const res = await request.attach('voice', file).send()
@@ -62,7 +62,7 @@ export default class Request {
     if (!token) { throw new RecastError('Parameter token is missing') }
 
     const request = agent('POST', constants.CONVERSE_ENDPOINT)
-      .set('Authorization', `Token ${this.token}`)
+      .set('Authorization', `Token ${token}`)
     if (proxy) { request.proxy(proxy) }
 
     const res = await request.send(data)
@@ -80,7 +80,7 @@ export default class Request {
     if (!token) { throw new RecastError('Parameter token is missing') }
 
     const request = agent('POST', constants.CONVERSE_ENDPOINT)
-      .set('Authorization', `Token ${this.token}`)
+      .set('Authorization', `Token ${token}`)
     if (proxy) { request.proxy(proxy) }
 
     const res = await request.attach('voice', file).send(data)
