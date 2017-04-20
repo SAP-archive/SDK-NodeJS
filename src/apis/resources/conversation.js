@@ -57,6 +57,21 @@ export default class Conversation {
   all = name => this.entities[name] || null
 
   /**
+   * SENTIMENT HELPERS
+   * Returns whether or not the response sentiment corresponds to the checked one
+   * @returns {boolean}: true or false
+   */
+  isVPositive = () => this.sentiment === constants.SENTIMENT_VERY_POSITIVE
+
+  isPositive = () => this.sentiment === constants.SENTIMENT_POSITIVE
+
+  isNeutral = () => this.sentiment === constants.SENTIMENT_NEUTRAL
+
+  isNegative = () => this.sentiment === constants.SENTIMENT_NEGATIVE
+
+  isVNegative = () => this.sentiment === constants.SENTIMENT_VERY_NEGATIVE
+
+  /**
    * Merge the conversation memory with the one in parameter
    * Returns the memory updated
    * @returns {object}: the memory updated
