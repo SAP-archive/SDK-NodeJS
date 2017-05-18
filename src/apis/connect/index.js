@@ -20,7 +20,7 @@ export default class Connect {
       res.status = 200
     }
 
-    onMessageReceived(new Message(req.body, this.token))
+    return onMessageReceived(new Message(req.body, this.token))
   }
 
   sendMessage = (messages, conversationId) => {
