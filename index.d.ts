@@ -6,8 +6,8 @@ declare module 'recastai' {
         recastToken: string;
         senderId: string;
         type: string;
-        addReply: (replies: object[]) => void;
-        reply: (replies?: object[]) => Promise<any>;
+        addReply(replies: object[]): void;
+        reply(replies?: object[]): Promise<any>;
     }
     export interface Intent {
         slug: string;
@@ -32,7 +32,7 @@ declare module 'recastai' {
         reply: string;
     }
     export class Conversation {
-        action: Action;
+        action: Action | null;
         conversationToken: string;
         entities: Entities;
         intents: Intent[];
@@ -47,18 +47,18 @@ declare module 'recastai' {
         timestamp: string;
         uuid: string;
         version: string;
-        all: (name: string) => object[];
-        get: (name: string) => string;
+        all(name: string): object[] | null;
+        get(name: string): object | null;
         getMemory(): Memory;
-        getMemory(alias: string): object;
+        getMemory(alias: string): object | undefined | null;
         isNegative(): boolean;
         isNeutral(): boolean;
         isPositive(): boolean;
         isVNegative(): boolean;
         isVPositive(): boolean;
         joinedReplies(sep?: string): string;
-        nextAction(): string;
-        reply(): string;
+        nextAction(): string | null;
+        reply(): string | null;
         resetConversation(): Promise<Memory>;
         resetMemory(alias: string): Promise<Memory>;
         setMemory(memory: Memory): Promise<Memory>;
@@ -70,7 +70,7 @@ declare module 'recastai' {
     }
     export class Connect {
         constructor(token: string, language: string);
-        handleMessage(req: any, res: any, onMessageReceived: (m: Message) => void): void;
+        handleMessage<T>(req: any, res: any, onMessageReceived: (m: Message) => T): T;
     }
     export default class Client {
         static request: Request;
