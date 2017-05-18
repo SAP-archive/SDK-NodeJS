@@ -1,9 +1,11 @@
 declare module 'recastai' {
     export interface Message {
+        chatId: string;
         content: string;
-        type: string;
         conversationId: string;
         recastToken: string;
+        senderId: string;
+        type: string;
         addReply: (replies: object[]) => void;
         reply: (replies?: object[]) => Promise<any>;
     }
@@ -21,12 +23,50 @@ declare module 'recastai' {
         type: string;
         act: string;
     }
+    export interface Memory {
+        [key: string]: object;
+    }
+    export interface Action {
+        slug: string;
+        done: boolean;
+        reply: string;
+    }
+    export class Conversation {
+        action: Action;
+        conversationToken: string;
+        entities: Entities;
+        intents: Intent[];
+        language: string;
+        memory: Memory;
+        nextActions: Action[];
+        processing_language: string;
+        replies: string[];
+        sentiment: string;
+        source: string;
+        status: number;
+        timestamp: string;
+        uuid: string;
+        version: string;
+        all: (name: string) => object[];
+        get: (name: string) => string;
+        getMemory(): Memory;
+        getMemory(alias: string): object;
+        isNegative(): boolean;
+        isNeutral(): boolean;
+        isPositive(): boolean;
+        isVNegative(): boolean;
+        isVPositive(): boolean;
+        joinedReplies(sep?: string): string;
+        nextAction(): string;
+        reply(): string;
+        resetConversation(): Promise<Memory>;
+        resetMemory(alias: string): Promise<Memory>;
+        setMemory(memory: Memory): Promise<Memory>;
+    }
     export class Request {
         constructor(token: string, language: string);
-        analyseText (text: string, option?: object): Promise<Response>;
-    }
-    interface WithBody {
-        body: object;
+        analyseText(text: string, option?: object): Promise<Response>;
+        converseText(text: string, option?: object): Promise<Conversation>;
     }
     export class Connect {
         constructor(token: string, language: string);
