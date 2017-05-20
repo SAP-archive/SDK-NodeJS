@@ -26,14 +26,14 @@ You can now use the SDK in your code.
 
 Using the entire SDK:
 ```js
-var recastai = require('recastai')
+var recastai = require('recastai').default
 
 var client = new recastai('YOUR_TOKEN')
 ```
 
 Extracting one single API:
 ```js
-var recastai = require('recastai')
+var recastai = require('recastai').default
 
 var converse = new recastai.converse('YOUR_TOKEN')
 ```
