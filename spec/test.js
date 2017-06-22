@@ -1,50 +1,60 @@
 /* eslint-disable max-nested-callbacks */
+/* eslint-disable no-unused-expressions */
 
 import { assert, expect } from 'chai'
 import nock from 'nock'
 import path from 'path'
 
-import * as recast from '../src'
+import Client from '../src'
+import { Entity, Conversation, RecastError, Response } from '../src/apis/resources'
 import json from './resource/json'
 import conversationJson from './resource/conversationJson'
 
 const TOKEN = process.env.RECAST_TOKEN || 'FAKE_TOKEN'
 const LANGUAGE = 'FR'
+const BOT_SLUG = process.env.RECAST_BOT_SLUG || 'FAKE_BOT_SLUG'
+const USER_SLUG = process.env.RECAST_USER_SLUG || 'FAKE_USER_SLUG'
 
 describe('Client class', () => {
 
   // Instanciation
 
   it('it should be instanciable without token', () => {
-    expect(new recast.Client(null, LANGUAGE)).to.be.an.instanceof(recast.Client)
+    expect(new Client(null, LANGUAGE)).to.be.an.instanceof(Client)
   })
 
   it('it should be instanciable without language', () => {
-    expect(new recast.Client(TOKEN, null)).to.be.an.instanceof(recast.Client)
+    expect(new Client(TOKEN, null)).to.be.an.instanceof(Client)
   })
 
   it('should be instanciable without params', () => {
-    expect(new recast.Client()).to.be.an.instanceof(recast.Client)
+    expect(new Client()).to.be.an.instanceof(Client)
   })
 
-  it('should be instanciable with all params', () => {
-    expect(new recast.Client(TOKEN, LANGUAGE)).to.be.an.instanceof(recast.Client)
+  it('should be instanciable with basic params', () => {
+    expect(new Client(TOKEN, LANGUAGE)).to.be.an.instanceof(Client)
+    expect(new Client(TOKEN, LANGUAGE).train).to.be.undefined
+  })
+
+  it('should be instanciable all params', () => {
+    expect(new Client(TOKEN, LANGUAGE, USER_SLUG, BOT_SLUG)).to.be.an.instanceof(Client)
+    expect(new Client(TOKEN, LANGUAGE, USER_SLUG, BOT_SLUG).train).to.not.be.undefined
   })
 
   // Attribute
 
   it('should have attributes', () => {
-    const client = new recast.Client(TOKEN, LANGUAGE)
+    const client = new Client(TOKEN, LANGUAGE)
 
-    assert.equal(client.token, TOKEN)
-    assert.equal(client.language, LANGUAGE)
+    expect(client.connect).to.be.an.instanceof(Client.connect)
+    expect(client.request).to.be.an.instanceof(Client.request)
 
-    assert.throws(() => { recast.Client() }, TypeError, 'Cannot call a class as a function')
+    assert.throws(() => { Client() }, TypeError, 'Cannot call a class as a function')
   })
 
   // Methods
 
-  const client = new recast.Client(TOKEN)
+  const client = new Client(TOKEN)
 
   describe('textRequest', () => {
     nock('https://api.recast.ai')
@@ -58,7 +68,7 @@ describe('Client class', () => {
       .reply(404, 'invalid parameter')
 
     it('should perform a text request', done => {
-      client.textRequest('Hello world')
+      client.request.analyseText('Hello world')
         .then(res => {
           assert.equal(res.status, 200)
           done()
@@ -66,16 +76,16 @@ describe('Client class', () => {
     })
 
     it('should fail if no token', (done) => {
-      const clientWithoutToken = new recast.Client()
-      clientWithoutToken.textRequest('text')
+      const clientWithoutToken = new Client()
+      clientWithoutToken.request.analyseText('text')
         .catch(err => {
-          assert.equal(err, 'Token is missing')
+          assert.equal(err.message, 'Parameter token is missing')
           done()
         })
     })
 
     it('should return an error on 404', done => {
-      client.textRequest('Hello world')
+      client.request.analyseText('Hello world')
         .catch(() => {
           done()
         })
@@ -86,14 +96,28 @@ describe('Client class', () => {
     nock('https://api.recast.ai')
       .post('/v2/converse')
       .once()
+      .reply(200, json)
+
+    nock('https://api.recast.ai')
+      .post('/v2/converse')
+      .once()
       .reply(404, 'invalid parameter')
 
     it('should performs a converse request', done => {
-      done()
+      client.request.converseText('Hello world')
+        .then(res => {
+          assert.equal(res.status, 200)
+          done()
+        })
     })
 
     it('should fail if no token', done => {
-      done()
+      const clientWithoutToken = new Client()
+      clientWithoutToken.request.converseText('text')
+        .catch(err => {
+          assert.equal(err.message, 'Parameter token is missing')
+          done()
+        })
     })
   })
 
@@ -110,7 +134,7 @@ describe('Client class', () => {
 
     it('should perform a voice request', function (done) {
       this.timeout(15000)
-      client.fileRequest(path.join(__dirname, '/resource/test.wav'))
+      client.request.analyseFile(path.join(__dirname, '/resource/test.wav'))
         .then(res => {
           assert.equal(res.status, 200)
           done()
@@ -118,18 +142,18 @@ describe('Client class', () => {
     })
 
     it('should return an error on 404', done => {
-      client.fileRequest('spec/resource/test.wav')
+      client.request.analyseFile('spec/resource/test.wav')
         .catch(() => {
           done()
         })
     })
 
     it('should throw an error on missing token', (done) => {
-      const clientWithoutToken = new recast.Client()
-      clientWithoutToken.fileRequest(path.resolve(__dirname, '/resource/test.wav'))
+      const clientWithoutToken = new Client()
+      clientWithoutToken.request.analyseFile(path.resolve(__dirname, '/resource/test.wav'))
         .catch(err => {
           expect(err).to.be.an.instanceof(Error)
-          assert.equal(err.message, 'Token is missing')
+          assert.equal(err.message, 'Parameter token is missing')
           done()
         })
     })
@@ -139,11 +163,11 @@ describe('Client class', () => {
 describe('Response class', () => {
 
   it('should be instanciable', () => {
-    expect(new recast.Response(json.results)).to.be.an.instanceof(recast.Response)
+    expect(new Response(json.results)).to.be.an.instanceof(Response)
   })
 
   it('should have attributes', () => {
-    const response = new recast.Response(json.results)
+    const response = new Response(json.results)
 
     assert.equal(response.uuid, json.results.uuid)
     assert.equal(response.source, json.results.source)
@@ -151,20 +175,21 @@ describe('Response class', () => {
     assert.equal(response.type, json.results.type)
     expect(response.intents).to.be.an.instanceof(Array)
     assert.equal(response.sentiment, json.results.sentiment)
-    expect(response.entities).to.be.an.instanceof(Array)
-    expect(response.entities[0]).to.be.an.instanceof(recast.Entity)
+    expect(response.entities).to.be.an.instanceof(Object)
+    expect(response.entities.action).to.be.an.instanceof(Array)
+    expect(response.entities.action[0]).to.be.an.instanceof(Object)
     assert.equal(response.language, json.results.language)
     assert.equal(response.version, json.results.version)
     assert.equal(response.timestamp, json.results.timestamp)
-    assert.equal(response.entities.length, 4)
+    assert.equal(Object.keys(response.entities).length, 3)
   })
 
   it('should have methods', () => {
-    const response = new recast.Response(json.results)
+    const response = new Response(json.results)
 
     assert.equal(response.intent(), response.intents[0])
     assert.equal(response.all('location').length, 2)
-    assert.equal(response.get('location').name, 'location')
+    assert.equal(response.get('location').raw, 'London')
 
     assert.equal(response.isAssert(), false)
     assert.equal(response.isCommand(), false)
@@ -182,7 +207,7 @@ describe('Response class', () => {
     assert.equal(response.isNegative(), false)
     assert.equal(response.isVNegative(), false)
 
-    assert.throws(() => { recast.Response() }, TypeError, 'Cannot call a class as a function')
+    assert.throws(() => { Response() }, TypeError, 'Cannot call a class as a function')
   })
 })
 
@@ -191,12 +216,12 @@ describe('Entity class', () => {
   const data2 = { value: 'asparagus', raw: 'asparagus' }
 
   it('should be instanciable', () => {
-    expect(new recast.Entity('ingredient', data2)).to.be.an.instanceof(recast.Entity)
+    expect(new Entity('ingredient', data2)).to.be.an.instanceof(Entity)
   })
 
   it('should have attributes', () => {
-    const testEntity1 = new recast.Entity('person', data1)
-    const testEntity2 = new recast.Entity('ingredient', data2)
+    const testEntity1 = new Entity('person', data1)
+    const testEntity2 = new Entity('ingredient', data2)
 
     // Test on first Entity
     assert.equal(testEntity1.name, 'person')
@@ -210,23 +235,23 @@ describe('Entity class', () => {
     assert.equal(testEntity2.value, data2.value)
     assert.equal(testEntity2.raw, data2.raw)
 
-    assert.throws(() => { recast.Entity() }, TypeError, 'Cannot call a class as a function')
+    assert.throws(() => { Entity() }, TypeError, 'Cannot call a class as a function')
   })
 })
 
 describe('RecastError', () => {
   it('should throw an error', () => {
-    assert.throws(() => { recast.RecastError() }, TypeError, 'Cannot call a class as a function')
+    assert.throws(() => { RecastError() }, TypeError, 'Cannot call a class as a function')
   })
 })
 
 describe('Conversation class', () => {
   it('should be instanciable', () => {
-    expect(new recast.Conversation(conversationJson)).to.be.an.instanceof(recast.Conversation)
+    expect(new Conversation(conversationJson)).to.be.an.instanceof(Conversation)
   })
 
   it('should have attributes', () => {
-    const converse = new recast.Conversation(conversationJson.results)
+    const converse = new Conversation(conversationJson.results)
     const results = conversationJson.results
 
     assert.equal(converse.uuid, results.uuid)
@@ -242,7 +267,7 @@ describe('Conversation class', () => {
   })
 
   it('should have methods', () => {
-    const converse = new recast.Conversation(conversationJson.results)
+    const converse = new Conversation(conversationJson.results)
     const results = conversationJson.results
 
     assert.equal(converse.reply(), results.replies[0])
@@ -251,11 +276,9 @@ describe('Conversation class', () => {
     assert.equal(converse.joinedReplies('\n'), results.replies.join('\n'))
     assert.equal(converse.getMemory(), results.memory)
     assert.equal(converse.getMemory('lieu'), results.memory.lieu)
-  })
 
-  it('should have statics methods', () => {
-    expect(recast.Conversation).to.have.property('setMemory')
-    expect(recast.Conversation).to.have.property('resetMemory')
-    expect(recast.Conversation).to.have.property('resetConversation')
+    expect(converse).to.have.property('setMemory')
+    expect(converse).to.have.property('resetMemory')
+    expect(converse).to.have.property('resetConversation')
   })
 })
