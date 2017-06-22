@@ -2,14 +2,19 @@ import apis from './apis'
 
 export default class Client {
 
-  constructor (token, language) {
-    for (const name in apis) {
-      this[name] = new apis[name](token, language)
+  constructor(token, language, userSlug, botSlug) {
+    this.connect = new apis.connect(token, language)
+    this.request = new apis.connect(token, language)
+
+    if (userSlug && botSlug) {
+      this.train = new apis.train(token, language, userSlug, botSlug)
     }
   }
 
   static connect = apis.connect
 
   static request = apis.request
+
+  static train = apis.train
 
 }
