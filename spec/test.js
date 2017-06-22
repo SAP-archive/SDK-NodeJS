@@ -282,3 +282,196 @@ describe('Conversation class', () => {
     expect(converse).to.have.property('resetConversation')
   })
 })
+
+describe('Train class', () => {
+  const client = new Client(TOKEN, LANGUAGE, USER_SLUG, BOT_SLUG)
+  describe('Bots api', () => {
+    nock('https://api.recast.ai')
+      .get(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}`)
+      .once()
+      .reply(200, 'success')
+
+    nock('https://api.recast.ai')
+      .put(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}`, { name: 'foo' })
+      .once()
+      .reply(200, {})
+
+    it('should get a bot', done => {
+      client.train.bots.get()
+        .then(res => {
+          assert.equal(res.status, 200)
+          done()
+        })
+    })
+
+    it('should update a bot', done => {
+      client.train.bots.update({ name: 'foo' })
+        .then(res => {
+          assert.equal(res.status, 200)
+          done()
+        })
+    })
+  })
+
+  describe('Entities api', () => {
+    nock('https://api.recast.ai')
+      .get(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/entities`)
+      .once()
+      .reply(200, 'success')
+
+    nock('https://api.recast.ai')
+      .get('/v2/entities')
+      .once()
+      .reply(200, 'success')
+
+    nock('https://api.recast.ai')
+      .post('/v2/entities', { slug: 'foo' })
+      .once()
+      .reply(200, {})
+
+    it('should get a bot entities', done => {
+      client.train.entities.list()
+        .then(res => {
+          assert.equal(res.status, 200)
+          done()
+        })
+    })
+
+    it('should get public entities', done => {
+      client.train.entities.listPublic()
+        .then(res => {
+          assert.equal(res.status, 200)
+          done()
+        })
+    })
+
+    it('should create an entitiy', done => {
+      client.train.entities.create({ slug: 'foo' })
+        .then(res => {
+          assert.equal(res.status, 200)
+          done()
+        })
+    })
+  })
+
+  describe('Gazettes api', () => {
+    const slug = 'myGazette'
+    const gazetteSlug = slug
+    const synonymSlug = 'mySynonym'
+    const data = { slug: 'myGazette' }
+
+    nock('https://api.recast.ai')
+      .get(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/entities`)
+      .once().reply(200, 'success')
+      .get(`/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes`)
+      .once().reply(200, 'success')
+      .get(`/users/${USER_SLUG}/bots/${BOT_SLUG}/logs/${slug}`)
+      .once().reply(200, 'success')
+      .del(`/users/${USER_SLUG}/bots/${BOT_SLUG}/logs/${slug}`)
+      .once().reply(200, 'success')
+      .post(`/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes`, data)
+      .once().reply(200, 'success')
+      .put(`/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes`, data)
+      .once().reply(200, 'success')
+      .get(`/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes/${slug}/synonyms`)
+      .once().reply(200, 'success')
+      .get(`/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes/${gazetteSlug}/synonyms/${synonymSlug}`)
+      .once().reply(200, 'success')
+      .post(`/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes/${slug}/synonyms`, data)
+      .once().reply(200, 'success')
+      .post(`/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes/${slug}/synonyms/bulk_create`, [data])
+      .once().reply(200, 'success')
+      .put(`/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes/${gazetteSlug}/synonyms/${synonymSlug}`, data)
+      .once().reply(200, 'success')
+      .del(`/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes/${gazetteSlug}/synonyms/${synonymSlug}`)
+      .once().reply(200, 'success')
+
+    it('Should list gazettes', done => {
+      client.train.entities.list()
+        .then(res => {
+          assert.equal(res.status, 200)
+          done()
+        })
+    })
+
+    it('Should get gazette by slug', done => {
+      client.train.getBySlug(slug)
+        .then(res => {
+          assert.equal(res.status, 200)
+          done()
+        })
+    })
+
+    it('Should delete gazette by slug', done => {
+      client.train.deleteBySlug(slug)
+        .then(res => {
+          assert.equal(res.status, 200)
+          done()
+        })
+    })
+
+    it('Should create a gazette', done => {
+      client.train.create(data)
+        .then(res => {
+          assert.equal(res.status, 200)
+          done()
+        })
+    })
+
+    it('Should update a gazette', done => {
+      client.train.update(data)
+        .then(res => {
+          assert.equal(res.status, 200)
+          done()
+        })
+    })
+
+    it('Should list synonyms of a gazette', done => {
+      client.train.listSynonyms(slug)
+        .then(res => {
+          assert.equal(res.status, 200)
+          done()
+        })
+    })
+
+    it('Should get a synonym of a gazette', done => {
+      client.train.getSynonymBySlug(gazetteSlug, synonymSlug)
+        .then(res => {
+          assert.equal(res.status, 200)
+          done()
+        })
+    })
+
+    it('Should create one synonym', done => {
+      client.train.createOneSynonym(slug, data)
+        .then(res => {
+          assert.equal(res.status, 200)
+          done()
+        })
+    })
+
+    it('Should bulk create synonyms', done => {
+      client.train.createBulkSynonyms(slug, [data])
+        .then(res => {
+          assert.equal(res.status, 200)
+          done()
+        })
+    })
+
+    it('Should update a synonym by slug', done => {
+      client.train.updateSynonymBySlug(gazetteSlug, synonymSlug, data)
+        .then(res => {
+          assert.equal(res.status, 200)
+          done()
+        })
+    })
+
+    it('Should delete a synonym by slug', done => {
+      client.train.deleteSynonymBySlug(gazetteSlug, synonymSlug)
+        .then(res => {
+          assert.equal(res.status, 200)
+          done()
+        })
+    })
+  })
+})

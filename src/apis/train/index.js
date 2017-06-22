@@ -33,12 +33,12 @@ export default class Train {
     const proxy = options.proxy
     if (!token) { throw new RecastError('Parameter token is missing') }
 
-    const request = agent('GET', `${constants.TRAIN_ENDPOINT}${url}`)
+    const request = agent.get(`${constants.TRAIN_ENDPOINT}${url}`)
       .query(params)
       .set('Authorization', `Token ${token}`)
     if (proxy) { request.proxy(proxy) }
 
-    return request.send(data)
+    return request.send()
   }
 
   del = async (url, params = {}, options = {}) => {
@@ -46,12 +46,12 @@ export default class Train {
     const proxy = options.proxy
     if (!token) { throw new RecastError('Parameter token is missing') }
 
-    const request = agent('DELETE', `${constants.TRAIN_ENDPOINT}${url}`)
+    const request = agent.del(`${constants.TRAIN_ENDPOINT}${url}`)
       .query(params)
       .set('Authorization', `Token ${token}`)
     if (proxy) { request.proxy(proxy) }
 
-    return request.send(data)
+    return request.send()
   }
 
   post = async (url, body = {}, options = {}) => {
@@ -59,12 +59,12 @@ export default class Train {
     const proxy = options.proxy
     if (!token) { throw new RecastError('Parameter token is missing') }
 
-    const request = agent('POST', `${constants.TRAIN_ENDPOINT}${url}`)
+    const request = agent.post(`${constants.TRAIN_ENDPOINT}${url}`)
       .send(body)
       .set('Authorization', `Token ${token}`)
     if (proxy) { request.proxy(proxy) }
 
-    return request.send(data)
+    return request.send(body)
   }
 
   put = async (url, body = {}, options = {}) => {
@@ -72,12 +72,11 @@ export default class Train {
     const proxy = options.proxy
     if (!token) { throw new RecastError('Parameter token is missing') }
 
-    const request = agent('PUT', `${constants.TRAIN_ENDPOINT}${url}`)
+    const request = agent.put(`${constants.TRAIN_ENDPOINT}${url}`)
       .send(body)
       .set('Authorization', `Token ${token}`)
     if (proxy) { request.proxy(proxy) }
 
-    return request.send(data)
+    return request.send(body)
   }
-
 }
