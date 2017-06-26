@@ -3,25 +3,25 @@ export default class Gazettes {
     this.client = client
   }
 
-  list = async () => this.client.get(`/users/${this.client.userSlug}/bots/${this.client.botSlug}/gazettes`)
+  list = async (params, opts) => this.client.get(`/users/${this.client.userSlug}/bots/${this.client.botSlug}/gazettes`, params, opts)
 
-  getBySlug = async (slug) => this.client.get(`/users/${this.client.userSlug}/bots/${this.client.botSlug}/logs/${slug}`)
+  getBySlug = async (slug, params, opts) => this.client.get(`/users/${this.client.userSlug}/bots/${this.client.botSlug}/logs/${slug}`, params, opts)
 
-  deleteBySlug = async (slug) => this.client.del(`/users/${this.client.userSlug}/bots/${this.client.botSlug}/logs/${slug}`)
+  deleteBySlug = async (slug, params, opts) => this.client.del(`/users/${this.client.userSlug}/bots/${this.client.botSlug}/logs/${slug}`, params, opts)
 
-  create = async (data) => this.client.post(`/users/${this.client.userSlug}/bots/${this.client.botSlug}/gazettes`, data)
+  create = async (data, opts) => this.client.post(`/users/${this.client.userSlug}/bots/${this.client.botSlug}/gazettes`, data, opts)
 
-  update = async (data) => this.client.put(`/users/${this.client.userSlug}/bots/${this.client.botSlug}/gazettes`, data)
+  update = async (data, opts) => this.client.put(`/users/${this.client.userSlug}/bots/${this.client.botSlug}/gazettes`, data, opts)
 
-  listSynonyms = async (slug) => this.client.get(`/users/${this.client.userSlug}/bots/${this.client.botSlug}/gazettes/${slug}/synonyms`)
+  listSynonyms = async (slug, params, opts) => this.client.get(`/users/${this.client.userSlug}/bots/${this.client.botSlug}/gazettes/${slug}/synonyms`, params, opts)
 
-  getSynonymBySlug = async (gazetteSlug, synonymSlug) => this.client.get(`/users/${this.client.userSlug}/bots/${this.client.botSlug}/gazettes/${gazetteSlug}/synonyms/${synonymSlug}`)
+  getSynonymBySlug = async (gazetteSlug, synonymSlug, params, opts) => this.client.get(`/users/${this.client.userSlug}/bots/${this.client.botSlug}/gazettes/${gazetteSlug}/synonyms/${synonymSlug}`, params, opts)
 
-  createOneSynonym = async (slug, data) => this.client.post(`/users/${this.client.userSlug}/bots/${this.client.botSlug}/gazettes/${slug}/synonyms/`, data)
+  createOneSynonym = async (slug, data, opts) => this.client.post(`/users/${this.client.userSlug}/bots/${this.client.botSlug}/gazettes/${slug}/synonyms`, data, opts)
 
-  createBulkSynonyms = async (slug, data) => this.client.post(`/users/${this.client.userSlug}/bots/${this.client.botSlug}/gazettes/${slug}/synonyms/bulk_create`, data)
+  createBulkSynonyms = async (slug, data, opts) => this.client.post(`/users/${this.client.userSlug}/bots/${this.client.botSlug}/gazettes/${slug}/synonyms/bulk_create`, data, opts)
 
-  updateSynonymBySlug = async (gazetteSlug, synonymSlug, data) => this.client.put(`/users/${this.client.userSlug}/bots/${this.client.botSlug}/gazettes/${gazetteSlug}/synonyms/${synonymSlug}`, data)
+  updateSynonymBySlug = async (gazetteSlug, synonymSlug, data, opts) => this.client.put(`/users/${this.client.userSlug}/bots/${this.client.botSlug}/gazettes/${gazetteSlug}/synonyms/${synonymSlug}`, data, opts)
 
-  deleteSynonymBySlug = async (gazetteSlug, synonymSlug) => this.client.del(`/users/${this.client.userSlug}/bots/${this.client.botSlug}/gazettes/${gazetteSlug}/synonyms/${synonymSlug}`)
+  deleteSynonymBySlug = async (gazetteSlug, synonymSlug, params, opts) => this.client.del(`/users/${this.client.userSlug}/bots/${this.client.botSlug}/gazettes/${gazetteSlug}/synonyms/${synonymSlug}`, params, opts)
 }

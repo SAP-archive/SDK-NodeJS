@@ -3,7 +3,7 @@ export default class Bots {
     this.client = client
   }
 
-  get = async () => this.client.get(`/users/${this.client.userSlug}/bots/${this.client.botSlug}`)
+  get = async (params, opts) => this.client.get(`/users/${this.client.userSlug}/bots/${this.client.botSlug}`, params, opts)
 
-  update = async (data) => this.client.put(`/users/${this.client.userSlug}/bots/${this.client.botSlug}`, data)
+  update = async (data, opts) => this.client.put(`/users/${this.client.userSlug}/bots/${this.client.botSlug}`, data, opts)
 }
