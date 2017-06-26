@@ -363,31 +363,31 @@ describe('Train class', () => {
     nock('https://api.recast.ai')
       .get(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/entities`)
       .once().reply(200, 'success')
-      .get(`/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes`)
+      .get(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes`)
       .once().reply(200, 'success')
-      .get(`/users/${USER_SLUG}/bots/${BOT_SLUG}/logs/${slug}`)
+      .get(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/logs/${slug}`)
       .once().reply(200, 'success')
-      .del(`/users/${USER_SLUG}/bots/${BOT_SLUG}/logs/${slug}`)
+      .delete(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/logs/${slug}`)
       .once().reply(200, 'success')
-      .post(`/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes`, data)
+      .post(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes`, data)
       .once().reply(200, 'success')
-      .put(`/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes`, data)
+      .put(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes`, data)
       .once().reply(200, 'success')
-      .get(`/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes/${slug}/synonyms`)
+      .get(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes/${slug}/synonyms`)
       .once().reply(200, 'success')
-      .get(`/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes/${gazetteSlug}/synonyms/${synonymSlug}`)
+      .get(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes/${gazetteSlug}/synonyms/${synonymSlug}`)
       .once().reply(200, 'success')
-      .post(`/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes/${slug}/synonyms`, data)
+      .post(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes/${slug}/synonyms`, data)
       .once().reply(200, 'success')
-      .post(`/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes/${slug}/synonyms/bulk_create`, [data])
+      .post(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes/${slug}/synonyms/bulk_create`, [data])
       .once().reply(200, 'success')
-      .put(`/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes/${gazetteSlug}/synonyms/${synonymSlug}`, data)
+      .put(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes/${gazetteSlug}/synonyms/${synonymSlug}`, data)
       .once().reply(200, 'success')
-      .del(`/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes/${gazetteSlug}/synonyms/${synonymSlug}`)
+      .delete(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes/${gazetteSlug}/synonyms/${synonymSlug}`)
       .once().reply(200, 'success')
 
     it('Should list gazettes', done => {
-      client.train.entities.list()
+      client.train.gazettes.list()
         .then(res => {
           assert.equal(res.status, 200)
           done()
@@ -395,7 +395,7 @@ describe('Train class', () => {
     })
 
     it('Should get gazette by slug', done => {
-      client.train.getBySlug(slug)
+      client.train.gazettes.getBySlug(slug)
         .then(res => {
           assert.equal(res.status, 200)
           done()
@@ -403,7 +403,7 @@ describe('Train class', () => {
     })
 
     it('Should delete gazette by slug', done => {
-      client.train.deleteBySlug(slug)
+      client.train.gazettes.deleteBySlug(slug)
         .then(res => {
           assert.equal(res.status, 200)
           done()
@@ -411,7 +411,7 @@ describe('Train class', () => {
     })
 
     it('Should create a gazette', done => {
-      client.train.create(data)
+      client.train.gazettes.create(data)
         .then(res => {
           assert.equal(res.status, 200)
           done()
@@ -419,7 +419,7 @@ describe('Train class', () => {
     })
 
     it('Should update a gazette', done => {
-      client.train.update(data)
+      client.train.gazettes.update(data)
         .then(res => {
           assert.equal(res.status, 200)
           done()
@@ -427,7 +427,7 @@ describe('Train class', () => {
     })
 
     it('Should list synonyms of a gazette', done => {
-      client.train.listSynonyms(slug)
+      client.train.gazettes.listSynonyms(slug)
         .then(res => {
           assert.equal(res.status, 200)
           done()
@@ -435,7 +435,7 @@ describe('Train class', () => {
     })
 
     it('Should get a synonym of a gazette', done => {
-      client.train.getSynonymBySlug(gazetteSlug, synonymSlug)
+      client.train.gazettes.getSynonymBySlug(gazetteSlug, synonymSlug)
         .then(res => {
           assert.equal(res.status, 200)
           done()
@@ -443,7 +443,7 @@ describe('Train class', () => {
     })
 
     it('Should create one synonym', done => {
-      client.train.createOneSynonym(slug, data)
+      client.train.gazettes.createOneSynonym(slug, data)
         .then(res => {
           assert.equal(res.status, 200)
           done()
@@ -451,7 +451,7 @@ describe('Train class', () => {
     })
 
     it('Should bulk create synonyms', done => {
-      client.train.createBulkSynonyms(slug, [data])
+      client.train.gazettes.createBulkSynonyms(slug, [data])
         .then(res => {
           assert.equal(res.status, 200)
           done()
@@ -459,7 +459,7 @@ describe('Train class', () => {
     })
 
     it('Should update a synonym by slug', done => {
-      client.train.updateSynonymBySlug(gazetteSlug, synonymSlug, data)
+      client.train.gazettes.updateSynonymBySlug(gazetteSlug, synonymSlug, data)
         .then(res => {
           assert.equal(res.status, 200)
           done()
@@ -467,7 +467,7 @@ describe('Train class', () => {
     })
 
     it('Should delete a synonym by slug', done => {
-      client.train.deleteSynonymBySlug(gazetteSlug, synonymSlug)
+      client.train.gazettes.deleteSynonymBySlug(gazetteSlug, synonymSlug)
         .then(res => {
           assert.equal(res.status, 200)
           done()
