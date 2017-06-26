@@ -16,6 +16,10 @@ const agent = superagentPromise(superagentProxy(superagent), Promise)
 export default class Train {
 
   constructor (token, language, userSlug, botSlug) {
+    if (typeof userSlug !== 'string' || typeof botSlug !== 'string') {
+      throw new RecastError('Train client must be initiated with a user slug and a bot slug')
+    }
+
     this.token = token
     this.language = language
     this.userSlug = userSlug
