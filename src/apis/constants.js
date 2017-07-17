@@ -1,4 +1,6 @@
 export default {
+  TRAIN_ENDPOINT: 'https://api.recast.ai/v2',
+  CONNECT_ENDPOINT: 'https://api.recast.ai/connect/v1',
   REQUEST_ENDPOINT: 'https://api.recast.ai/v2/request',
   CONVERSE_ENDPOINT: 'https://api.recast.ai/v2/converse',
   CONVERSATION_ENDPOINT: 'https://api.recast.ai/connect/v1/messages',

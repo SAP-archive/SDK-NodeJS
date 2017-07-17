@@ -35,4 +35,16 @@ export default class Connect {
       .send({ messages })
   }
 
+  activateFallback = (conversationId) => {
+    return agent('POST', `${constants.CONNECT_ENDPOINT}/conversations/${conversationId}/fallback/activate`)
+      .set('Authorization', `Token ${this.token}`)
+      .send()
+  }
+
+  deactivateFallback = (conversationId) => {
+    return agent('POST', `${constants.CONNECT_ENDPOINT}/conversations/${conversationId}/fallback/deactivate`)
+      .set('Authorization', `Token ${this.token}`)
+      .send()
+  }
+
 }
