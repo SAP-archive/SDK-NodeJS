@@ -24,6 +24,7 @@ export default class Build {
     return agent('POST', `${constants.DIALOG_ENDPOINT}/dialog`)
       .set('Authorization', `Token ${token}`)
       .send(data)
+      .then(res => res.body.results)
   }
 
   getConversation = (user, bot, conversationId, options = {}) => {
