@@ -3,6 +3,7 @@ export default {
   CONNECT_ENDPOINT: 'https://api.recast.ai/connect/v1',
   REQUEST_ENDPOINT: 'https://api.recast.ai/v2/request',
   CONVERSE_ENDPOINT: 'https://api.recast.ai/v2/converse',
+  DIALOG_ENDPOINT: 'https://api.recast.ai/build/v1',
   CONVERSATION_ENDPOINT: 'https://api.recast.ai/connect/v1/messages',
   MESSAGE_ENDPOINT: 'https://api.recast.ai/connect/v1/conversations/:conversation_id/messages',
   TRAIN_ENDPOINT: 'https://api.recast.ai/v2',
