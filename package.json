@@ -45,7 +45,7 @@
     "form-data": "^1.0.1",
     "lodash": "^4.12.0",
     "nock": "^8.0.0",
-    "superagent": "^2.3.0",
+    "superagent": "^3.7.0",
     "superagent-promise": "^1.1.0",
     "superagent-proxy": "^1.0.1"
   },
