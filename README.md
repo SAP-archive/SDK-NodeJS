@@ -8,7 +8,7 @@ Recast.AI official SDK in Node.js
 
 ## Synospis
 
-This module is a wrapper around the [Recast.AI](https://recast.ai) API, and allows you to:
+This module is a wrapper around the [Recast.AI](https://recast.ai/) [API](https://man.recast.ai/) API, and allows you to:
 * [Analyse your text](https://github.com/RecastAI/SDK-NodeJS/wiki/Analyse-text)
 * [Manage your conversation](https://github.com/RecastAI/SDK-NodeJS/wiki/Manage-your-conversation)
 * [Receive and send messages](https://github.com/RecastAI/SDK-NodeJS/wiki/Receive-and-send-messages)
@@ -53,6 +53,10 @@ import { converse } from 'recastai'
 
 const clientConverse = new converse('YOUR_TOKEN')
 ```
+
+## Sample projects
+
+Check out our [NodeJS starter-kit](https://github.com/RecastAI/starter-NodeJS) for a usage example of the SDK.
 
 ## Documentation
 
