@@ -1,7 +1,6 @@
-
-[logo]: https://cdn.recast.ai/brand/recast-ai-logo-inline.png "Recast.AI"
-
-![alt text][logo]
+<p align="center">
+  <img src="misc/logo2.png" />
+</p>
 
 # Recast.AI - SDK Node.js
 Recast.AI official SDK in Node.js
@@ -58,13 +57,14 @@ const clientConverse = new converse('YOUR_TOKEN')
 
 Check out our [NodeJS starter-kit](https://github.com/RecastAI/starter-NodeJS) for a usage example of the SDK.
 
-## Documentation
+## RESOURCES
+* [Bot Builder Guide](https://recast.ai/docs): Best practices and tips to use the Recast.AI platform 
+* [API Documentation](https://man.recast.ai/)
 
-You can find the full documentation [here](https://github.com/RecastAI/SDK-NodeJS/wiki).
+## TUTORIALS
+* [Your first bot](https://blog.recast.ai/build-your-first-bot-with-recast-ai/) - Build your first bot with Bot Builder
+* [Bots 101, Intro for Developers](https://recast.ai/blog/bots-introduction-developers/) - Overview of how to get started building your bot's server
 
-## More
-
-You can view the whole API reference at [man.recast.ai](https://man.recast.ai).
 
 ## Author
 
