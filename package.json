@@ -1,6 +1,6 @@
 {
   "name": "recastai",
-  "version": "3.6.0",
+  "version": "3.7.0",
   "description": "Recast.AI official SDK in NodeJs",
   "main": "lib/index.js",
   "types": "index.d.ts",
