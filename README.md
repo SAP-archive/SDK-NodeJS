@@ -2,7 +2,7 @@
   <img src="misc/logo2.png" />
 </p>
 
-| [Installation](#installation) | [Sample Projects](sample-projects) | [Resources]( #resources) | [Getting Started on Recast.AI]( #getting-started-with-recastai) | [License](#license) |
+| [Installation](#installation) | [Sample Projects](#sample-projects) | [Resources]( #resources) | [Getting Started on Recast.AI]( #getting-started-with-recastai) | [License](#license) |
 |---|---|---|---|---|
 <div>
 <a href="https://slack.recast.ai/">💬 Questions / Comments? Join the discussion on our community Slack channel!</a>
