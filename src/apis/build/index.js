@@ -13,12 +13,13 @@ export default class Build {
     this.language = language
   }
 
-  dialog = (message, options = {}) => {
+  dialog = (message, options = {}, memory = {}) => {
     const token = options.token || this.token
     const data = {
       message,
       conversation_id: options.conversationId,
       language: options.language || this.language,
+      memory: memory,
     }
 
     return agent('POST', `${constants.DIALOG_ENDPOINT}/dialog`)
