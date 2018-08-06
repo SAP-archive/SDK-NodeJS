@@ -13,7 +13,7 @@ export default class Build {
     this.language = language
   }
 
-  dialog = (message, options = {}, memory = {}, log_level = 0) => {
+  dialog = (message, options = {}, memory = {}, log_level = 'info') => {
     const token = options.token || this.token
     const proxy = options.proxy
     const data = {
