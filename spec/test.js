@@ -120,44 +120,6 @@ describe('Client class', () => {
         })
     })
   })
-
-  describe('fileRequest', () => {
-    nock('https://api.recast.ai')
-      .post('/v2/request')
-      .once()
-      .reply(200, json)
-
-    nock('https://api.recast.ai')
-      .post('/v2/request')
-      .once()
-      .reply(404, 'invalid parameter')
-
-    it('should perform a voice request', function (done) {
-      this.timeout(15000)
-      client.request.analyseFile(path.join(__dirname, '/resource/test.wav'))
-        .then(res => {
-          assert.equal(res.status, 200)
-          done()
-        })
-    })
-
-    it('should return an error on 404', done => {
-      client.request.analyseFile('spec/resource/test.wav')
-        .catch(() => {
-          done()
-        })
-    })
-
-    it('should throw an error on missing token', (done) => {
-      const clientWithoutToken = new Client()
-      clientWithoutToken.request.analyseFile(path.resolve(__dirname, '/resource/test.wav'))
-        .catch(err => {
-          expect(err).to.be.an.instanceof(Error)
-          assert.equal(err.message, 'Parameter token is missing')
-          done()
-        })
-    })
-  })
 })
 
 describe('Response class', () => {

@@ -13,7 +13,7 @@ export default class Build {
     this.language = language
   }
 
-  dialog = (message, options = {}, memory = {}, log_level = 'info') => {
+  dialog = (message, options = {}, memory = null, log_level = 'info') => {
     const token = options.token || this.token
     const proxy = options.proxy
     const data = {
@@ -34,7 +34,7 @@ export default class Build {
     const token = options.token || this.token
     const proxy = options.proxy
 
-    const request = agent('POST', `${constants.DIALOG_ENDPOINT}/dialog`)
+    const request = agent('GET', `${constants.DIALOG_ENDPOINT}/users/${user}/bots/${bot}/builders/v1/conversation_states/${conversationId}`)
       .set('Authorization', `Token ${token}`)
     if (proxy) { request.proxy(proxy) }
     return request.send()
@@ -47,7 +47,7 @@ export default class Build {
       return Promise.reject('Invalid memory parameter')
     }
 
-    const request = agent('POST', `${constants.DIALOG_ENDPOINT}/dialog`)
+    const request = agent('PUT', `${constants.DIALOG_ENDPOINT}/users/${user}/bots/${bot}/builders/v1/conversation_states/${conversationId}`)
       .set('Authorization', `Token ${token}`)
     if (proxy) { request.proxy(proxy) }
     return request.send(data)
@@ -57,7 +57,7 @@ export default class Build {
     const token = options.token || this.token
     const proxy = options.proxy
 
-    const request = agent('POST', `${constants.DIALOG_ENDPOINT}/dialog`)
+    const request = agent('DELETE', `${constants.DIALOG_ENDPOINT}/users/${user}/bots/${bot}/builders/v1/conversation_states/${conversationId}`)
       .set('Authorization', `Token ${token}`)
     if (proxy) { request.proxy(proxy) }
     return request.send()
