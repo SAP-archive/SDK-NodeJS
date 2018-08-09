@@ -20,9 +20,10 @@ export default class Build {
       message,
       conversation_id: options.conversationId,
       language: options.language || this.language,
-      memory: memory,
       log_level: log_level,
     }
+		if (memory)
+			data['memory'] = memory
 
     const request = agent('POST', `${constants.DIALOG_ENDPOINT}/dialog`)
       .set('Authorization', `Token ${token}`)
