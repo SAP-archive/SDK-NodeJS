@@ -11,7 +11,7 @@
 # Recast.AI - SDK Node.js
 Recast.AI official SDK in Node.js
 
-## Synospis
+## Synopsis
 
 This module is a wrapper around the [Recast.AI](https://recast.ai/) [API](https://man.recast.ai/) API, and allows you to:
 * [Analyse your text](https://github.com/RecastAI/SDK-NodeJS/wiki/Analyse-text)
