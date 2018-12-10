@@ -1,5 +1,5 @@
 export Conversation from './conversation'
 export Response from './response'
 export Message from './message'
-export RecastError from './recastError'
+export SapcaiError from './sapcaiError'
 export Entity from './entity'

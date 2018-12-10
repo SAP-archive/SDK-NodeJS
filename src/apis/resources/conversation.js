@@ -78,7 +78,7 @@ export default class Conversation {
    */
   setMemory = async (memory) => {
     const res = await agent('PUT', constants.CONVERSE_ENDPOINT)
-      .set('Authorization', `Token ${this.recastToken}`)
+      .set('Authorization', `Token ${this.sapcaiToken}`)
       .send({ memory, conversation_token: this.conversationToken })
 
     this.memory = { ...this.memory, ...memory }
@@ -94,7 +94,7 @@ export default class Conversation {
     if (alias) { data.memory[alias] = null }
 
     const res = await agent('PUT', constants.CONVERSE_ENDPOINT)
-      .set('Authorization', `Token ${this.recastToken}`)
+      .set('Authorization', `Token ${this.sapcaiToken}`)
       .send(data)
 
     this.memory = { ...this.memory, ...data.memory }
@@ -107,7 +107,7 @@ export default class Conversation {
    */
   resetConversation = async () => {
     const res = await agent('DELETE', constants.CONVERSE_ENDPOINT)
-      .set('Authorization', `Token ${this.recastToken}`)
+      .set('Authorization', `Token ${this.sapcaiToken}`)
       .send({ conversation_token: this.conversationToken })
 
     this.intents = []

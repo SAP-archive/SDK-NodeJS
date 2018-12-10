@@ -3,7 +3,7 @@ import superagentProxy from 'superagent-proxy'
 import superagentPromise from 'superagent-promise'
 
 import constants from '../constants'
-import { RecastError } from '../resources'
+import { SapcaiError } from '../resources'
 
 import Bots from './bots'
 import Entities from './entities'
@@ -15,15 +15,16 @@ const agent = superagentPromise(superagentProxy(superagent), Promise)
 
 export default class Train {
 
-  constructor (token, language, userSlug, botSlug) {
+  constructor (token, language, version, userSlug, botSlug) {
     if (typeof userSlug !== 'string' || typeof botSlug !== 'string') {
-      throw new RecastError('Train client must be initiated with a user slug and a bot slug')
+      throw new SapcaiError('Train client must be initiated with a user slug and a bot slug')
     }
 
     this.token = token
     this.language = language
     this.userSlug = userSlug
     this.botSlug = botSlug
+    this.botVersion = version
 
     this.bots = new Bots(this)
     this.entities = new Entities(this)
@@ -35,7 +36,7 @@ export default class Train {
   get = async (url, params = {}, options = {}) => {
     const token = options.token || this.token
     const proxy = options.proxy
-    if (!token) { throw new RecastError('Parameter token is missing') }
+    if (!token) { throw new SapcaiError('Parameter token is missing') }
 
     const request = agent.get(`${constants.TRAIN_ENDPOINT}${url}`)
       .query(params)
@@ -48,7 +49,7 @@ export default class Train {
   del = async (url, params = {}, options = {}) => {
     const token = options.token || this.token
     const proxy = options.proxy
-    if (!token) { throw new RecastError('Parameter token is missing') }
+    if (!token) { throw new SapcaiError('Parameter token is missing') }
 
     const request = agent.del(`${constants.TRAIN_ENDPOINT}${url}`)
       .query(params)
@@ -61,7 +62,7 @@ export default class Train {
   post = async (url, body = {}, options = {}) => {
     const token = options.token || this.token
     const proxy = options.proxy
-    if (!token) { throw new RecastError('Parameter token is missing') }
+    if (!token) { throw new SapcaiError('Parameter token is missing') }
 
     const request = agent.post(`${constants.TRAIN_ENDPOINT}${url}`)
       .send(body)
@@ -74,7 +75,7 @@ export default class Train {
   put = async (url, body = {}, options = {}) => {
     const token = options.token || this.token
     const proxy = options.proxy
-    if (!token) { throw new RecastError('Parameter token is missing') }
+    if (!token) { throw new SapcaiError('Parameter token is missing') }
 
     const request = agent.put(`${constants.TRAIN_ENDPOINT}${url}`)
       .send(body)
