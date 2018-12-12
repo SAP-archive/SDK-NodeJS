@@ -13,7 +13,7 @@ SAP Conversational AI official SDK in Node.js
 
 ## Synospis
 
-This module is a wrapper around the [SAP Conversational AI](https://cai.tool.sap/) [API](https://cai.tool.sap/docs/) API, and allows you to:
+This module is a wrapper around the [SAP Conversational AI](https://cai.tool.sap/) [API](https://cai.tool.sap/docs/api-reference) API, and allows you to:
 * [Analyse your text](https://github.com/SAPConversationalAI/SDK-NodeJS/wiki/Analyse-text)
 * [Manage your conversation](https://github.com/SAPConversationalAI/SDK-NodeJS/wiki/Manage-your-conversation)
 * [Receive and send messages](https://github.com/SAPConversationalAI/SDK-NodeJS/wiki/Receive-and-send-messages)
@@ -67,7 +67,7 @@ Check out our [NodeJS starter-kit](https://github.com/SAPConversationalAI/starte
 
 ## Resources
 * [Bot Builder Guide](https://cai.tool.sap/docs) - Best practices and tips to use the SAP Conversational AI platform 
-* [API Documentation](https://cai.tool.sap/docs/)
+* [API Documentation](https://cai.tool.sap/docs/api-reference)
 * [Your first bot](https://cai.tool.sap/blog/build-your-first-bot-with-recast-ai/) - Build your first bot with Bot Builder
 * [Advanced chatbot tutorial(Moviebot)](https://cai.tool.sap/blog/nodejs-chatbot-movie-bot/) - Overview of how to get started building your bot's server
 
