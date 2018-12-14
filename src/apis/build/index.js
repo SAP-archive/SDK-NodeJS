@@ -35,7 +35,7 @@ export default class Build {
     const token = options.token || this.token
     const proxy = options.proxy
 
-    const request = agent('GET', `${constants.DIALOG_ENDPOINT}/users/${user}/bots/${bot}/versions/${version}/builder/v1/conversation_states/${conversationId}`)
+    const request = agent('GET', `${constants.DIALOG_ENDPOINT}/users/${user}/bots/${bot}/versions/${version}/builder/conversation_states/${conversationId}`)
       .set('Authorization', `Token ${token}`)
     if (proxy) { request.proxy(proxy) }
     return request.send()
@@ -48,7 +48,7 @@ export default class Build {
       return Promise.reject('Invalid memory parameter')
     }
 
-    const request = agent('PUT', `${constants.DIALOG_ENDPOINT}/users/${user}/bots/${bot}/versions/${version}/builder/v1/conversation_states/${conversationId}`)
+    const request = agent('PUT', `${constants.DIALOG_ENDPOINT}/users/${user}/bots/${bot}/versions/${version}/builder/conversation_states/${conversationId}`)
       .set('Authorization', `Token ${token}`)
     if (proxy) { request.proxy(proxy) }
     return request.send(data)
@@ -58,7 +58,7 @@ export default class Build {
     const token = options.token || this.token
     const proxy = options.proxy
 
-    const request = agent('DELETE', `${constants.DIALOG_ENDPOINT}/users/${user}/bots/${bot}/versions/${version}/builder/v1/conversation_states/${conversationId}`)
+    const request = agent('DELETE', `${constants.DIALOG_ENDPOINT}/users/${user}/bots/${bot}/versions/${version}/builder/conversation_states/${conversationId}`)
       .set('Authorization', `Token ${token}`)
     if (proxy) { request.proxy(proxy) }
     return request.send()
