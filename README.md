@@ -92,7 +92,7 @@ Learn more about:
 
 ## License
 
-Copyright (c) [2018] [SAP Conversational AI](https://cai.tool.sap)
+Copyright (c) [2019] [SAP Conversational AI](https://cai.tool.sap)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
