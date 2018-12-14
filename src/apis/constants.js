@@ -4,7 +4,7 @@ export default {
   DIALOG_ENDPOINT: 'https://api.cai.tool.sap/build/v1',
   CONVERSATION_ENDPOINT: 'https://api.cai.tool.sap/connect/v1/messages',
   MESSAGE_ENDPOINT: 'https://api.cai.tool.sap/connect/v1/conversations/:conversation_id/messages',
-  TRAIN_ENDPOINT: 'https://api.cai.tool.sap/v2',
+  TRAIN_ENDPOINT: 'https://api.cai.tool.sap/train/v2',
 
   ACT_ASSERT: 'assert',
   ACT_COMMAND: 'command',
