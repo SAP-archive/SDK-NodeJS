@@ -20,7 +20,7 @@
   "keywords": [
     "sapcai"
   ],
-  "author": "Jerome Houdan <jerome.houdan@sap.com> (https://cai.tool.sap)",
+  "author": "SAP CAI team",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/SAPConversationalAI/SDK-NodeJs/issues"

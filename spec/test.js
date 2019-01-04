@@ -58,12 +58,12 @@ describe('Client class', () => {
   const client = new Client(TOKEN)
 
   describe('textRequest', () => {
-    nock('https://api.cai.tool.sap')
+    nock('https://api.cai.tools.sap')
       .post('/v2/request')
       .once()
       .reply(200, json)
 
-    nock('https://api.cai.tool.sap')
+    nock('https://api.cai.tools.sap')
       .post('/v2/request')
       .once()
       .reply(404, 'invalid parameter')
@@ -94,12 +94,12 @@ describe('Client class', () => {
   })
 
   describe('textConversation', () => {
-    nock('https://api.cai.tool.sap')
+    nock('https://api.cai.tools.sap')
       .post('/v2/converse')
       .once()
       .reply(200, json)
 
-    nock('https://api.cai.tool.sap')
+    nock('https://api.cai.tools.sap')
       .post('/v2/converse')
       .once()
       .reply(404, 'invalid parameter')
@@ -249,12 +249,12 @@ describe('Conversation class', () => {
 describe('Train class', () => {
   const client = new Client(TOKEN, LANGUAGE, BOT_VERSION, USER_SLUG, BOT_SLUG)
   describe('Bots api', () => {
-    nock('https://api.cai.tool.sap')
+    nock('https://api.cai.tools.sap')
       .get(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}`)
       .once()
       .reply(200, 'success')
 
-    nock('https://api.cai.tool.sap')
+    nock('https://api.cai.tools.sap')
       .put(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}`, { name: 'foo' })
       .once()
       .reply(200, {})
@@ -277,17 +277,17 @@ describe('Train class', () => {
   })
 
   describe('Entities api', () => {
-    nock('https://api.cai.tool.sap')
+    nock('https://api.cai.tools.sap')
       .get(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/versions/${BOT_VERSION}/dataset/entities`)
       .once()
       .reply(200, 'success')
 
-    nock('https://api.cai.tool.sap')
+    nock('https://api.cai.tools.sap')
       .get('/v2/entities')
       .once()
       .reply(200, 'success')
 
-    nock('https://api.cai.tool.sap')
+    nock('https://api.cai.tools.sap')
       .post('/v2/entities', { slug: 'foo' })
       .once()
       .reply(200, {})
@@ -323,7 +323,7 @@ describe('Train class', () => {
     const synonymSlug = 'mySynonym'
     const data = { slug: 'myGazette' }
 
-    nock('https://api.cai.tool.sap')
+    nock('https://api.cai.tools.sap')
       .get(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/versions/${BOT_VERSION}/dataset/gazettes`)
       .once().reply(200, 'success')
       .get(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/versions/${BOT_VERSION}/dataset/gazettes/${slug}`)

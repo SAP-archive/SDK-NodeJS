@@ -1,11 +1,11 @@
 <p align="center">
-  <img src="https://cdn.cai.tool.sap/brand/sapcai/sap-cai-black.svg" />
+  <img src="https://cdn.cai.tools.sap/brand/sapcai/sap-cai-black.svg" />
 </p>
 
 | [Installation](#installation) | [Sample Projects](#sample-projects) | [Resources]( #resources) | [Getting Started on SAP Conversational AI]( #getting-started-with-sap-conversational-ai) | [License](#license) |
 |---|---|---|---|---|
 <div>
-<a href="https://slack.cai.tool.sap">💬 Questions / Comments? Join the discussion on our community Slack channel!</a>
+<a href="https://slack.cai.tools.sap">💬 Questions / Comments? Join the discussion on our community Slack channel!</a>
 </div>
 
 # SAP Conversational AI - SDK Node.js
@@ -13,7 +13,7 @@ SAP Conversational AI official SDK in Node.js
 
 ## Synospis
 
-This module is a wrapper around the [SAP Conversational AI](https://cai.tool.sap/) [API](https://cai.tool.sap/docs/api-reference) API, and allows you to:
+This module is a wrapper around the [SAP Conversational AI](https://cai.tools.sap/) [API](https://cai.tools.sap/docs/api-reference) API, and allows you to:
 * [Analyse your text](https://github.com/SAPConversationalAI/SDK-NodeJS/wiki/Analyse-text)
 * [Manage your conversation](https://github.com/SAPConversationalAI/SDK-NodeJS/wiki/Manage-your-conversation)
 * [Receive and send messages](https://github.com/SAPConversationalAI/SDK-NodeJS/wiki/Receive-and-send-messages)
@@ -66,14 +66,10 @@ const clientConverse = new converse('YOUR_TOKEN')
 Check out our [NodeJS starter-kit](https://github.com/SAPConversationalAI/starter-NodeJS) for a usage example of the SDK.
 
 ## Resources
-* [Bot Builder Guide](https://cai.tool.sap/docs) - Best practices and tips to use the SAP Conversational AI platform 
-* [API Documentation](https://cai.tool.sap/docs/api-reference)
-* [Your first bot](https://cai.tool.sap/blog/build-your-first-bot-with-recast-ai/) - Build your first bot with Bot Builder
-* [Advanced chatbot tutorial(Moviebot)](https://cai.tool.sap/blog/nodejs-chatbot-movie-bot/) - Overview of how to get started building your bot's server
-
-## Author
-
-Jérôme Houdan, jerome.houdan@sap.com
+* [Bot Builder Guide](https://cai.tools.sap/docs) - Best practices and tips to use the SAP Conversational AI platform 
+* [API Documentation](https://cai.tools.sap/docs/api-reference)
+* [Your first bot](https://cai.tools.sap/blog/build-your-first-bot-with-recast-ai/) - Build your first bot with Bot Builder
+* [Advanced chatbot tutorial(Moviebot)](https://cai.tools.sap/blog/nodejs-chatbot-movie-bot/) - Overview of how to get started building your bot's server
 
 You can follow us on Twitter at [@sapcai](https://twitter.com/sapcai) for updates and releases.
 
@@ -87,12 +83,12 @@ We build products to help enterprises and developers have a better understanding
 
 Learn more about:
 
-| [API Documentation](https://cai.tool.sap/docs/api-reference/) | [Discover the platform](https://cai.tool.sap/docs/create-your-bot) | [First bot tutorial](https://cai.tool.sap/blog/build-your-first-bot-with-recast-ai/) | [Advanced NodeJS tutorial](https://cai.tool.sap/blog/nodejs-chatbot-movie-bot/) | [Advanced Python tutorial](https://cai.tool.sap/blog/python-cryptobot/) |
+| [API Documentation](https://cai.tools.sap/docs/api-reference/) | [Discover the platform](https://cai.tools.sap/docs/create-your-bot) | [First bot tutorial](https://cai.tools.sap/blog/build-your-first-bot-with-recast-ai/) | [Advanced NodeJS tutorial](https://cai.tools.sap/blog/nodejs-chatbot-movie-bot/) | [Advanced Python tutorial](https://cai.tools.sap/blog/python-cryptobot/) |
 |---|---|---|---|---|
 
 ## License
 
-Copyright (c) [2019] [SAP Conversational AI](https://cai.tool.sap)
+Copyright (c) [2019] [SAP Conversational AI](https://cai.tools.sap)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
