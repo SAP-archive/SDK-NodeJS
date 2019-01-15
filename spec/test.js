@@ -6,14 +6,15 @@ import nock from 'nock'
 import path from 'path'
 
 import Client from '../src'
-import { Entity, Conversation, RecastError, Response } from '../src/apis/resources'
+import { Entity, Conversation, SapcaiError, Response } from '../src/apis/resources'
 import json from './resource/json'
 import conversationJson from './resource/conversationJson'
 
-const TOKEN = process.env.RECAST_TOKEN || 'FAKE_TOKEN'
+const TOKEN = process.env.SAPCAI_TOKEN || 'FAKE_TOKEN'
 const LANGUAGE = 'FR'
-const BOT_SLUG = process.env.RECAST_BOT_SLUG || 'FAKE_BOT_SLUG'
-const USER_SLUG = process.env.RECAST_USER_SLUG || 'FAKE_USER_SLUG'
+const BOT_SLUG = process.env.SAPCAI_BOT_SLUG || 'FAKE_BOT_SLUG'
+const USER_SLUG = process.env.SAPCAI_USER_SLUG || 'FAKE_USER_SLUG'
+const BOT_VERSION = process.env.SAPCAI_BOT_VERSION || 'v1'
 
 describe('Client class', () => {
 
@@ -38,7 +39,7 @@ describe('Client class', () => {
 
   it('should be instanciable all params', () => {
     expect(new Client(TOKEN, LANGUAGE, USER_SLUG, BOT_SLUG)).to.be.an.instanceof(Client)
-    expect(new Client(TOKEN, LANGUAGE, USER_SLUG, BOT_SLUG).train).to.not.be.undefined
+    expect(new Client(TOKEN, LANGUAGE, BOT_VERSION, USER_SLUG, BOT_SLUG).train).to.not.be.undefined
   })
 
   // Attribute
@@ -57,12 +58,12 @@ describe('Client class', () => {
   const client = new Client(TOKEN)
 
   describe('textRequest', () => {
-    nock('https://api.recast.ai')
+    nock('https://api.cai.tools.sap')
       .post('/v2/request')
       .once()
       .reply(200, json)
 
-    nock('https://api.recast.ai')
+    nock('https://api.cai.tools.sap')
       .post('/v2/request')
       .once()
       .reply(404, 'invalid parameter')
@@ -93,12 +94,12 @@ describe('Client class', () => {
   })
 
   describe('textConversation', () => {
-    nock('https://api.recast.ai')
+    nock('https://api.cai.tools.sap')
       .post('/v2/converse')
       .once()
       .reply(200, json)
 
-    nock('https://api.recast.ai')
+    nock('https://api.cai.tools.sap')
       .post('/v2/converse')
       .once()
       .reply(404, 'invalid parameter')
@@ -201,9 +202,9 @@ describe('Entity class', () => {
   })
 })
 
-describe('RecastError', () => {
+describe('SapcaiError', () => {
   it('should throw an error', () => {
-    assert.throws(() => { RecastError() }, TypeError, 'Cannot call a class as a function')
+    assert.throws(() => { SapcaiError() }, TypeError, 'Cannot call a class as a function')
   })
 })
 
@@ -246,14 +247,14 @@ describe('Conversation class', () => {
 })
 
 describe('Train class', () => {
-  const client = new Client(TOKEN, LANGUAGE, USER_SLUG, BOT_SLUG)
+  const client = new Client(TOKEN, LANGUAGE, BOT_VERSION, USER_SLUG, BOT_SLUG)
   describe('Bots api', () => {
-    nock('https://api.recast.ai')
+    nock('https://api.cai.tools.sap')
       .get(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}`)
       .once()
       .reply(200, 'success')
 
-    nock('https://api.recast.ai')
+    nock('https://api.cai.tools.sap')
       .put(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}`, { name: 'foo' })
       .once()
       .reply(200, {})
@@ -276,17 +277,17 @@ describe('Train class', () => {
   })
 
   describe('Entities api', () => {
-    nock('https://api.recast.ai')
-      .get(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/entities`)
+    nock('https://api.cai.tools.sap')
+      .get(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/versions/${BOT_VERSION}/dataset/entities`)
       .once()
       .reply(200, 'success')
 
-    nock('https://api.recast.ai')
+    nock('https://api.cai.tools.sap')
       .get('/v2/entities')
       .once()
       .reply(200, 'success')
 
-    nock('https://api.recast.ai')
+    nock('https://api.cai.tools.sap')
       .post('/v2/entities', { slug: 'foo' })
       .once()
       .reply(200, {})
@@ -322,30 +323,32 @@ describe('Train class', () => {
     const synonymSlug = 'mySynonym'
     const data = { slug: 'myGazette' }
 
-    nock('https://api.recast.ai')
-      .get(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/entities`)
+    nock('https://api.cai.tools.sap')
+      .get(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/versions/${BOT_VERSION}/dataset/gazettes`)
       .once().reply(200, 'success')
-      .get(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes`)
+      .get(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/versions/${BOT_VERSION}/dataset/gazettes/${slug}`)
       .once().reply(200, 'success')
-      .get(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/logs/${slug}`)
+      .delete(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/versions/${BOT_VERSION}/dataset/gazettes/${slug}`)
       .once().reply(200, 'success')
-      .delete(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/logs/${slug}`)
+      .get(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/versions/${BOT_VERSION}/dataset/logs/${slug}`)
       .once().reply(200, 'success')
-      .post(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes`, data)
+      .delete(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/versions/${BOT_VERSION}/dataset/logs/${slug}`)
       .once().reply(200, 'success')
-      .put(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes`, data)
+      .post(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/versions/${BOT_VERSION}/dataset/gazettes`, data)
       .once().reply(200, 'success')
-      .get(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes/${slug}/synonyms`)
+      .put(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/versions/${BOT_VERSION}/dataset/gazettes`, data)
       .once().reply(200, 'success')
-      .get(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes/${gazetteSlug}/synonyms/${synonymSlug}`)
+      .get(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/versions/${BOT_VERSION}/dataset/gazettes/${slug}/synonyms`)
       .once().reply(200, 'success')
-      .post(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes/${slug}/synonyms`, data)
+      .get(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/versions/${BOT_VERSION}/dataset/gazettes/${gazetteSlug}/synonyms/${synonymSlug}`)
       .once().reply(200, 'success')
-      .post(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes/${slug}/synonyms/bulk_create`, [data])
+      .post(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/versions/${BOT_VERSION}/dataset/gazettes/${slug}/synonyms`, data)
       .once().reply(200, 'success')
-      .put(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes/${gazetteSlug}/synonyms/${synonymSlug}`, data)
+      .post(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/versions/${BOT_VERSION}/dataset/gazettes/${slug}/synonyms/bulk_create`, [data])
       .once().reply(200, 'success')
-      .delete(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/gazettes/${gazetteSlug}/synonyms/${synonymSlug}`)
+      .put(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/versions/${BOT_VERSION}/dataset/gazettes/${gazetteSlug}/synonyms/${synonymSlug}`, data)
+      .once().reply(200, 'success')
+      .delete(`/v2/users/${USER_SLUG}/bots/${BOT_SLUG}/versions/${BOT_VERSION}/dataset/gazettes/${gazetteSlug}/synonyms/${synonymSlug}`)
       .once().reply(200, 'success')
 
     it('Should list gazettes', done => {

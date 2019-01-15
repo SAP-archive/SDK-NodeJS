@@ -3,7 +3,7 @@ export default class Entities {
     this.client = client
   }
 
-  list = async (params, opts) => this.client.get(`/users/${this.client.userSlug}/bots/${this.client.botSlug}/entities`, params, opts)
+  list = async (params, opts) => this.client.get(`/users/${this.client.userSlug}/bots/${this.client.botSlug}/versions/${this.client.botVersion}/dataset/entities`, params, opts)
 
   listPublic = async (params, opts) => this.client.get('/entities', params, opts)
 

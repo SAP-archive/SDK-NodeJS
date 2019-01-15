@@ -1,7 +1,7 @@
 {
-  "name": "recastai",
+  "name": "sapcai",
   "version": "4.0.0",
-  "description": "Recast.AI official SDK in NodeJs",
+  "description": "SAP Conversational AI official SDK in NodeJs",
   "main": "lib/index.js",
   "types": "index.d.ts",
   "directories": {
@@ -15,17 +15,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/RecastAI/SDK-NodeJs.git"
+    "url": "git+https://github.com/SAPConversationalAI/SDK-NodeJs.git"
   },
   "keywords": [
-    "recastai"
+    "sapcai"
   ],
-  "author": "Jerome Houdan <jerome.houdan@recast.ai> (https://recast.ai)",
+  "author": "SAP CAI team",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/RecastAI/SDK-NodeJs/issues"
+    "url": "https://github.com/SAPConversationalAI/SDK-NodeJs/issues"
   },
-  "homepage": "https://github.com/RecastAI/SDK-NodeJs#readme",
+  "homepage": "https://github.com/SAPConversationalAI/SDK-NodeJs#readme",
   "devDependencies": {
     "babel-cli": "^6.22.0",
     "babel-eslint": "^6.0.4",

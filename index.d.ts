@@ -1,9 +1,9 @@
-declare module 'recastai' {
+declare module 'sapcai' {
     export interface Message {
         chatId: string;
         content: string;
         conversationId: string;
-        recastToken: string;
+        sapcaiToken: string;
         senderId: string;
         type: string;
         addReply(replies: object[]): void;
