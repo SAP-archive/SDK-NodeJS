@@ -1,15 +1,37 @@
-<p align="center">
-  <img src="https://cdn.cai.tools.sap/brand/sapcai/sap-cai-black.svg" />
-</p>
-
-| [Installation](#installation) | [Sample Projects](#sample-projects) | [Resources]( #resources) | [Getting Started on SAP Conversational AI]( #getting-started-with-sap-conversational-ai) | [License](#license) |
-|---|---|---|---|---|
-<div>
-<a href="https://slack.cai.tools.sap">💬 Questions / Comments? Join the discussion on our community Slack channel!</a>
-</div>
 
 # SAP Conversational AI - SDK Node.js
 SAP Conversational AI official SDK in Node.js
+
+# 🚨 Sunset of Open Source SDKs for SAP Conversational AI 
+ 
+SAP Conversational AI provides several SDKs, which are all open-source and hosted on GitHub.  
+Starting from January 2021, please note that we inform you that the SDKs will not be available anymore and the public repository of the project will be archived from GitHub.  
+
+## ✨ Why are we sunsetting our SDKs? 
+ 
+Firstly, we noticed over the past year that these SDKs were not used much by our users.  
+This is because our platform usage has become easier, including the APIs. 
+
+Secondly, our APIs have undergone major changes. We would need to adapt the SDKs in order to keep them working, which will lead to a significant cost from our side. 
+
+Hence, we decided to sunset this open source version starting from January 2021.  
+ 
+## ✨ What does it mean for me as a user? 
+ 
+Any changes in our API’s will not be reflected in our SDKs. Hence, the code might not work unless you adjust the same.  
+
+## ✨ What are the next steps? 
+ 
+If you are interested in taking the ownership of the project on GitHub, please get in touch with us and we can discuss the process. Otherwise, if there are no objections from anyone, we would archive the project following the open source sunset process.  
+
+Please use the platform SAP Answers if you have any other questions related to this topic. 
+ 
+Happy bot building! 
+ 
+The SAP Conversational AI team
+
+---
+
 
 ## Synospis
 
