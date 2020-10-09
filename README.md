@@ -33,7 +33,7 @@ The SAP Conversational AI team
 ---
 
 
-## Synospis
+## Synopsis
 
 This module is a wrapper around the [SAP Conversational AI](https://cai.tools.sap/) [API](https://cai.tools.sap/docs/api-reference) API, and allows you to:
 * [Analyse your text](https://github.com/SAPConversationalAI/SDK-NodeJS/wiki/Analyse-text)
