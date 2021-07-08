@@ -1,6 +1,6 @@
 {
   "name": "@tiesproject/sapcai",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "SAP Conversational AI official SDK in NodeJs",
   "main": "lib/index.js",
   "types": "index.d.ts",
